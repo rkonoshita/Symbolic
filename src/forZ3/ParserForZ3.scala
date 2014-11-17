@@ -8,6 +8,8 @@ import scala.util.parsing.combinator.RegexParsers
  */
 trait AST
 
+case class mkLet(l: List[AST]) extends AST
+
 case class andLog(l: AST, r: AST) extends AST
 
 case class orLog(l: AST, r: AST) extends AST
@@ -62,9 +64,21 @@ case class mkInt(n: Int) extends AST
 
 case class mkSymbol(n: String) extends AST
 
+case class mkVariable(n: String, ast: AST) extends AST
+
+case class findVariable(n: String) extends AST
+
 class ParserForZ3 extends RegexParsers {
 
-  private def expr: Parser[AST] = expr1 | expr2 | bool | term
+  private def root: Parser[AST] = rep(let | expr) ^^ (mkLet(_))
+
+  private def let: Parser[AST] = "(" ~> "let" ~> root <~ ")"
+
+  private def expr: Parser[AST] = expr1 | expr2 | bool | term | variable | ignore
+
+  private def ignore: Parser[AST] = "(" ~> expr <~ ")"
+
+  private def variable: Parser[AST] = "(" ~> """[a-z]+![0-9]+""".r ~ expr <~ ")" ^^ (l => mkVariable(l._1, l._2))
 
   private def expr1: Parser[AST] = "(" ~> ("and" | "or") ~ expr ~ rep(expr) <~ ")" ^^ {
     case "add" ~ left ~ rep =>
@@ -130,13 +144,17 @@ class ParserForZ3 extends RegexParsers {
     case "bvneg" ~ item => bvNeg(item)
   }
 
-  private def elem: Parser[AST] = num | symbol | hex
+  private def elem: Parser[AST] = num | symbol | hex | alp
 
   private def num: Parser[AST] = "[0-9]+".r ^^ (n => mkInt(n.toInt))
 
-  private def symbol: Parser[AST] = """s[0-9]+""".r ^^ (n => mkSymbol(n))
+  private def symbol: Parser[AST] = """s[0-9]+""".r ^^ (mkSymbol(_))
+
+  private def alp: Parser[AST] = """[a-z]+![0-9]+""".r ^^ (findVariable(_))
 
   private def hex: Parser[AST] = "#x" ~> "[0-9a-f]+".r ^^ (n => mkInt(hexToInt(n)))
+
+  private def skip = ".".r
 
   private def hexToInt(hex: String): Int = {
     {
@@ -145,5 +163,5 @@ class ParserForZ3 extends RegexParsers {
     }.toInt
   }
 
-  def parse(input: String) = parseAll(expr, input).get
+  def parse(input: String) = parseAll(root, input).get
 }

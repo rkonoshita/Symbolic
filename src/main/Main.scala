@@ -21,13 +21,28 @@ object Main {
     for (i <- 0 until 8) hash += i -> makeSymbol(32)
     val reg = new Register(ctx, hash)
 
-    val reg7 = reg.reg(7)
-    reg.setByte(reg.getByte(7), 7)
-
     val s = ctx.mkSolver
+    val reg7 = reg.reg(7)
+    reg.setByte(reg.getByte(0xF), 0xF)
     val a = ctx.mkEq(reg.reg(7), reg7)
-    println(a)
-    s.assertCnstr(a)
+    println(reg.reg(7))
+    println
+//    s.assertCnstr(a)
+    reg.setByte(reg.getByte(7), 7)
+    val b = ctx.mkEq(reg.reg(7), reg7)
+    println(reg.reg(7))
+    println
+//    s.assertCnstr(b)
+    reg.setWord(reg.getWord(7), 7)
+    val c = ctx.mkEq(reg.reg(7), reg7)
+    println(reg.reg(7))
+    println
+//    s.assertCnstr(c)
+    reg.setWord(reg.getWord(0xF), 0xF)
+    val d = ctx.mkEq(reg.reg(7), reg7)
+    println(reg.reg(7))
+    s.assertCnstr(d)
+
     println(s.check())
   }
 

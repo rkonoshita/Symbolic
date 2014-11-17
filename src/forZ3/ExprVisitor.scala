@@ -2,6 +2,8 @@ package forZ3
 
 import z3.scala.{Z3AST, Z3Context}
 
+import scala.collection.mutable
+
 /**
  * Created by ryosuke on 14/11/15.
  */
@@ -9,9 +11,14 @@ class ExprVisitor(c: Z3Context, s: Int) {
 
   val ctx = c
   val size = s
+  val hash = new mutable.HashMap[String, AST]()
 
   def visit(ast: AST): Z3AST = {
     ast match {
+      case mkLet(list) =>
+        var l = List.empty[Z3AST]
+        list.foreach(ast => l = visit(ast) :: l)
+        l.head
       case andLog(left, right) => ctx.mkAnd(visit(left), visit(right))
       case orLog(left, right) => ctx.mkOr(visit(left), visit(right))
       case notLog(item) => ctx.mkNot(visit(item))
@@ -39,6 +46,10 @@ class ExprVisitor(c: Z3Context, s: Int) {
       case bvNeg(item) => ctx.mkBVNeg(visit(item))
       case mkInt(num) => ctx.mkInt(num, ctx.mkBVSort(size))
       case mkSymbol(str) => ctx.mkConst(str, ctx.mkBVSort(size))
+      case mkVariable(str, ast) =>
+        hash += str -> ast
+        visit(ast)
+      case findVariable(str) => visit(hash(str))
     }
   }
 
