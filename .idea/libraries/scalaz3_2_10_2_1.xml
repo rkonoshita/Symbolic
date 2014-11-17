@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="scalaz3_2.10-2.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/scalaz3_2.10-2.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
