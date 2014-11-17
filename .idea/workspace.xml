@@ -2,167 +2,163 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7d3b70b1-efe5-4c9d-9c0f-5a6b73c88875" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ExprVisitor$$anonfun$visit$1.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$1$$anonfun$apply$2.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$3$$anonfun$apply$3.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$5$$anonfun$apply$5.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$alp$1.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$13.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$elem$3.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr$4.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr$5.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$ignore$1.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$ignore$2.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$let$1.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$let$2.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$let$3.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$root$1$$anonfun$apply$1.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$root$1.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$root$2.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1$$anonfun$apply$28.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term3$1$$anonfun$apply$29.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$variable$1.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$variable$2.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$variable$3.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$variable$4.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$1$$anonfun$apply$17.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$3$$anonfun$apply$18.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5$$anonfun$apply$23.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/findVariable$.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/findVariable.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkLet$.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkLet.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkVariable$.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkVariable.class" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$1$$anonfun$apply$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$3$$anonfun$apply$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$5$$anonfun$apply$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1$$anonfun$apply$23.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term3$1$$anonfun$apply$28.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$1$$anonfun$apply$13.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$3$$anonfun$apply$17.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5$$anonfun$apply$18.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ExprVisitor.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ExprVisitor.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/Decoder.scala" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/data/register/Memory.scala" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/AST.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ExprVisitor$$anonfun$visit$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ExprVisitor.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$1$$anonfun$apply$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$3$$anonfun$apply$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$4.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$5$$anonfun$apply$4.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$5$$anonfun$apply$5.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$5.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$alp$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$10.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$11.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$12.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$13.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$6.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$7.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$8.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$9.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$4.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$5.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$elem$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$elem$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$elem$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr$4.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr$5.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr2$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr2$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr2$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr2$4.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$hex$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$hex$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$ignore$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$ignore$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$let$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$let$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$let$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$root$1$$anonfun$apply$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$root$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$root$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$symbol$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1$$anonfun$apply$24.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1$$anonfun$apply$25.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1$$anonfun$apply$26.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1$$anonfun$apply$27.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1$$anonfun$apply$28.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$4.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$5.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term3$1$$anonfun$apply$29.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term3$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term3$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term3$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term3$4.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$variable$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$variable$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$variable$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$variable$4.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$num$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$1$$anonfun$apply$14.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$1$$anonfun$apply$15.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$1$$anonfun$apply$16.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$1$$anonfun$apply$17.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$3$$anonfun$apply$18.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$4.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5$$anonfun$apply$19.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5$$anonfun$apply$20.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5$$anonfun$apply$21.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5$$anonfun$apply$22.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5$$anonfun$apply$23.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/andLog$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/andLog.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAdd$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAdd.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAnd$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAnd.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAshr$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAshr.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvLshr$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvLshr.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvMul$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvMul.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvNeg$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvNeg.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvNot$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvNot.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvOr$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvOr.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSdiv$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSdiv.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSge$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSge.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSgt$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSgt.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvShl$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvShl.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSle$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSle.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSlt$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSlt.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSub$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSub.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUdiv$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUdiv.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUge$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUge.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUgt$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUgt.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUle$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUle.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUlt$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUlt.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvXor$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvXor.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/equal$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/equal.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/findVariable$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/findVariable.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkInt$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkInt.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkLet$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkLet.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkSymbol$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkSymbol.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkVariable$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkVariable.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/notLog$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/notLog.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/orLog$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/orLog.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/forZ3/ExprVisitor.scala" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/forZ3/ParserForZ3.scala" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/main/Main$$anonfun$main$1.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/main/Main$$anonfun$main$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/main/Main$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/main/Main$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$1.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$2.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$3.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$4.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$5$$anonfun$apply$4.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$5$$anonfun$apply$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$5.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$5.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$10.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$10.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$11.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$11.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$12.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$12.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$6.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$6.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$7.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$7.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$8.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$8.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$9.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$9.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$2.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$3.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$4.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$5.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$5.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$elem$1.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$elem$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$elem$2.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$elem$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr$1.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr$2.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr$3.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr2$1.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr2$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr2$2.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr2$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr2$3.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr2$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr2$4.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr2$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$hex$1.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$hex$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$hex$2.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$hex$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$symbol$1.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$symbol$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term$1.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term$2.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term$3.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1$$anonfun$apply$24.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1$$anonfun$apply$24.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1$$anonfun$apply$25.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1$$anonfun$apply$25.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1$$anonfun$apply$26.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1$$anonfun$apply$26.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1$$anonfun$apply$27.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1$$anonfun$apply$27.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$2.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$3.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$4.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$5.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$5.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term3$1.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term3$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term3$2.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term3$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term3$3.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term3$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term3$4.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term3$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$num$1.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$num$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$1$$anonfun$apply$14.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$1$$anonfun$apply$14.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$1$$anonfun$apply$15.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$1$$anonfun$apply$15.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$1$$anonfun$apply$16.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$1$$anonfun$apply$16.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$1.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$2.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$3.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$4.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5$$anonfun$apply$19.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5$$anonfun$apply$19.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5$$anonfun$apply$20.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5$$anonfun$apply$20.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5$$anonfun$apply$21.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5$$anonfun$apply$21.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5$$anonfun$apply$22.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5$$anonfun$apply$22.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/data/register/Register.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/data/register/Register.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/andLog$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/andLog$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/andLog.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/andLog.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAdd$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAdd$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAdd.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAdd.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAnd$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAnd$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAnd.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAnd.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAshr$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAshr$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAshr.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAshr.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvLshr$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvLshr$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvLshr.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvLshr.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvMul$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvMul$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvMul.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvMul.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvNeg$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvNeg$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvNeg.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvNeg.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvNot$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvNot$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvNot.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvNot.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvOr$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvOr$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvOr.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvOr.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSdiv$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSdiv$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSdiv.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSdiv.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSge$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSge$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSge.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSge.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSgt$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSgt$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSgt.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSgt.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvShl$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvShl$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvShl.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvShl.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSle$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSle$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSle.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSle.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSlt$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSlt$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSlt.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSlt.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSub$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSub$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSub.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSub.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUdiv$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUdiv$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUdiv.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUdiv.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUge$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUge$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUge.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUge.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUgt$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUgt$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUgt.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUgt.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUle$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUle$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUle.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUle.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUlt$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUlt$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUlt.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUlt.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvXor$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvXor$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvXor.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvXor.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/equal$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/equal$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/equal.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/equal.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkInt$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkInt$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkInt.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkInt.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkSymbol$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkSymbol$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkSymbol.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkSymbol.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/notLog$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/notLog$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/notLog.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/notLog.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/orLog$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/orLog$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/orLog.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/forZ3/orLog.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/forZ3/ExprVisitor.scala" afterPath="$PROJECT_DIR$/src/forZ3/ExprVisitor.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/data/Data.scala" afterPath="$PROJECT_DIR$/src/data/Data.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/Main.scala" afterPath="$PROJECT_DIR$/src/main/Main.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/forZ3/ParserForZ3.scala" afterPath="$PROJECT_DIR$/src/forZ3/ParserForZ3.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/data/register/Register.scala" afterPath="$PROJECT_DIR$/src/data/register/Register.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -189,25 +185,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Register.scala" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Register.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/data/register/Register.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6666667" vertical-offset="1410" max-vertical-offset="1950">
-              <caret line="118" column="64" selection-start-line="118" selection-start-column="64" selection-end-line="118" selection-end-column="64" />
+            <state vertical-scroll-proportion="-9.0" vertical-offset="45" max-vertical-offset="1125">
+              <caret line="18" column="25" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="25" />
               <folding>
-                <element signature="e#23#62#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ParserForZ3.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/forZ3/ParserForZ3.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="905" max-vertical-offset="2595">
-              <caret line="145" column="0" selection-start-line="145" selection-start-column="0" selection-end-line="145" selection-end-column="0" />
-              <folding>
-                <element signature="e#15#45#0" expanded="true" />
+                <element signature="e#23#57#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -216,8 +200,8 @@
       <file leaf-file-name="Main.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/Main.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.8" vertical-offset="180" max-vertical-offset="900">
-              <caret line="30" column="33" selection-start-line="30" selection-start-column="33" selection-end-line="30" selection-end-column="33" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="480">
+              <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
               <folding>
                 <element signature="e#14#43#0" expanded="true" />
               </folding>
@@ -225,13 +209,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ExprVisitor.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/forZ3/ExprVisitor.scala">
+      <file leaf-file-name="Memory.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/data/register/Memory.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="930">
-              <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+            <state vertical-scroll-proportion="-10.8" vertical-offset="255" max-vertical-offset="1155">
+              <caret line="35" column="3" selection-start-line="35" selection-start-column="3" selection-end-line="35" selection-end-column="3" />
               <folding>
-                <element signature="e#15#49#0" expanded="true" />
+                <element signature="e#23#57#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Decoder.scala" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/Decoder.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.31858408" vertical-offset="0" max-vertical-offset="565">
+              <caret line="12" column="2" selection-start-line="12" selection-start-column="2" selection-end-line="12" selection-end-column="2" />
+              <folding>
+                <element signature="e#14#30#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -240,11 +236,9 @@
       <file leaf-file-name="NewSymbol.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/symbol/NewSymbol.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="375">
+            <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="375">
               <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="16" selection-end-column="3" />
-              <folding>
-                <element signature="e#16#32#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -252,8 +246,8 @@
       <file leaf-file-name="Data.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/data/Data.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="210">
-              <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285">
+              <caret line="6" column="3" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
               <folding />
             </state>
           </provider>
@@ -272,6 +266,9 @@
         <option value="$PROJECT_DIR$/src/forZ3/ParserForZ3.scala" />
         <option value="$PROJECT_DIR$/src/data/register/Register.scala" />
         <option value="$PROJECT_DIR$/src/main/Main.scala" />
+        <option value="$PROJECT_DIR$/src/data/register/Memory.scala" />
+        <option value="$PROJECT_DIR$/src/data/Data.scala" />
+        <option value="$PROJECT_DIR$/src/main/Decoder.scala" />
       </list>
     </option>
   </component>
@@ -355,24 +352,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Symbolic" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Symbolic" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="forZ3" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -750,7 +729,6 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/Main.scala</url>
-          <line>23</line>
           <properties />
           <option name="timeStamp" value="11" />
         </line-breakpoint>
@@ -769,17 +747,43 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="100">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#23#62#0" expanded="true" />
+            <element signature="e#23#57#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/forZ3/ParserForZ3.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/Main.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2085" max-vertical-offset="2175">
-          <caret line="139" column="0" selection-start-line="139" selection-start-column="0" selection-end-line="139" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="450" max-vertical-offset="900">
+          <caret line="30" column="33" selection-start-line="30" selection-start-column="33" selection-end-line="30" selection-end-column="33" />
           <folding>
-            <element signature="e#15#45#0" expanded="true" />
+            <element signature="e#14#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/symbol/NewSymbol.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="375">
+          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="16" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/data/Data.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="75" max-vertical-offset="210">
+          <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/data/register/Register.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="100">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#23#57#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -798,9 +802,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="345">
           <caret line="11" column="26" selection-start-line="11" selection-start-column="26" selection-end-line="11" selection-end-column="26" />
-          <folding>
-            <element signature="e#16#32#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -817,17 +819,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="100">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#23#62#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/forZ3/ParserForZ3.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="315" max-vertical-offset="405">
-          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-          <folding>
-            <element signature="e#15#45#0" expanded="true" />
+            <element signature="e#23#57#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -846,9 +838,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="345">
           <caret line="11" column="26" selection-start-line="11" selection-start-column="26" selection-end-line="11" selection-end-column="26" />
-          <folding>
-            <element signature="e#16#32#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -865,17 +855,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="510">
           <caret line="9" column="29" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
           <folding>
-            <element signature="e#23#62#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/forZ3/ParserForZ3.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="100">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#15#45#0" expanded="true" />
+            <element signature="e#23#57#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -894,9 +874,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="345">
           <caret line="11" column="26" selection-start-line="11" selection-start-column="26" selection-end-line="11" selection-end-column="26" />
-          <folding>
-            <element signature="e#16#32#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -912,7 +890,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="7376" max-vertical-offset="22920">
           <caret line="531" column="22" selection-start-line="531" selection-start-column="22" selection-end-line="531" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -920,44 +897,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="375">
           <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="16" selection-end-column="3" />
-          <folding>
-            <element signature="e#16#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/data/Data.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="210">
-          <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/forZ3/ParserForZ3.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="905" max-vertical-offset="2595">
-          <caret line="145" column="0" selection-start-line="145" selection-start-column="0" selection-end-line="145" selection-end-column="0" />
-          <folding>
-            <element signature="e#15#45#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/forZ3/ExprVisitor.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="930">
-          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-          <folding>
-            <element signature="e#15#49#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/Main.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.8" vertical-offset="180" max-vertical-offset="900">
-          <caret line="30" column="33" selection-start-line="30" selection-start-column="33" selection-end-line="30" selection-end-column="33" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="480">
+          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
           <folding>
             <element signature="e#14#43#0" expanded="true" />
           </folding>
@@ -966,10 +913,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/data/register/Register.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6666667" vertical-offset="1410" max-vertical-offset="1950">
-          <caret line="118" column="64" selection-start-line="118" selection-start-column="64" selection-end-line="118" selection-end-column="64" />
+        <state vertical-scroll-proportion="-9.0" vertical-offset="45" max-vertical-offset="1125">
+          <caret line="18" column="25" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="25" />
           <folding>
-            <element signature="e#23#62#0" expanded="true" />
+            <element signature="e#23#57#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/data/Data.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285">
+          <caret line="6" column="3" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/data/register/Memory.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-10.8" vertical-offset="255" max-vertical-offset="1155">
+          <caret line="35" column="3" selection-start-line="35" selection-start-column="3" selection-end-line="35" selection-end-column="3" />
+          <folding>
+            <element signature="e#23#57#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/Decoder.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.31858408" vertical-offset="0" max-vertical-offset="565">
+          <caret line="12" column="2" selection-start-line="12" selection-start-column="2" selection-end-line="12" selection-end-column="2" />
+          <folding>
+            <element signature="e#14#30#0" expanded="true" />
           </folding>
         </state>
       </provider>
