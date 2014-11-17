@@ -5,9 +5,9 @@ import z3.scala.{Z3AST, Z3Context}
 /**
  * Created by ryosuke on 14/11/15.
  */
-class ExprVisitor(s: Int) {
+class ExprVisitor(c: Z3Context, s: Int) {
 
-  val ctx = new Z3Context
+  val ctx = c
   val size = s
 
   def visit(ast: AST): Z3AST = {

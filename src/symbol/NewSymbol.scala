@@ -1,5 +1,6 @@
 package symbol
 
+import main.Main
 import z3.scala.{Z3AST, Z3Context}
 
 /**
@@ -7,11 +8,12 @@ import z3.scala.{Z3AST, Z3Context}
  */
 object NewSymbol {
 
-  val num = 0
+  var num = -1
 
   def make(size: Int): Z3AST = {
-    val ctx = new Z3Context
-    ctx.mkConst("s" + num, ctx.mkBVSort(size))
+    num += 1
+    //val ctx = new Z3Context
+    Main.ctx.mkConst("s" + num, Main.ctx.mkBVSort(size))
   }
 
 }

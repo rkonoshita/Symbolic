@@ -1,5 +1,6 @@
 package forZ3
 
+import scala.collection.GenSeq
 import scala.util.parsing.combinator.RegexParsers
 
 /**
@@ -129,11 +130,20 @@ class ParserForZ3 extends RegexParsers {
     case "bvneg" ~ item => bvNeg(item)
   }
 
-  private def elem: Parser[AST] = num | symbol
+  private def elem: Parser[AST] = num | symbol | hex
 
   private def num: Parser[AST] = "[0-9]+".r ^^ (n => mkInt(n.toInt))
 
   private def symbol: Parser[AST] = """s[0-9]+""".r ^^ (n => mkSymbol(n))
+
+  private def hex: Parser[AST] = "#x" ~> "[0-9a-f]+".r ^^ (n => mkInt(hexToInt(n)))
+
+  private def hexToInt(hex: String): Int = {
+    {
+      if (hex.length < 8 && !hex.charAt(0).toString.matches("[0-7]")) java.lang.Long.parseLong("f" * (8 - hex.length) + hex, 16)
+      else java.lang.Long.parseLong(hex, 16)
+    }.toInt
+  }
 
   def parse(input: String) = parseAll(expr, input).get
 }
