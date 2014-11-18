@@ -1,0 +1,12 @@
+          .CPU        300HN
+          .EXPORT     _led_set
+          .SECTION    P,CODE,ALIGN=2
+          .LINE       "C:\Users\ryousuke\Desktop\files\mylab\soft_1_1\ieee\linetrace\led.c",17
+_led_set:                               ; function: led_set
+          .STACK      _led_set=2
+          .LINE       18
+          .LINE       19
+          MOV.B       R0L,@65496:8
+          .LINE       20
+          RTS
+          .END

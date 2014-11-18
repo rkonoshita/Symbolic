@@ -1,0 +1,70 @@
+          .CPU        300HN
+          .IMPORT     __D_ROM
+          .IMPORT     __D_BGN
+          .IMPORT     __D_END
+          .IMPORT     __B_BGN
+          .IMPORT     __B_END
+          .IMPORT     _tim_b1_init
+          .EXPORT     __INITSCT
+          .EXPORT     _init
+          .SECTION    P,CODE,ALIGN=2
+          .LINE       "C:\Users\ryousuke\Desktop\files\mylab\soft_1_1\ieee\linetrace\init.c",11
+__INITSCT:                              ; function: _INITSCT
+          .STACK      __INITSCT=4
+          .LINE       12
+          .LINE       16
+          MOV.W       @__B_BGN:16,R1
+          .LINE       16
+          BRA         L66:8
+L65:                                     
+          .LINE       16
+          SUB.B       R0L,R0L
+          MOV.B       R0L,@ER1
+          .LINE       16
+          INC.W       #1,R1
+L66:                                     
+          .LINE       16
+          MOV.W       @__B_END:16,R0
+          CMP.W       R0,R1
+          BLO         L65:8
+          .LINE       18
+          MOV.W       @__D_BGN:16,R1
+          MOV.W       @__D_ROM:16,R5
+          .LINE       18
+          BRA         L68:8
+L67:                                     
+          .LINE       18
+          MOV.B       @ER5,R0L
+          MOV.B       R0L,@ER1
+          .LINE       18
+          INC.W       #1,R1
+          INC.W       #1,R5
+L68:                                     
+          .LINE       18
+          MOV.W       @__D_END:16,R0
+          CMP.W       R0,R1
+          BLO         L67:8
+          .LINE       19
+          RTS
+          .LINE       21
+_init:                                  ; function: init
+          .STACK      _init=2
+          .LINE       22
+          .LINE       24
+          SUB.B       R0L,R0L
+          MOV.B       R0L,@65524:8
+          .LINE       25
+          MOV.B       R0L,@65525:8
+          .LINE       28
+          MOV.B       #-8,R0H
+          MOV.B       R0H,@65510:8
+          .LINE       29
+          MOV.B       #112,R0H
+          MOV.B       R0H,@65512:8
+          .LINE       31
+          JSR         @_tim_b1_init:16
+          .LINE       32
+          ANDC.B      #127,CCR
+          .LINE       33
+          RTS
+          .END

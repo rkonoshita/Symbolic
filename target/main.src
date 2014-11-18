@@ -1,0 +1,23 @@
+          .CPU        300HN
+          .IMPORT     _c_start
+          .IMPORT     _init
+          .EXPORT     _main
+          .SECTION    P,CODE,ALIGN=2
+          .LINE       "C:\Users\ryousuke\Desktop\files\mylab\soft_1_1\ieee\linetrace\main.c",5
+_main:                                  ; function: main
+          .STACK      _main=2
+          .LINE       5
+          .LINE       7
+          JSR         @_init:16
+          .LINE       9
+          .LINE       9
+L59:                                     
+          .LINE       9
+          MOV.W       @_c_start:16,R0
+          CMP.W       #4,R0
+          BLT         L59:8
+          .LINE       12
+          ORC.B       #-128,CCR
+          .LINE       14
+          RTS
+          .END

@@ -1,0 +1,108 @@
+          .CPU        300HN
+          .IMPORT     _led_set
+          .IMPORT     _c_start
+          .IMPORT     _tsensor_get
+          .EXPORT     _tim_b1_init
+          .EXPORT     _int_tim_b1
+          .SECTION    P,CODE,ALIGN=2
+          .LINE       "C:\Users\ryousuke\Desktop\files\mylab\soft_1_1\ieee\linetrace\tim_b1.c",20
+_tim_b1_init:                           ; function: tim_b1_init
+          .STACK      _tim_b1_init=2
+          .LINE       21
+          .LINE       26
+          MOV.B       #-3,R0L
+          MOV.B       R0L,@63328:16
+          .LINE       27
+          MOV.B       #-125,R0L
+          MOV.B       R0L,@63329:16
+          .LINE       29
+          BSET.B      #5,@65525:8
+          .LINE       30
+          RTS
+          .LINE       38
+_int_tim_b1:                            ; function: int_tim_b1
+          .STACK      _int_tim_b1=14
+          PUSH.W      R1
+          PUSH.W      R0
+          .LINE       39
+          .LINE       41
+          JSR         @_tsensor_get:16
+          AND.B       #5,R0L
+          .LINE       42
+          BCLR.B      #5,@65527:8
+          .LINE       43
+          BCLR.B      #5,@65525:8
+          .LINE       45
+          ADD.B       #-1,R0L
+          CMP.B       #6,R0L
+          BHI         L70:8
+          EXTU.W      R0
+          MOV.B       @(L72:16,ER0),R0L
+          ADD.W       #LWORD L63,R0
+          JMP         @ER0
+          .LINE       45
+          .LINE       46
+L63:                                    ; case label 
+          .LINE       46
+          MOV.W       #64,R6
+          .LINE       46
+          BRA         L71:8
+L64:                                    ; case label 
+          .LINE       47
+          MOV.W       #32,R6
+          .LINE       47
+          BRA         L71:8
+L65:                                    ; case label 
+          .LINE       48
+          MOV.W       #96,R6
+          .LINE       48
+          BRA         L71:8
+L66:                                    ; case label 
+          .LINE       49
+          MOV.W       #16,R6
+          .LINE       49
+          BRA         L71:8
+L67:                                    ; case label 
+          .LINE       50
+          MOV.W       #80,R6
+          .LINE       50
+          BRA         L71:8
+L68:                                    ; case label 
+          .LINE       51
+          MOV.W       #48,R6
+          .LINE       51
+          BRA         L71:8
+L69:                                    ; case label 
+          .LINE       52
+          MOV.W       #112,R6
+          .LINE       52
+          BRA         L71:8
+L70:                                    ; default label 
+          .LINE       53
+          SUB.W       R6,R6
+          .LINE       53
+L71:                                    ; default label 
+          .LINE       56
+          MOV.W       R6,R0
+          JSR         @_led_set:16
+          .LINE       57
+          MOV.W       @_c_start:16,R0
+          INC.W       #1,R0
+          MOV.W       R0,@_c_start:16
+          .LINE       59
+          BSET.B      #5,@65525:8
+          .LINE       60
+          POP.W       R0
+          POP.W       R1
+          RTE
+          .SECTION    C,DATA,ALIGN=2
+L72:
+          .DATA.B     L63-L63
+          .DATA.B     L64-L63
+          .DATA.B     L65-L63
+          .DATA.B     L66-L63
+          .DATA.B     L67-L63
+          .DATA.B     L68-L63
+          .DATA.B     L69-L63
+          .DATAB.B    1,0
+          .END

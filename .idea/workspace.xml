@@ -2,164 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7d3b70b1-efe5-4c9d-9c0f-5a6b73c88875" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/Decoder.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/data/register/Memory.scala" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/AST.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ExprVisitor$$anonfun$visit$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ExprVisitor.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$1$$anonfun$apply$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$3$$anonfun$apply$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$5$$anonfun$apply$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$5$$anonfun$apply$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$expr1$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$alp$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$10.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$11.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$12.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$13.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$6.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$7.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$8.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1$$anonfun$apply$9.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$bool$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$elem$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$elem$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$elem$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr2$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr2$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr2$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$expr2$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$hex$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$hex$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$ignore$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$ignore$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$let$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$let$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$let$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$root$1$$anonfun$apply$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$root$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$root$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$symbol$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1$$anonfun$apply$24.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1$$anonfun$apply$25.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1$$anonfun$apply$26.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1$$anonfun$apply$27.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1$$anonfun$apply$28.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term2$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term3$1$$anonfun$apply$29.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term3$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term3$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term3$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$term3$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$variable$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$variable$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$variable$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$forZ3$ParserForZ3$$variable$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$num$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$1$$anonfun$apply$14.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$1$$anonfun$apply$15.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$1$$anonfun$apply$16.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$1$$anonfun$apply$17.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$3$$anonfun$apply$18.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5$$anonfun$apply$19.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5$$anonfun$apply$20.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5$$anonfun$apply$21.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5$$anonfun$apply$22.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5$$anonfun$apply$23.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3$$anonfun$term1$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/ParserForZ3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/andLog$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/andLog.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAdd$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAdd.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAnd$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAnd.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAshr$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvAshr.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvLshr$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvLshr.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvMul$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvMul.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvNeg$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvNeg.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvNot$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvNot.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvOr$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvOr.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSdiv$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSdiv.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSge$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSge.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSgt$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSgt.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvShl$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvShl.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSle$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSle.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSlt$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSlt.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSub$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvSub.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUdiv$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUdiv.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUge$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUge.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUgt$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUgt.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUle$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUle.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUlt$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvUlt.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvXor$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/bvXor.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/equal$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/equal.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/findVariable$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/findVariable.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkInt$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkInt.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkLet$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkLet.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkSymbol$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkSymbol.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkVariable$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/mkVariable.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/notLog$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/notLog.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/orLog$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/forZ3/orLog.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/forZ3/ExprVisitor.scala" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/forZ3/ParserForZ3.scala" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/main/Main$$anonfun$main$1.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/main/Main$$anonfun$main$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/main/Main$.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/main/Main$.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Symbolic/data/register/Register.class" afterPath="$PROJECT_DIR$/out/production/Symbolic/data/register/Register.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/data/Data.scala" afterPath="$PROJECT_DIR$/src/data/Data.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/Main.scala" afterPath="$PROJECT_DIR$/src/main/Main.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/data/register/Register.scala" afterPath="$PROJECT_DIR$/src/data/register/Register.scala" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/parser/ASTParser.scala" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/data/register/ConditionRegister.scala" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/convert/Convert.scala" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/data/PathCondition.scala" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/data/register/ProgramCounter.scala" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/Decoder.scala" afterPath="$PROJECT_DIR$/src/main/Decoder.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Symbolic.iws" />
@@ -185,26 +34,42 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Register.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/data/register/Register.scala">
+      <file leaf-file-name="tsensor.src" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/target/tsensor.src">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.0" vertical-offset="45" max-vertical-offset="1125">
-              <caret line="18" column="25" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="25" />
-              <folding>
-                <element signature="e#23#57#0" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="300">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Main.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/Main.scala">
+      <file leaf-file-name="vect.src" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/target/vect.src">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="480">
-              <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-              <folding>
-                <element signature="e#14#43#0" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="810">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="section.src" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/target/section.src">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="990">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="startup.src" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/target/startup.src">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="390">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -212,42 +77,58 @@
       <file leaf-file-name="Memory.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/data/register/Memory.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.8" vertical-offset="255" max-vertical-offset="1155">
-              <caret line="35" column="3" selection-start-line="35" selection-start-column="3" selection-end-line="35" selection-end-column="3" />
-              <folding>
-                <element signature="e#23#57#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Decoder.scala" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/Decoder.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.31858408" vertical-offset="0" max-vertical-offset="565">
-              <caret line="12" column="2" selection-start-line="12" selection-start-column="2" selection-end-line="12" selection-end-column="2" />
-              <folding>
-                <element signature="e#14#30#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NewSymbol.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/symbol/NewSymbol.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="375">
-              <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="16" selection-end-column="3" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1125">
+              <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Data.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/data/Data.scala">
+      <file leaf-file-name="PathCondition.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/data/PathCondition.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285">
-              <caret line="6" column="3" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="270">
+              <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ConditionRegister.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/data/register/ConditionRegister.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="210">
+              <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ProgramCounter.scala" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/data/register/ProgramCounter.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.2173913" vertical-offset="0" max-vertical-offset="552">
+              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Decoder.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/Decoder.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="330">
+              <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ASTParser.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/parser/ASTParser.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="210">
+              <caret line="5" column="16" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -268,14 +149,16 @@
         <option value="$PROJECT_DIR$/src/main/Main.scala" />
         <option value="$PROJECT_DIR$/src/data/register/Memory.scala" />
         <option value="$PROJECT_DIR$/src/data/Data.scala" />
+        <option value="$PROJECT_DIR$/src/convert/Convert.scala" />
         <option value="$PROJECT_DIR$/src/main/Decoder.scala" />
+        <option value="$PROJECT_DIR$/src/data/PathCondition.scala" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1" />
-    <option name="width" value="1922" />
-    <option name="height" value="1175" />
+    <option name="x" value="-3" />
+    <option name="width" value="1926" />
+    <option name="height" value="952" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -300,7 +183,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -351,24 +233,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Symbolic" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Symbolic" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="data" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -398,6 +262,7 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -678,33 +543,33 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="0" width="1922" height="1175" extended-state="6" />
+    <frame x="-3" y="0" width="1926" height="952" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32897863" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="SBT Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32934684" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.45722172" sideWeight="0.50208336" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31472683" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.45722172" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20677084" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.11170213" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25022998" sideWeight="0.49947917" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25022998" sideWeight="0.49947917" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32934684" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.45722172" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -746,9 +611,119 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="100">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#23#57#0" expanded="true" />
-          </folding>
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/Main.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="390" max-vertical-offset="480">
+          <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/data/register/Memory.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="525" max-vertical-offset="1155">
+          <caret line="35" column="3" selection-start-line="35" selection-start-column="3" selection-end-line="35" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/Decoder.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="300">
+          <caret line="11" column="14" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/data.src">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="180">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/convert/Convert.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="195" max-vertical-offset="285">
+          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/symbol/NewSymbol.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="210" max-vertical-offset="375">
+          <caret line="14" column="0" selection-start-line="15" selection-start-column="37" selection-end-line="18" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/data/Data.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="285">
+          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/data/register/Register.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="270" max-vertical-offset="990">
+          <caret line="18" column="25" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/Main.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="225" max-vertical-offset="315">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/data/register/Memory.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="525" max-vertical-offset="1155">
+          <caret line="35" column="3" selection-start-line="35" selection-start-column="3" selection-end-line="35" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/Decoder.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="100">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/symbol/NewSymbol.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="345">
+          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="16" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/data/Data.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="210">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/data/register/Register.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="100">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -756,9 +731,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="450" max-vertical-offset="900">
           <caret line="30" column="33" selection-start-line="30" selection-start-column="33" selection-end-line="30" selection-end-column="33" />
-          <folding>
-            <element signature="e#14#43#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -782,9 +755,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="100">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#23#57#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -792,9 +763,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="315">
           <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding>
-            <element signature="e#14#43#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -818,9 +787,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="100">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#23#57#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -828,9 +795,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="345">
           <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding>
-            <element signature="e#14#43#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -854,9 +819,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="510">
           <caret line="9" column="29" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
-          <folding>
-            <element signature="e#23#57#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -864,9 +827,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="120" max-vertical-offset="345">
           <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding>
-            <element signature="e#14#43#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -895,57 +856,136 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/symbol/NewSymbol.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="375">
-          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="16" selection-end-column="3" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="210" max-vertical-offset="375">
+          <caret line="14" column="0" selection-start-line="15" selection-start-column="37" selection-end-line="18" selection-end-column="1" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/Main.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="480">
-          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-          <folding>
-            <element signature="e#14#43#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/data/register/Register.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.0" vertical-offset="45" max-vertical-offset="1125">
-          <caret line="18" column="25" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="25" />
-          <folding>
-            <element signature="e#23#57#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="390" max-vertical-offset="480">
+          <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/data/Data.scala">
       <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="285">
+          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/convert/Convert.scala">
+      <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285">
-          <caret line="6" column="3" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
+          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/data.src">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="407">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/data/register/Register.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="225" max-vertical-offset="1095">
+          <caret line="26" column="24" selection-start-line="26" selection-start-column="24" selection-end-line="26" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/init.src">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.48128343" vertical-offset="180" max-vertical-offset="1140">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/tsensor.src">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="552">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/vect.src">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="810">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/section.src">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="990">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/startup.src">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="552">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/parser/ASTParser.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="210">
+          <caret line="5" column="16" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/Decoder.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="330">
+          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/data/register/Memory.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.8" vertical-offset="255" max-vertical-offset="1155">
-          <caret line="35" column="3" selection-start-line="35" selection-start-column="3" selection-end-line="35" selection-end-column="3" />
-          <folding>
-            <element signature="e#23#57#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1125">
+          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/Decoder.scala">
+    <entry file="file://$PROJECT_DIR$/src/data/PathCondition.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.31858408" vertical-offset="0" max-vertical-offset="565">
-          <caret line="12" column="2" selection-start-line="12" selection-start-column="2" selection-end-line="12" selection-end-column="2" />
-          <folding>
-            <element signature="e#14#30#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="270">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/data/register/ConditionRegister.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="210">
+          <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/data/register/ProgramCounter.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2173913" vertical-offset="0" max-vertical-offset="552">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
