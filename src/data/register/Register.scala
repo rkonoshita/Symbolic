@@ -3,6 +3,7 @@ package data.register
 import z3.scala.{Z3AST, Z3Context}
 
 import scala.collection.mutable
+import scala.collection.mutable.ArrayBuffer
 
 /**
  * Created by rkonoshita on 14/11/12.
@@ -14,6 +15,20 @@ class Register(c: Z3Context, r: mutable.HashMap[Int, Z3AST]) {
   private final val limit = 0x07
   private final val bv32 = ctx.mkBVSort(32)
 
+  //レジスタへのアクセスが記号で行われた場合
+  def getByte(num: Z3AST): ArrayBuffer[Z3AST] = {
+    val s = ctx.mkSolver
+    val array = new ArrayBuffer[Z3AST]
+    //記号が0~fのどれに合致するか検査
+    (0 to 0x0f).foreach { n =>
+      s.push //push
+      s.assertCnstr(ctx.mkEq(ctx.mkBVAnd(num, ctx.mkInt(0x0F, bv32)), ctx.mkInt(n, bv32)))
+      if (s.check.get) array += getByte(n)
+      s.pop(1) //assertをpop
+    }
+    array
+  }
+
   def getByte(num: Int): Z3AST =
     if ((num & 0x8) == 0x8) getByteLow(num)
     else getByteHigh(num)
@@ -22,6 +37,20 @@ class Register(c: Z3Context, r: mutable.HashMap[Int, Z3AST]) {
 
   private def getByteLow(num: Int): Z3AST = ctx.mkBVAnd(reg(num & limit), ctx.mkInt(0x000000FF, bv32))
 
+  //レジスタへのアクセスが記号で行われた場合
+  def getWord(num: Z3AST): ArrayBuffer[Z3AST] = {
+    val s = ctx.mkSolver
+    val array = new ArrayBuffer[Z3AST]
+    //記号が0~fのどれに合致するか検査
+    (0 to 0xf).foreach { n =>
+      s.push //push
+      s.assertCnstr(ctx.mkEq(ctx.mkBVAnd(num, ctx.mkInt(0x0000000F, bv32)), ctx.mkInt(n, bv32)))
+      if (s.check.get) array += getWord(n)
+      s.pop(1) //assertをpop
+    }
+    array
+  }
+
   def getWord(num: Int): Z3AST =
     if ((num & 0x8) == 0x8) getWordHigh(num)
     else getWordLow(num)
@@ -29,6 +58,20 @@ class Register(c: Z3Context, r: mutable.HashMap[Int, Z3AST]) {
   private def getWordHigh(num: Int): Z3AST = ctx.mkBVAnd(ctx.mkBVAshr(reg(num & limit), ctx.mkInt(16, bv32)), ctx.mkInt(0x0000FFFF, bv32))
 
   private def getWordLow(num: Int): Z3AST = ctx.mkBVAnd(reg(num & limit), ctx.mkInt(0x0000FFFF, bv32))
+
+  //レジスタへのアクセスが記号で行われた場合
+  def getLong(num: Z3AST): ArrayBuffer[Z3AST] = {
+    val s = ctx.mkSolver
+    val array = new ArrayBuffer[Z3AST]
+    //記号が0~fのどれに合致するか検査
+    (0 to 7).foreach { n =>
+      s.push //push
+      s.assertCnstr(ctx.mkEq(ctx.mkBVAnd(num, ctx.mkInt(0x00000007, bv32)), ctx.mkInt(n, bv32)))
+      if (s.check.get) array += getLong(n)
+      s.pop(1) //assertをpop
+    }
+    array
+  }
 
   def getLong(num: Int): Z3AST = reg(num & limit)
 

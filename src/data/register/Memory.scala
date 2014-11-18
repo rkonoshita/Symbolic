@@ -3,6 +3,7 @@ package data.register
 import z3.scala.{Z3AST, Z3Context}
 
 import scala.collection.mutable
+import scala.collection.mutable.ArrayBuffer
 
 /**
  * Created by rkonoshita on 14/11/17.
@@ -12,10 +13,35 @@ class Memory(c: Z3Context, m: mutable.HashMap[Int, Z3AST]) {
   val mem = m
   private final val ctx = c
   private final val div = 4
-  private final val limit = 0xFFFF / div
+  private final val mlimit = 0x0000FFFF
+  private final val limit = mlimit / div
   private final val bv32 = ctx.mkBVSort(32)
 
   def address(num: Int): (Int, Int) = ((num / div) & limit) -> ((num % div) & limit)
+
+  def getByteForce(num: Z3AST): ArrayBuffer[Z3AST] = {
+    val s = ctx.mkSolver
+    val array = new ArrayBuffer[Z3AST]
+    (0 to mlimit).foreach { m =>
+      s.push
+      s.assertCnstr(ctx.mkEq(ctx.mkBVAnd(num, ctx.mkInt(mlimit, bv32)), ctx.mkInt(m, bv32)))
+      if(s.check.get) array += getByte(m)
+      s.pop(1)
+    }
+    array
+  }
+
+  def getByte(num: Z3AST): ArrayBuffer[Z3AST] = {
+    val s = ctx.mkSolver
+    val array = new ArrayBuffer[Z3AST]
+    (0 to mlimit).foreach { m =>
+      s.push
+      s.assertCnstr(ctx.mkEq(ctx.mkBVAnd(num, ctx.mkInt(mlimit, bv32)), ctx.mkInt(m, bv32)))
+      if(s.check.get && m % 2 == 0) array += getByte(m)
+      s.pop(1)
+    }
+    array
+  }
 
   def getByte(num: Int): Z3AST = {
     val p = address(num)
@@ -27,12 +53,36 @@ class Memory(c: Z3Context, m: mutable.HashMap[Int, Z3AST]) {
     }, bv32)), ctx.mkInt(0x000000FF, bv32))
   }
 
+  def getWord(num: Z3AST): ArrayBuffer[Z3AST] = {
+    val s = ctx.mkSolver
+    val array = new ArrayBuffer[Z3AST]
+    (0 to mlimit).foreach { m =>
+      s.push
+      s.assertCnstr(ctx.mkEq(ctx.mkBVAnd(num, ctx.mkInt(mlimit, bv32)), ctx.mkInt(m, bv32)))
+      if(s.check.get && m % 2 == 0) array += getWord(m)
+      s.pop(1)
+    }
+    array
+  }
+
   def getWord(num: Int): Z3AST = {
     val p = address(num)
     ctx.mkBVAnd(ctx.mkBVLshr(mem(p._1), ctx.mkInt({
       if (p._2 == 0) 16
       else 0
     }, bv32)), ctx.mkInt(0x0000FFFF, bv32))
+  }
+
+  def getLong(num: Z3AST): ArrayBuffer[Z3AST] = {
+    val s = ctx.mkSolver
+    val array = new ArrayBuffer[Z3AST]
+    (0 to mlimit).foreach { m =>
+      s.push
+      s.assertCnstr(ctx.mkEq(ctx.mkBVAnd(num, ctx.mkInt(mlimit, bv32)), ctx.mkInt(m, bv32)))
+      if(s.check.get && m % 2 == 0) array += getLong(m)
+      s.pop(1)
+    }
+    array
   }
 
   def getLong(num: Int): Z3AST = mem((num / 4) & limit)

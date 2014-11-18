@@ -4,6 +4,7 @@ import data.register.Register
 import z3.scala.{Z3AST, Z3Context}
 
 import scala.collection.mutable
+import scala.collection.mutable.ArrayBuffer
 
 /**
  * Created by rkonoshita on 14/11/12.
@@ -14,7 +15,9 @@ object Main {
   var symnum = -1
 
   def main(args: Array[String]): Unit = {
-
+    val array = new ArrayBuffer[Int]
+    array += 1
+    println(array(0))
 
   }
 
