@@ -11,9 +11,9 @@ import scala.collection.mutable.ArrayBuffer
 class ProgramCounter(c: Z3Context, p: Z3AST) {
 
   var pc = p
-  private final val ctx = c
-  private final val limit = 0x0000FFFF
-  private final val bv32 = ctx.mkBVSort(32)
+  private val ctx = c
+  private val limit = 0x0000FFFF
+  private val bv32 = ctx.mkBVSort(32)
 
   def getPC: ArrayBuffer[Int] = {
     val array = new ArrayBuffer[Int]

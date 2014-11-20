@@ -11,9 +11,9 @@ import scala.collection.mutable.ArrayBuffer
 class Register(c: Z3Context, r: mutable.HashMap[Int, Z3AST]) {
 
   val reg = r
-  private final val ctx = c
-  private final val limit = 0x07
-  private final val bv32 = ctx.mkBVSort(32)
+  private val ctx = c
+  private val limit = 0x07
+  private val bv32 = ctx.mkBVSort(32)
 
   //レジスタへのアクセスが記号で行われた場合
   def getByte(num: Z3AST): ArrayBuffer[Z3AST] = {

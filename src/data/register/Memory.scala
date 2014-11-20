@@ -11,11 +11,11 @@ import scala.collection.mutable.ArrayBuffer
 class Memory(c: Z3Context, m: mutable.HashMap[Int, Z3AST]) {
 
   val mem = m
-  private final val ctx = c
-  private final val div = 4
-  private final val mlimit = 0x0000FFFF
-  private final val limit = mlimit / div
-  private final val bv32 = ctx.mkBVSort(32)
+  private val ctx = c
+  private val div = 4
+  private val mlimit = 0x0000FFFF
+  private val limit = mlimit / div
+  private val bv32 = ctx.mkBVSort(32)
 
   def address(num: Int): (Int, Int) = ((num / div) & limit) -> ((num % div) & limit)
 

@@ -3,8 +3,6 @@ package main
 import data.Data
 import z3.scala.Z3Context
 
-import scala.collection.mutable.ArrayBuffer
-
 /**
  * Created by rkonoshita on 14/11/17.
  */

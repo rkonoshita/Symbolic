@@ -22,7 +22,12 @@ class Data(z3: Z3Context, r: Register, m: Memory, p: ProgramCounter, c: Conditio
     reg.reg.foreach(key => newreg += key._1 -> key._2)
     val newmem = new mutable.HashMap[Int, Z3AST]
     mem.mem.foreach(key => newmem += key._1 -> key._2)
-    new Data(ctx, new Register(ctx, newreg), new Memory(ctx, newmem), new ProgramCounter(ctx, pc.pc), new ConditionRegister(ccr.ccr), new PathCondition(path.path))
+    new Data(ctx,
+      new Register(ctx, newreg),
+      new Memory(ctx, newmem),
+      new ProgramCounter(ctx, pc.pc),
+      new ConditionRegister(ctx, ccr.ccr),
+      new PathCondition(ctx, path.path))
   }
 
 }

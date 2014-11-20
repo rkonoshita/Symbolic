@@ -1,6 +1,10 @@
 package main
 
+import java.io.File
+
+import convert.ConvertToInputForm
 import data.register.Register
+import parser.ASTParser
 import z3.scala.{Z3AST, Z3Context}
 
 import scala.collection.mutable
@@ -15,10 +19,8 @@ object Main {
   var symnum = -1
 
   def main(args: Array[String]): Unit = {
-    val array = new ArrayBuffer[Int]
-    array += 1
-    println(array(0))
-
+    println(new ASTParser().parse("ADD.B #3,R0L"))
+    new ConvertToInputForm(new File("target"), new File("asm")).convert
   }
 
   def makeSymbol(size: Int): Z3AST = {
