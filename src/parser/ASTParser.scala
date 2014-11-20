@@ -1,5 +1,7 @@
 package parser
 
+import java.io.{InputStreamReader, BufferedReader}
+
 import scala.util.parsing.combinator.RegexParsers
 
 /**
@@ -232,6 +234,6 @@ class ASTParser extends RegexParsers {
     case num1 ~ num2 => DataBlock(num1, num2)
   }
 
-  def parse(in: String) = parseAll(expr, in)
+  def parse(in: InputStreamReader) = parseAll(expr, in)
 
 }

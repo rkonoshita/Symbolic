@@ -4,7 +4,7 @@ import java.io.File
 
 import convert.ConvertToInputForm
 import data.register.Register
-import parser.ASTParser
+import parser.{ASTVisitor, ASTParser}
 import z3.scala.{Z3AST, Z3Context}
 
 import scala.collection.mutable
@@ -19,10 +19,9 @@ object Main {
   var symnum = -1
 
   def main(args: Array[String]): Unit = {
-    val str = "3+4*2+(3*2)-3*2"
-    println(str)
-    println(new ASTParser().parse(str))
-    new ConvertToInputForm(new File("target"), new File("asm")).convert
+    val file = new File("target") -> new File("asm")
+    new ConvertToInputForm(file._1, file._2).convert()
+    new ASTVisitor().makeProgram(ctx, file._2)
   }
 
   def makeSymbol(size: Int): Z3AST = {
