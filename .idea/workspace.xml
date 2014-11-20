@@ -2,6 +2,135 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7d3b70b1-efe5-4c9d-9c0f-5a6b73c88875" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/AST.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$abs$1$$anonfun$apply$10.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$abs$1$$anonfun$apply$9.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$abs$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$abs$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$abs$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$add$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$add$2$$anonfun$apply$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$add$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$add$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$add$4.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$add$5.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$bcc$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$bcc$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$bcc$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$disp$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$disp$2$$anonfun$apply$12.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$disp$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$disp$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$disp$4.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$disp$5.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$disp$6.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$disp$7.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$hex$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$hex$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$imm$1$$anonfun$apply$11.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$imm$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$imm$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$imm$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$indirMem$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$indirMem$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$indirReg$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$indirReg$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$jumpSub$1$$anonfun$apply$6.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$jumpSub$1$$anonfun$apply$7.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$jumpSub$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$jumpSub$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mlabel$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mlabel$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mlabel$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mov$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mov$2$$anonfun$apply$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mov$2$$anonfun$apply$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mov$2$$anonfun$apply$4.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mov$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mov$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mov$4.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mov$5.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$num$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$opsize$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$opsize$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$opsize$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$reg$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$reg$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$reg$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$reg$4$$anonfun$apply$8.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$reg$4.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$reg$5.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$section$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$section$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$section$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$section$4.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$section$5.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$section$6.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$section$7.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$section$8.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$sub$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$sub$2$$anonfun$apply$5.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$sub$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$sub$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$sub$4.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$sub$5.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$ulabel$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$ulabel$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/AbsAddress$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/AbsAddress.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/AddByte$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/AddByte.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/AddLong$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/AddLong.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/AddWord$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/AddWord.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/BRA$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/BRA.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/Disp$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/Disp.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/Imm$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/Imm.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/IncByte$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/IncByte.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/IncLong$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/IncLong.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/IncWord$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/IncWord.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/IndirAdd$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/IndirAdd.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/IndirReg$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/IndirReg.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/JumpSub$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/JumpSub.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/MakeLabel$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/MakeLabel.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/MovByte$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/MovByte.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/MovLong$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/MovLong.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/MovWord$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/MovWord.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/Number$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/Number.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/RegByte$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/RegByte.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/RegLong$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/RegLong.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/RegWord$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/RegWord.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/Section$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/Section.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/SubByte$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/SubByte.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/SubLong$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/SubLong.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/SubWord$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/SubWord.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/UseLabel$.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/UseLabel.class" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/section.src" afterPath="$PROJECT_DIR$/target/section.src" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/startup.src" afterPath="$PROJECT_DIR$/target/startup.src" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/vect.src" afterPath="$PROJECT_DIR$/target/vect.src" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Symbolic.iws" />
@@ -65,11 +194,71 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ASTParser.scala" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ASTParser.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/parser/ASTParser.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.7125" vertical-offset="495" max-vertical-offset="2010">
-              <caret line="14" column="15" selection-start-line="14" selection-start-column="15" selection-end-line="14" selection-end-column="15" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="495" max-vertical-offset="2010">
+              <caret line="44" column="7" selection-start-line="44" selection-start-column="7" selection-end-line="44" selection-end-column="7" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="section.src" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/target/section.src">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="375">
+              <caret line="9" column="42" selection-start-line="9" selection-start-column="42" selection-end-line="9" selection-end-column="42" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.src" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/target/main.src">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="led.src" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/target/led.src">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="270">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="data.src" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/target/data.src">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="180">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="vect.src" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/target/vect.src">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="391" max-vertical-offset="720">
+              <caret line="34" column="46" selection-start-line="34" selection-start-column="46" selection-end-line="34" selection-end-column="46" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="startup.src" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/target/startup.src">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="329">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -99,6 +288,9 @@
         <option value="$PROJECT_DIR$/src/main/Decoder.scala" />
         <option value="$PROJECT_DIR$/src/parser/ASTParser.scala" />
         <option value="$PROJECT_DIR$/src/parser/AST.scala" />
+        <option value="$PROJECT_DIR$/target/section.src" />
+        <option value="$PROJECT_DIR$/target/vect.src" />
+        <option value="$PROJECT_DIR$/target/startup.src" />
       </list>
     </option>
   </component>
@@ -178,24 +370,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Symbolic" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Symbolic" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="parser" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -513,12 +687,12 @@
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32934684" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32718894" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4562212" sideWeight="0.5018657" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32896304" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.45649582" sideWeight="0.49787235" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32718894" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4562212" sideWeight="0.4972015" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32718894" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22108209" sideWeight="0.49814126" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -567,54 +741,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/data/register/Memory.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="405" max-vertical-offset="1905">
-          <caret line="27" column="20" selection-start-line="27" selection-start-column="20" selection-end-line="27" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/data/register/PathCondition.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="315">
-          <caret line="12" column="28" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/data/register/ProgramCounter.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="555">
-          <caret line="12" column="2" selection-start-line="12" selection-start-column="2" selection-end-line="12" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/Decoder.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="330" max-vertical-offset="450">
-          <caret line="22" column="3" selection-start-line="22" selection-start-column="3" selection-end-line="22" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/data/Data.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="225" max-vertical-offset="585">
-          <caret line="15" column="12" selection-start-line="15" selection-start-column="12" selection-end-line="15" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/data/register/ConditionRegister.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="285">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/parser/ASTParser.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="100">
@@ -943,14 +1069,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/target/init.src">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36144578" vertical-offset="90" max-vertical-offset="1140">
-          <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/parser/AST.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.07692308" vertical-offset="270" max-vertical-offset="945">
@@ -961,8 +1079,64 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/parser/ASTParser.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.7125" vertical-offset="495" max-vertical-offset="2010">
-          <caret line="14" column="15" selection-start-line="14" selection-start-column="15" selection-end-line="14" selection-end-column="15" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="495" max-vertical-offset="2010">
+          <caret line="44" column="7" selection-start-line="44" selection-start-column="7" selection-end-line="44" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/section.src">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="375">
+          <caret line="9" column="42" selection-start-line="9" selection-start-column="42" selection-end-line="9" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/main.src">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/led.src">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="329">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/init.src">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.36144578" vertical-offset="90" max-vertical-offset="1140">
+          <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/data.src">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="329">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/vect.src">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="391" max-vertical-offset="720">
+          <caret line="34" column="46" selection-start-line="34" selection-start-column="46" selection-end-line="34" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/startup.src">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="390">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
