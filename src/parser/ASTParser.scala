@@ -17,6 +17,14 @@ class ASTParser extends RegexParsers {
       }
   }
 
+//  //INC
+//  def inc: Parser[AST] = "INC." ~> opsize ~ (imm | reg) ~ "," ~ reg ^^ {
+//    case size ~ left ~ c ~ right =>
+//      size match {
+//        case INC
+//      }
+//  }
+
   //MOV
   def mov: Parser[AST] = "MOV." ~> opsize ~ (imm | reg | abs | disp) ~ "," ~ reg ^^ {
     case size ~ left ~ c ~ right =>
@@ -37,6 +45,7 @@ class ASTParser extends RegexParsers {
       }
   }
 
+  //JSR
   def jumpSub: Parser[AST] = "JSR" ~> (abs | indirReg | indirMem) ^^ (JumpSub(_))
 
   //オペレーションのサイズ
@@ -63,6 +72,11 @@ class ASTParser extends RegexParsers {
       }
   }
 
+  //条件付き分岐
+  def bcc: Parser[AST] = "BRA" ~ ulabel <~ ":(8|16)".r ^^ {
+    case "BRA" ~ num => BRA(num)
+  }
+
   //10進数
   def num: Parser[AST] = "[0-9]+".r ^^ (num => Number(num.toInt))
 
@@ -81,7 +95,7 @@ class ASTParser extends RegexParsers {
   def abs: Parser[AST] = "@" ~> (num | hex | ulabel) ~ ":(8|16|24)".? ^^ {
     case num ~ size =>
       size match {
-        case Some(s) => AbsAddress(num, size.get.toInt)
+        case Some(s) => AbsAddress(num, size.get.replace(":", "").toInt)
         case None => AbsAddress(num, 16)
       }
 
@@ -98,7 +112,7 @@ class ASTParser extends RegexParsers {
 
   //ディスプレースメント付
   def disp: Parser[AST] = "@" ~> "(" ~> (num | hex) ~ ":(16|24)".r ~ "," ~ reg <~ ")" ^^ {
-    case num ~ size ~ c ~ reg => Disp(num, reg, size.toInt)
+    case num ~ size ~ c ~ reg => Disp(num, reg, size.replace(":", "").toInt)
   }
 
   //16進数(文字列)を10進数（整数）へ変換

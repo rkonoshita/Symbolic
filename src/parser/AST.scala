@@ -11,6 +11,12 @@ case class AddWord(left: AST, right: AST) extends AST
 
 case class AddLong(left: AST, right: AST) extends AST
 
+case class IncByte(left: AST) extends AST
+
+case class IncWord(left: AST, right: AST) extends AST
+
+case class IncLong(left: AST, right: AST) extends AST
+
 case class SubByte(left: AST, right: AST) extends AST
 
 case class SubWord(left: AST, right: AST) extends AST
@@ -24,6 +30,8 @@ case class MovWord(left: AST, right: AST) extends AST
 case class MovLong(left: AST, right: AST) extends AST
 
 case class JumpSub(add: AST) extends AST
+
+case class BRA(num: AST) extends AST
 
 case class Section(str: String) extends AST
 
