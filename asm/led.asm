@@ -1,4 +1,0 @@
-.SECTION    P,CODE,ALIGN=2
-_led_set:
-MOV.B       R0L,@65496:8
-RTS

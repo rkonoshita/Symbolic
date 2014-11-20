@@ -1,3 +1,0 @@
-.SECTION    D,DATA,ALIGN=2
-_c_start:
-.DATA.W H'0000
