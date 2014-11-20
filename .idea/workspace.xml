@@ -1,138 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7d3b70b1-efe5-4c9d-9c0f-5a6b73c88875" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/AST.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$abs$1$$anonfun$apply$10.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$abs$1$$anonfun$apply$9.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$abs$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$abs$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$abs$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$add$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$add$2$$anonfun$apply$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$add$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$add$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$add$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$add$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$bcc$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$bcc$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$bcc$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$disp$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$disp$2$$anonfun$apply$12.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$disp$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$disp$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$disp$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$disp$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$disp$6.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$disp$7.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$hex$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$hex$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$imm$1$$anonfun$apply$11.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$imm$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$imm$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$imm$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$indirMem$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$indirMem$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$indirReg$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$indirReg$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$jumpSub$1$$anonfun$apply$6.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$jumpSub$1$$anonfun$apply$7.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$jumpSub$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$jumpSub$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mlabel$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mlabel$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mlabel$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mov$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mov$2$$anonfun$apply$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mov$2$$anonfun$apply$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mov$2$$anonfun$apply$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mov$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mov$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mov$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$mov$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$num$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$opsize$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$opsize$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$opsize$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$reg$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$reg$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$reg$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$reg$4$$anonfun$apply$8.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$reg$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$reg$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$section$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$section$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$section$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$section$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$section$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$section$6.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$section$7.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$section$8.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$sub$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$sub$2$$anonfun$apply$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$sub$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$sub$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$sub$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$sub$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$ulabel$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/ASTParser$$anonfun$ulabel$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/AbsAddress$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/AbsAddress.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/AddByte$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/AddByte.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/AddLong$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/AddLong.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/AddWord$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/AddWord.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/BRA$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/BRA.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/Disp$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/Disp.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/Imm$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/Imm.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/IncByte$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/IncByte.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/IncLong$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/IncLong.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/IncWord$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/IncWord.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/IndirAdd$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/IndirAdd.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/IndirReg$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/IndirReg.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/JumpSub$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/JumpSub.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/MakeLabel$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/MakeLabel.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/MovByte$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/MovByte.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/MovLong$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/MovLong.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/MovWord$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/MovWord.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/Number$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/Number.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/RegByte$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/RegByte.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/RegLong$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/RegLong.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/RegWord$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/RegWord.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/Section$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/Section.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/SubByte$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/SubByte.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/SubLong$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/SubLong.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/SubWord$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/SubWord.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/UseLabel$.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Symbolic/parser/UseLabel.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/section.src" afterPath="$PROJECT_DIR$/target/section.src" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/startup.src" afterPath="$PROJECT_DIR$/target/startup.src" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/vect.src" afterPath="$PROJECT_DIR$/target/vect.src" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="7d3b70b1-efe5-4c9d-9c0f-5a6b73c88875" name="Default" comment="" />
     <ignored path="Symbolic.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -176,8 +45,8 @@
             <file leaf-file-name="init.src" pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/target/init.src">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state vertical-scroll-proportion="0.36144578" vertical-offset="90" max-vertical-offset="1140">
-                    <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
+                  <state vertical-scroll-proportion="0.8674699" vertical-offset="90" max-vertical-offset="1140">
+                    <caret line="30" column="36" selection-start-line="30" selection-start-column="36" selection-end-line="30" selection-end-column="36" />
                     <folding />
                   </state>
                 </provider>
@@ -1069,14 +938,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/parser/AST.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.07692308" vertical-offset="270" max-vertical-offset="945">
-          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/parser/ASTParser.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="495" max-vertical-offset="2010">
@@ -1109,14 +970,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/target/init.src">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36144578" vertical-offset="90" max-vertical-offset="1140">
-          <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/target/data.src">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="329">
@@ -1137,6 +990,22 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="390">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/init.src">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8674699" vertical-offset="90" max-vertical-offset="1140">
+          <caret line="30" column="36" selection-start-line="30" selection-start-column="36" selection-end-line="30" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/parser/AST.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.07692308" vertical-offset="270" max-vertical-offset="945">
+          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
           <folding />
         </state>
       </provider>
