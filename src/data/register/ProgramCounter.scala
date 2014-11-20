@@ -1,6 +1,6 @@
 package data.register
 
-import data.Data
+import data.DataSet
 import z3.scala.{Z3Context, Z3AST}
 
 import scala.collection.mutable.ArrayBuffer

@@ -8,7 +8,7 @@ import scala.collection.mutable
 /**
  * Created by rkonoshita on 14/11/12.
  */
-class Data(z3: Z3Context, r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, pt: PathCondition) {
+class DataSet(z3: Z3Context, r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, pt: PathCondition) {
 
   val ctx = z3
   val reg = r
@@ -17,12 +17,12 @@ class Data(z3: Z3Context, r: Register, m: Memory, p: ProgramCounter, c: Conditio
   val ccr = c
   val path = pt
 
-  override def clone(): Data = {
+  override def clone(): DataSet = {
     val newreg = new mutable.HashMap[Int, Z3AST]
     reg.reg.foreach(key => newreg += key._1 -> key._2)
     val newmem = new mutable.HashMap[Int, Z3AST]
     mem.mem.foreach(key => newmem += key._1 -> key._2)
-    new Data(ctx,
+    new DataSet(ctx,
       new Register(ctx, newreg),
       new Memory(ctx, newmem),
       new ProgramCounter(ctx, pc.pc),
