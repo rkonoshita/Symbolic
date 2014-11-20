@@ -19,7 +19,9 @@ object Main {
   var symnum = -1
 
   def main(args: Array[String]): Unit = {
-    println(new ASTParser().parse("ADD.B #3,R0L"))
+    val str = "3+4*2+(3*2)-3*2"
+    println(str)
+    println(new ASTParser().parse(str))
     new ConvertToInputForm(new File("target"), new File("asm")).convert
   }
 

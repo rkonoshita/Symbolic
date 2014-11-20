@@ -1,6 +1,6 @@
 package main
 
-import data.Data
+import data.DataSet
 import z3.scala.Z3Context
 
 /**
@@ -11,7 +11,7 @@ class Decoder(c: Z3Context) {
   private final val ctx = c
   private final val bv32 = ctx.mkBVSort(32)
 
-  def analyze(data: Data): Unit = {
+  def analyze(data: DataSet): Unit = {
     val pclist = data.pc.getPC
     pclist.foreach { p =>
       val d = data.clone
