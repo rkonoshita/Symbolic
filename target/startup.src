@@ -9,7 +9,7 @@
 
 _startup:
     MOV.L   #H'FF80, ER7
-	JSR		@__INITSCT
-    JSR     @_main
+	JSR		@__INITSCT:16
+    JSR     @_main:16
     
     .END

@@ -52,7 +52,19 @@ class ConvertToInputForm(t: File, a: File) {
                 str = str.replaceAll(l, trans(l)) //新ラベルへ変換
             }
 
-          val trim = str
+          //ラベル宣言の直後に文が来ないようにする
+          val trim =
+            if (str.startsWith("_")) {
+              val la = str.split("[ \t]")
+              if (la.isEmpty | la.length == 1) str
+              else {
+                writter.println(la(0))
+                var newstr = ""
+                for (i <- 1 until la.length) newstr += la(i)
+                newstr.trim
+              }
+            } else str
+
           //".DATA.(size)は分解
           if (trim.startsWith(".DATA.")) {
             val data = trim.substring(0, 7)

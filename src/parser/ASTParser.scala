@@ -16,6 +16,12 @@ import scala.util.parsing.combinator.RegexParsers
 //手で*.srcを書かなければ気にしなくていいです
 class ASTParser extends RegexParsers {
 
+  def root: Parser[AST] = op | section | mlabel
+
+  def op: Parser[AST] = (add | inc | cmp | sub |
+    and | not | andc | orc | mov | push | pop | extu | bset | bclr |
+    jsr | jmp | rts | rte | bcc | data | dataBlock)
+
   //ADD
   def add: Parser[AST] = "ADD." ~> opsize ~> (imm | reg) ~ "," ~ reg ^^ {
     case left ~ c ~ right => Add(left, right)
@@ -26,7 +32,7 @@ class ASTParser extends RegexParsers {
     case left ~ c ~ right =>
       right match {
         case Some(s) => Inc(left, s.asInstanceOf[AST])
-        case None => Inc(left)
+        case None => Inc(left, Number(0))
       }
   }
 
@@ -55,7 +61,7 @@ class ASTParser extends RegexParsers {
   def orc: Parser[AST] = "ORC.B" ~> imm <~ "," <~ "CCR" ^^ (Orc(_))
 
   //MOV
-  def mov: Parser[AST] = "MOV." ~> opsize ~> (imm | reg | abs | disp) ~ "," ~ reg ^^ {
+  def mov: Parser[AST] = "MOV." ~> opsize ~> (reg | imm | indirReg | disp | pos | abs) ~ "," ~ (reg | indirReg | disp | pos | abs) ^^ {
     case left ~ c ~ right => Mov(left, right)
   }
 
@@ -74,38 +80,39 @@ class ASTParser extends RegexParsers {
   }
 
   //BCLR
-  def bclr: Parser[AST] = "BCLR.B" ~> (imm | reg) ~ "." ~ (reg | abs | indirReg) ^^ {
+  def bclr: Parser[AST] = "BCLR.B" ~> (imm | reg) ~ "," ~ (reg | abs | indirReg) ^^ {
     case left ~ c ~ right => Bset(left, right)
   }
 
   //JSR
-  def jumpSub: Parser[AST] = "JSR" ~> (abs | indirReg | indirMem) ^^ (Jsr(_))
+  def jsr: Parser[AST] = "JSR" ~> (abs | indirReg | indirMem) ^^ (Jsr(_))
 
   //JMP
-  def jump: Parser[AST] = "JMP" ~> (indirReg | abs | indirMem) ^^ (Jmp(_))
+  def jmp: Parser[AST] = "JMP" ~> (indirReg | abs | indirMem) ^^ (Jmp(_))
 
   //RTS
   def rts: Parser[AST] = "RTS" ^^ {
     case _ => Rts()
   }
 
+  //rte
   def rte: Parser[AST] = "RTE" ^^ {
     case _ => Rte()
   }
 
   //条件付き分岐
-  def bcc: Parser[AST] = "(BRA|BLO|BLT|BHI)".r ~ label <~ ":(8|16)".r ^^ {
-    case "BRA" ~ num => Bra(num)
-    case "BLO" ~ num => Blo(num)
-    case "BLT" ~ num => Blt(num)
-    case "BHI" ~ num => Bhi(num)
+  def bcc: Parser[AST] = "(BRA|BLO|BLT|BHI)".r ~ label ~ ":" ~ ("8" | "16") ^^ {
+    case "BRA" ~ num ~ c ~ size => Bra(num, size.toInt)
+    case "BLO" ~ num ~ c ~ size => Blo(num, size.toInt)
+    case "BLT" ~ num ~ c ~ size => Blt(num, size.toInt)
+    case "BHI" ~ num ~ c ~ size => Bhi(num, size.toInt)
   }
 
   //オペレーションのサイズ
   def opsize = ("B" | "W" | "L")
 
   //現在のセクション
-  def section: Parser[AST] = ".SECTION" ~> "[VPCDRB]".r <~ "," <~ "CODE" <~ "," <~ "ALIGN" <~ "=" <~ "[0-9]+".r ^^ (Section(_))
+  def section: Parser[AST] = ".SECTION" ~> "[VPCDRB]".r <~ "," <~ ("CODE" | "DATA") <~ "," <~ "ALIGN" <~ "=" <~ "[0-9]+".r ^^ (Section(_))
 
   //レジスタ
   def reg: Parser[AST] = ("ER" | "R" | "E") ~ "[0-7]".r ~ ("H" | "L").? ^^ {
@@ -181,7 +188,7 @@ class ASTParser extends RegexParsers {
   }
 
   //数値として使えるものを一括
-  def number: Parser[AST] = num | hex | label | "(" ~> expr <~ ")"
+  def number: Parser[AST] = sizeof | startof | num | hex | label | "(" ~> expr <~ ")"
 
   //10進数
   def num: Parser[AST] = "[0-9]+".r ^^ (num => Number(num.toInt))
@@ -195,13 +202,19 @@ class ASTParser extends RegexParsers {
   def label: Parser[AST] = ("_[a-zA-Z0-9_$]+".r | "L[0-9]+".r) ^^ (Label(_))
 
   //位置として出現するラベル
-  def mlabel: Parser[AST] = label <~ ":" ^^ (MakeLabel(_))
+  def mlabel: Parser[AST] = label <~ ":".? ^^ (MakeLabel(_))
+
+  //セクションサイズ
+  def sizeof: Parser[AST] = "SIZEOF" ~> "[VPCDBR]".r ^^ (SizeOf(_))
+
+  //セクション開始位置
+  def startof: Parser[AST] = "STARTOF" ~> "[VPCDBR]".r ^^ (StartOf(_))
 
   //絶対アドレス
-  def abs: Parser[AST] = "@" ~> (expr | hex | label) ~ ":(8|16|24)".? ^^ {
-    case num ~ size =>
+  def abs: Parser[AST] = "@" ~> (expr | hex | label) ~ ":" ~ ("8" | "16" | "24").? ^^ {
+    case num ~ c ~ size =>
       size match {
-        case Some(s) => AbsAddress(num, size.get.replace(":", "").toInt)
+        case Some(s) => AbsAddress(num, size.get.toInt)
         case None => AbsAddress(num, 16)
       }
   }
@@ -216,9 +229,18 @@ class ASTParser extends RegexParsers {
   def indirMem: Parser[AST] = "@" ~> abs ^^ (IndirAdd(_))
 
   //ディスプレースメント付
-  def disp: Parser[AST] = "@" ~> "(" ~> (expr | hex) ~ ":(16|24)".r ~ "," ~ reg <~ ")" ^^ {
-    case num ~ size ~ c ~ reg => Disp(num, reg, size.replace(":", "").toInt)
+  def disp: Parser[AST] = "@" ~> "(" ~> (expr | hex) ~ ":" ~ ("16" | "24") ~ "," ~ reg <~ ")" ^^ {
+    case num ~ c1 ~ size ~ c2 ~ reg => Disp(num, reg, size.toInt)
   }
+
+  def pos: Parser[AST] = "@" ~> (reg ~ "+" | "-" ~ reg) ^^ {
+    case left ~ right =>
+      (left, right) match {
+        case (l: AST, r: String) => Pos(l)
+        case (l: String, r: AST) => Pre(r)
+      }
+  }
+
 
   //16進数(文字列)を10進数（整数）へ変換
   private def hexToInt(hex: String): Int = {
@@ -228,12 +250,14 @@ class ASTParser extends RegexParsers {
     }.toInt
   }
 
-  def data: Parser[AST] = ".DATA" ~> opsize ~> expr ^^ (Data(_))
+  def data: Parser[AST] = ".DATA." ~> opsize ~> expr ^^ (Data(_))
 
-  def dataBlock: Parser[AST] = ".DATAB." ~> opsize ~> expr ~ expr ^^ {
-    case num1 ~ num2 => DataBlock(num1, num2)
+  def dataBlock: Parser[AST] = ".DATAB." ~> opsize ~> expr ~ "," ~ expr ^^ {
+    case num1 ~ c ~ num2 => DataBlock(num1, num2)
   }
 
-  def parse(in: InputStreamReader) = parseAll(expr, in)
+  def parse(in: InputStreamReader) = parseAll(root, in)
+
+  def parse(in: String) = parseAll(root, in)
 
 }

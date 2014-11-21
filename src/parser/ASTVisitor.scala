@@ -15,7 +15,8 @@ class ASTVisitor {
 
   def makeProgram(ctx: Z3Context, file: File): Memory = {
     file.listFiles.foreach { f =>
-      println(new ASTParser().parse(Source.fromFile(f).reader))
+      println(f)
+      Source.fromFile(f).getLines.foreach(l => println(new ASTParser().parse(l)))
     }
     new Memory(ctx, new mutable.HashMap[Int, Z3AST]())
   }

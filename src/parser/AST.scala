@@ -7,7 +7,7 @@ trait AST
 
 case class Add(left: AST, right: AST) extends AST
 
-case class Inc(left: AST*) extends AST
+case class Inc(left: AST, right: AST) extends AST
 
 case class Cmp(left: AST, right: AST) extends AST
 
@@ -41,13 +41,13 @@ case class Rts() extends AST
 
 case class Rte() extends AST
 
-case class Bra(num: AST) extends AST
+case class Bra(num: AST, size: Int) extends AST
 
-case class Blo(num: AST) extends AST
+case class Blo(num: AST, size: Int) extends AST
 
-case class Blt(num: AST) extends AST
+case class Blt(num: AST, size: Int) extends AST
 
-case class Bhi(num: AST) extends AST
+case class Bhi(num: AST, size: Int) extends AST
 
 case class Section(str: String) extends AST
 
@@ -69,6 +69,10 @@ case class Number(num: Int) extends AST
 
 case class Disp(disp: AST, reg: AST, size: Int) extends AST
 
+case class Pos(reg: AST) extends AST
+
+case class Pre(reg: AST) extends AST
+
 case class Label(name: String) extends AST
 
 case class MakeLabel(label: AST) extends AST
@@ -89,6 +93,6 @@ case class HWord(num: AST) extends AST
 
 case class LWord(num: AST) extends AST
 
-case class StartOf(sec: AST) extends AST
+case class StartOf(sec: String) extends AST
 
-case class SizeOf(sec: AST) extends AST
+case class SizeOf(sec: String) extends AST
