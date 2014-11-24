@@ -250,10 +250,22 @@ class ASTParser extends RegexParsers {
     }.toInt
   }
 
-  def data: Parser[AST] = ".DATA." ~> opsize ~> expr ^^ (Data(_))
+  def data: Parser[AST] = ".DATA." ~> opsize ~ expr ^^ {
+    case size ~ expr =>
+      size match {
+        case "B" => Data(expr, 8)
+        case "W" => Data(expr, 16)
+        case "L" => Data(expr, 32)
+      }
+  }
 
-  def dataBlock: Parser[AST] = ".DATAB." ~> opsize ~> expr ~ "," ~ expr ^^ {
-    case num1 ~ c ~ num2 => DataBlock(num1, num2)
+  def dataBlock: Parser[AST] = ".DATAB." ~> opsize ~ expr ~ "," ~ expr ^^ {
+    case size ~ num1 ~ c ~ num2 =>
+      size match {
+        case "B" => DataBlock(num1,num2,8)
+        case "W" => DataBlock(num1,num2,16)
+        case "L" => DataBlock(num1,num2,32)
+      }
   }
 
   def parse(in: InputStreamReader) = parseAll(root, in)

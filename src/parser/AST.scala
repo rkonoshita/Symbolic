@@ -77,9 +77,9 @@ case class Label(name: String) extends AST
 
 case class MakeLabel(label: AST) extends AST
 
-case class Data(num: AST) extends AST
+case class Data(num: AST, size: Int) extends AST
 
-case class DataBlock(num1: AST, num2: AST) extends AST
+case class DataBlock(block: AST, data: AST, size: Int) extends AST
 
 case class Expr(op: String, left: AST, right: AST) extends AST
 
