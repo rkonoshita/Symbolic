@@ -202,7 +202,7 @@ class ASTVisitor {
           case (l: Imm, r: RegLong) =>
             val hold = visit(l).asInstanceOf[VisitInt].item
             new VisitArray(Array(0x7A, 0x10 | visit(r).asInstanceOf[VisitInt].item, (hold >> 24) & 0xFF, (hold >> 16) & 0xFF, (hold >> 8) & 0xFF, hold & 0xFF))
-          case (l: RegLong, r: RegLong) => new VisitArray(Array(0x0A, 0x10 | (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item))
+          case (l: RegLong, r: RegLong) => new VisitArray(Array(0x0A, 0x80 | (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item))
         }
       case Inc(left, right) =>
         (left, right) match {
@@ -212,12 +212,26 @@ class ASTVisitor {
         }
       case Cmp(left, right) =>
         (left, right) match {
-          case (l: Imm, r: RegByte) =>
-          case (l: RegByte, r: RegByte) =>
+          case (l: Imm, r: RegByte) => new VisitArray(Array(0xA0 | visit(r).asInstanceOf[VisitInt].item, visit(l).asInstanceOf[VisitInt].item))
+          case (l: RegByte, r: RegByte) => new VisitArray(Array(0x1C, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item))
           case (l: Imm, r: RegWord) =>
-          case (l: RegWord, r: RegWord) =>
+            val hold = visit(l).asInstanceOf[VisitInt].item
+            new VisitArray(Array(0x79, 0x20 | visit(r).asInstanceOf[VisitInt].item, (hold >> 8) & 0xFF, hold & 0xFF))
+          case (l: RegWord, r: RegWord) => new VisitArray(Array(0x1D, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item))
           case (l: Imm, RegLong, r: RegLong) =>
-          case (l, RegLong, r: RegLong) =>
+            val hold = visit(l).asInstanceOf[VisitInt].item
+            new VisitArray(Array(0x7A, 0x20 | visit(r).asInstanceOf[VisitInt].item, (hold >> 24) & 0xFF, (hold >> 16) & 0xFF, (hold >> 8) & 0xFF, hold & 0xFF))
+          case (l, RegLong, r: RegLong) => new VisitArray(Array(0x1F, 0x80 | (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item))
+        }
+      case Sub(left, right) =>
+        (left, right) match {
+          case (l: RegByte, r: RegByte) => new VisitArray(Array(0x18, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item))
+          case (l: Imm, r: RegWord) =>
+            val hold = visit(l).asInstanceOf[VisitInt].item
+            new VisitArray(Array(0x79, 0x30 | visit(r).asInstanceOf[VisitInt].item, (hold >> 8) & 0xFF, hold & 0xFF))
+          case (l: RegWord, r: RegWord) => new VisitArray(Array(0x19, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item))
+          case (l: Imm, r: RegLong) => new VisitInt(6)
+          case (l: RegLong, r: RegLong) => new VisitInt(2)
         }
       case Section(str) => new VisitString(str)
       case RegByte(num) => new VisitInt(num)
@@ -229,8 +243,7 @@ class ASTVisitor {
 
 }
 
-trait VisitItem {
-  type T
+trait VisitItem[T] {
   val item: T
 }
 
