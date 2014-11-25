@@ -3,12 +3,8 @@ package main
 import java.io.File
 
 import convert.ConvertToInputForm
-import data.register.Register
-import parser.{ASTVisitor, ASTParser}
+import parser.ASTVisitor
 import z3.scala.{Z3AST, Z3Context}
-
-import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
 
 /**
  * Created by rkonoshita on 14/11/12.
