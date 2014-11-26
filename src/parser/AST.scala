@@ -73,7 +73,7 @@ case class Pos(reg: AST) extends AST
 
 case class Pre(reg: AST) extends AST
 
-case class Label(name: String) extends AST
+case class LabelName(name: String) extends AST
 
 case class MakeLabel(label: AST) extends AST
 
@@ -84,6 +84,8 @@ case class DataBlock(block: AST, data: AST, size: Int) extends AST
 case class Expr(op: String, left: AST, right: AST) extends AST
 
 case class Minus(num: AST) extends AST
+
+case class Rev(num: AST) extends AST
 
 case class High(num: AST) extends AST
 

@@ -1,8 +1,7 @@
 package main
 
 import java.io.File
-
-import convert.ConvertToInputForm
+import main.ConvertToInputForm
 import parser.ASTVisitor
 import z3.scala.{Z3AST, Z3Context}
 
@@ -15,9 +14,9 @@ object Main {
   var symnum = -1
 
   def main(args: Array[String]): Unit = {
-    val file = new File("target") -> new File("asm")
-    new ConvertToInputForm(file._1, file._2).convert()
-    new ASTVisitor().makeProgram(ctx, file._2)
+    //    val file = new File("target") -> new File("asm")
+    //    new ConvertToInputForm(file._1, file._2).convert()
+    //    new ASTVisitor().makeProgram(ctx, file._2)
   }
 
   def makeSymbol(size: Int): Z3AST = {

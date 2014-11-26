@@ -3,7 +3,7 @@ package parser
 import java.io.File
 
 import data.register.Memory
-import parameter.Parameter
+import main.Parameter
 import z3.scala.{Z3AST, Z3Context}
 
 import scala.collection.mutable
@@ -21,24 +21,28 @@ class ASTVisitor {
   count ++= Parameter.start
   var section = ""
   val parseResult = new ListBuffer[AST]
+  val tmppc = new MyHashMap
+  tmppc ++= Parameter.start
 
   def makeProgram(ctx: Z3Context, file: File): Memory = {
     file.listFiles.foreach { f =>
       Source.fromFile(f).getLines.foreach { l =>
-        val p = new ASTParser().parse(l).get
-        println(p)
-        parseResult += p
+        parseResult += new ASTParser().parse(l).get
       }
     }
     parseResult.foreach { p =>
       val num = search(p).asInstanceOf[VisitInt].item
       count.put(section, num)
     }
-    count.foreach(println(_))
     val memory = new mutable.HashMap[Int, Z3AST]
-    //    parseResult.foreach { p =>
-    //
-    //    }
+    parseResult.foreach { p =>
+      println(p)
+      val array = visit(p)
+      val num = search(p).asInstanceOf[VisitInt].item
+      tmppc.put(section, num)
+    }
+    count.foreach(println(_))
+    tmppc.foreach(println(_))
     Parameter.sizeset(count)
     new Memory(ctx, memory)
   }
@@ -187,7 +191,7 @@ class ASTVisitor {
         }
       case AbsAddress(num, size) => new VisitInt(size)
       case Disp(disp, reg, size) => new VisitInt(size)
-      case Label(str) => new VisitString(str)
+      case LabelName(str) => new VisitString(str)
       case Number(num) => new VisitInt(num)
       case MakeLabel(name) =>
         label += search(name).asInstanceOf[VisitString].item -> count(section)
@@ -264,8 +268,8 @@ class ASTVisitor {
           case i: RegWord => new VisitArray(0x17, 0x10 | visit(i).asInstanceOf[VisitInt].item)
           case i: RegLong => new VisitArray(0x17, 0x30 | visit(i).asInstanceOf[VisitInt].item)
         }
-      case Andc(item) => new VisitArray(0x06, item.asInstanceOf[VisitInt].item)
-      case Orc(item) => new VisitArray(0x04, item.asInstanceOf[VisitInt].item)
+      case Andc(item) => new VisitArray(0x06, visit(item).asInstanceOf[VisitInt].item)
+      case Orc(item) => new VisitArray(0x04, visit(item).asInstanceOf[VisitInt].item)
       case Mov(left, right) =>
         (left, right) match {
           case (l: RegByte, r: RegByte) => new VisitArray(0x0C, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
@@ -360,19 +364,19 @@ class ASTVisitor {
         (left, right) match {
           case (l: Imm, r: RegByte) => new VisitArray(0x72, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
           case (l: Imm, r: IndirReg) => new VisitArray(0x7D, visit(r).asInstanceOf[VisitInt].item << 4, 0x72, visit(l).asInstanceOf[VisitInt].item << 4)
-          case (l: Imm, r: AbsAddress) => new VisitArray(0x7F, visit(r).asInstanceOf[VisitInt].item, 0x72, visit(l).asInstanceOf[VisitInt].item << 4)
+          case (l: Imm, r: AbsAddress) => new VisitArray(0x7F, visit(r).asInstanceOf[VisitArray].item(0), 0x72, visit(l).asInstanceOf[VisitInt].item << 4)
           case (l: RegByte, r: RegByte) => new VisitArray(0x62, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
           case (l: RegByte, r: IndirReg) => new VisitArray(0x7D, visit(r).asInstanceOf[VisitInt].item << 4, 0x62, visit(l).asInstanceOf[VisitInt].item << 4)
-          case (l: RegByte, r: AbsAddress) => new VisitArray(0x7F, visit(r).asInstanceOf[VisitInt].item, 0x62, visit(l).asInstanceOf[VisitInt].item << 4)
+          case (l: RegByte, r: AbsAddress) => new VisitArray(0x7F, visit(r).asInstanceOf[VisitArray].item(0), 0x62, visit(l).asInstanceOf[VisitInt].item << 4)
         }
       case Bset(left, right) =>
         (left, right) match {
           case (l: Imm, r: RegByte) => new VisitArray(0x70, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
           case (l: Imm, r: IndirReg) => new VisitArray(0x7D, visit(r).asInstanceOf[VisitInt].item << 4, 0x70, visit(l).asInstanceOf[VisitInt].item << 4)
-          case (l: Imm, r: AbsAddress) => new VisitArray(0x7F, visit(r).asInstanceOf[VisitInt].item, 0x70, visit(l).asInstanceOf[VisitInt].item << 4)
+          case (l: Imm, r: AbsAddress) => new VisitArray(0x7F, visit(r).asInstanceOf[VisitArray].item(0), 0x70, visit(l).asInstanceOf[VisitInt].item << 4)
           case (l: RegByte, r: RegByte) => new VisitArray(0x60, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
           case (l: RegByte, r: IndirReg) => new VisitArray(0x7D, visit(r).asInstanceOf[VisitInt].item << 4, 0x60, visit(l).asInstanceOf[VisitInt].item << 4)
-          case (l: RegByte, r: AbsAddress) => new VisitArray(0x7F, visit(r).asInstanceOf[VisitInt].item, 0x60, visit(l).asInstanceOf[VisitInt].item << 4)
+          case (l: RegByte, r: AbsAddress) => new VisitArray(0x7F, visit(r).asInstanceOf[VisitArray].item(0), 0x60, visit(l).asInstanceOf[VisitInt].item << 4)
         }
       case Jmp(add) =>
         add match {
@@ -390,10 +394,22 @@ class ASTVisitor {
             new VisitArray(0x5E, (abs(0) >> 16) & 0xFF, (abs(0) >> 8) & 0xFF, abs(0) & 0xFF)
           case (a: IndirAdd) => new VisitArray(0x5F, visit(a).asInstanceOf[VisitInt].item)
         }
-//      case Bra(num, size) =>
-//      case Blo(num, size) =>
-//      case Blt(num, size) =>
-//      case Bhi(num, size) =>
+      case Bra(num, size) =>
+        val disp = visit(num).asInstanceOf[VisitInt].item - tmppc("P")
+        if (size == 8) new VisitArray(0x40, disp)
+        else new VisitArray(0x58, 0x00, (disp >> 8) & 0xFF, disp & 0xFF)
+      case Blo(num, size) =>
+        val disp = visit(num).asInstanceOf[VisitInt].item - tmppc("P")
+        if (size == 8) new VisitArray(0x45, disp)
+        else new VisitArray(0x58, 0x50, (disp >> 8) & 0xFF, disp & 0xFF)
+      case Blt(num, size) =>
+        val disp = visit(num).asInstanceOf[VisitInt].item - tmppc("P")
+        if (size == 8) new VisitArray(0x4D, disp)
+        else new VisitArray(0x58, 0xD0, (disp >> 8) & 0xFF, disp & 0xFF)
+      case Bhi(num, size) =>
+        val disp = visit(num).asInstanceOf[VisitInt].item - tmppc("P")
+        if (size == 8) new VisitArray(0x42, disp)
+        else new VisitArray(0x58, 0x20, (disp >> 8) & 0xFF, disp & 0xFF)
       case Rts() => new VisitArray(0x54, 0x70)
       case Rte() => new VisitArray(0x56, 0x70)
       case Data(num, size) =>
@@ -428,7 +444,7 @@ class ASTVisitor {
             }
             new VisitArray(array)
         }
-      case Label(num) => new VisitInt(label(num))
+      case LabelName(num) => new VisitInt(label(num))
       case MakeLabel(num) => new VisitInt(0)
       case Imm(num) => visit(num)
       case AbsAddress(num, size) => new VisitArray(visit(num).asInstanceOf[VisitInt].item, size)
@@ -439,18 +455,31 @@ class ASTVisitor {
       case Pre(item) => visit(item)
       case Section(sec) =>
         section = sec
-        new VisitInt(0)
+        new VisitArray()
       case RegByte(num) => new VisitInt(num)
       case RegWord(num) => new VisitInt(num)
       case RegLong(num) => new VisitInt(num)
       case Number(num) => new VisitInt(num)
-      case Minus(num) => new VisitInt(-num.asInstanceOf[VisitInt].item)
-      case High(num) => new VisitInt((num.asInstanceOf[VisitInt].item >> 8) & 0xFF)
-      case Low(num) => new VisitInt(num.asInstanceOf[VisitInt].item & 0xFF)
-      case HWord(num) => new VisitInt((num.asInstanceOf[VisitInt].item >> 8) & 0xFFFF)
-      case LWord(num) => new VisitInt(num.asInstanceOf[VisitInt].item & 0xFFFF)
+      case Minus(num) => new VisitInt(-visit(num).asInstanceOf[VisitInt].item)
+      case Rev(num) => new VisitInt(~visit(num).asInstanceOf[VisitInt].item)
+      case High(num) => new VisitInt((visit(num).asInstanceOf[VisitInt].item >> 8) & 0xFF)
+      case Low(num) => new VisitInt(visit(num).asInstanceOf[VisitInt].item & 0xFF)
+      case HWord(num) => new VisitInt((visit(num).asInstanceOf[VisitInt].item >> 8) & 0xFFFF)
+      case LWord(num) => new VisitInt(visit(num).asInstanceOf[VisitInt].item & 0xFFFF)
       case StartOf(sec) => new VisitInt(Parameter.start(sec))
       case SizeOf(sec) => new VisitInt(count(sec))
+      case Expr(op, left, right) =>
+        op match {
+          case "+" => new VisitInt(visit(left).asInstanceOf[VisitInt].item + visit(right).asInstanceOf[VisitInt].item)
+          case "-" => new VisitInt(visit(left).asInstanceOf[VisitInt].item - visit(right).asInstanceOf[VisitInt].item)
+          case "*" => new VisitInt(visit(left).asInstanceOf[VisitInt].item * visit(right).asInstanceOf[VisitInt].item)
+          case "/" => new VisitInt(visit(left).asInstanceOf[VisitInt].item / visit(right).asInstanceOf[VisitInt].item)
+          case "&" => new VisitInt(visit(left).asInstanceOf[VisitInt].item & visit(right).asInstanceOf[VisitInt].item)
+          case "|" => new VisitInt(visit(left).asInstanceOf[VisitInt].item | visit(right).asInstanceOf[VisitInt].item)
+          case "~" => new VisitInt(visit(left).asInstanceOf[VisitInt].item ^ visit(right).asInstanceOf[VisitInt].item)
+          case ">>" => new VisitInt(visit(left).asInstanceOf[VisitInt].item >> visit(right).asInstanceOf[VisitInt].item)
+          case "<<" => new VisitInt(visit(left).asInstanceOf[VisitInt].item << visit(right).asInstanceOf[VisitInt].item)
+        }
     }
   }
 

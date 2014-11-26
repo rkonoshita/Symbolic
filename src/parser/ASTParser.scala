@@ -141,7 +141,7 @@ class ASTParser extends RegexParsers {
   def expr: Parser[AST] = expr6
 
   //計算優先度1（高)
-  def expr1: Parser[AST] = ("+" | "-" | "HIGH" | "LOW" | "HWORD" | "LWORD").? ~ number ^^ {
+  def expr1: Parser[AST] = ("+" | "-" | "~" | "HIGH" | "LOW" | "HWORD" | "LWORD").? ~ number ^^ {
     case op ~ num =>
       op match {
         case Some(s) =>
@@ -199,7 +199,7 @@ class ASTParser extends RegexParsers {
   //2進数,8進数は未実装
 
   //ラベル
-  def label: Parser[AST] = ("_[a-zA-Z0-9_$]+".r | "L[0-9]+".r) ^^ (Label(_))
+  def label: Parser[AST] = ("_[a-zA-Z0-9_$]+".r | "L[0-9]+".r) ^^ (LabelName(_))
 
   //位置として出現するラベル
   def mlabel: Parser[AST] = label <~ ":".? ^^ (MakeLabel(_))
@@ -262,9 +262,9 @@ class ASTParser extends RegexParsers {
   def dataBlock: Parser[AST] = ".DATAB." ~> opsize ~ expr ~ "," ~ expr ^^ {
     case size ~ num1 ~ c ~ num2 =>
       size match {
-        case "B" => DataBlock(num1,num2,8)
-        case "W" => DataBlock(num1,num2,16)
-        case "L" => DataBlock(num1,num2,32)
+        case "B" => DataBlock(num1, num2, 8)
+        case "W" => DataBlock(num1, num2, 16)
+        case "L" => DataBlock(num1, num2, 32)
       }
   }
 

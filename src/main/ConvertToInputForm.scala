@@ -1,4 +1,4 @@
-package convert
+package main
 
 import java.io.{File, PrintWriter}
 
@@ -38,8 +38,8 @@ class ConvertToInputForm(t: File, a: File) {
         //コメント文排除
         val split = line.split(";")
         val t =
-          if (split.length != 0) split(0).trim
-          else "" //split.lengthが0 => 文が空白
+          if (!split.isEmpty) split(0).trim
+          else ""
 
         //書き出し
         if (!removeCheck(t)) {
@@ -73,9 +73,9 @@ class ConvertToInputForm(t: File, a: File) {
           } else writter.println(trim)
 
         }
-        //ラベルを未使用状態にする
-        local.foreach(l => local(l._1) = false)
       }
+      //ラベルを未使用状態にする
+      local.foreach(l => local(l._1) = false)
       writter.close
       source.close
     }
@@ -137,7 +137,7 @@ class ConvertToInputForm(t: File, a: File) {
       if (!local(label) && (!trans.contains(label) || !local(trans(label)))) makeLocalLabel(label)
       true
     } else {
-      local += label -> false
+      local += label -> true
       false
     }
   }
@@ -148,7 +148,7 @@ class ConvertToInputForm(t: File, a: File) {
       val label = "L" + i
       //この番号のローカルラベルがなければ作る
       if (!local.contains(label)) {
-        local += label -> false
+        local += label -> true
         trans += key -> label
         return
       }
