@@ -4,6 +4,7 @@ import java.io.File
 
 import data.register.Memory
 import main.Parameter
+import symbol.{IntSymbol, MySymbol}
 import z3.scala.{Z3AST, Z3Context}
 
 import scala.collection.mutable
@@ -25,24 +26,27 @@ class ASTVisitor {
   tmppc ++= Parameter.start
 
   def makeProgram(ctx: Z3Context, file: File): Memory = {
-    file.listFiles.foreach { f =>
-      Source.fromFile(f).getLines.foreach { l =>
-        parseResult += new ASTParser().parse(l).get
-      }
-    }
+    file.listFiles.foreach { f => Source.fromFile(f).getLines.foreach { l => parseResult += new ASTParser().parse(l).get}}
+
     parseResult.foreach { p =>
       val num = search(p).asInstanceOf[VisitInt].item
       count.put(section, num)
     }
-    val memory = new mutable.HashMap[Int, Z3AST]
+
+    val memory = new mutable.HashMap[Int, MySymbol]
     parseResult.foreach { p =>
       println(p)
       val array = visit(p)
+      if (array.isInstanceOf[VisitArray]) {
+        (0 until array.asInstanceOf[VisitArray].item.length).foreach { op =>
+          print("%x".format(array.asInstanceOf[VisitArray].item(op) & 0xFF) + ":")
+          memory += tmppc(section) + op -> new IntSymbol(array.asInstanceOf[VisitArray].item(op) & 0xFF)
+        }
+      }
+      println
       val num = search(p).asInstanceOf[VisitInt].item
       tmppc.put(section, num)
     }
-    count.foreach(println(_))
-    tmppc.foreach(println(_))
     Parameter.sizeset(count)
     new Memory(ctx, memory)
   }
@@ -455,7 +459,7 @@ class ASTVisitor {
       case Pre(item) => visit(item)
       case Section(sec) =>
         section = sec
-        new VisitArray()
+        new VisitInt(0)
       case RegByte(num) => new VisitInt(num)
       case RegWord(num) => new VisitInt(num)
       case RegLong(num) => new VisitInt(num)

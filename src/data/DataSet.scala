@@ -1,6 +1,7 @@
 package data
 
 import data.register._
+import symbol.MySymbol
 import z3.scala.{Z3Context, Z3AST}
 
 import scala.collection.mutable
@@ -18,9 +19,9 @@ class DataSet(z3: Z3Context, r: Register, m: Memory, p: ProgramCounter, c: Condi
   val path = pt
 
   override def clone(): DataSet = {
-    val newreg = new mutable.HashMap[Int, Z3AST]
+    val newreg = new mutable.HashMap[Int, MySymbol]
     reg.reg.foreach(key => newreg += key._1 -> key._2)
-    val newmem = new mutable.HashMap[Int, Z3AST]
+    val newmem = new mutable.HashMap[Int, MySymbol]
     mem.mem.foreach(key => newmem += key._1 -> key._2)
     new DataSet(ctx,
       new Register(ctx, newreg),
