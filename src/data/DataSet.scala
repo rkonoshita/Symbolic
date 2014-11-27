@@ -26,7 +26,7 @@ class DataSet(z3: Z3Context, r: Register, m: Memory, p: ProgramCounter, c: Condi
     new DataSet(ctx,
       new Register(ctx, newreg),
       new Memory(ctx, newmem),
-      new ProgramCounter(ctx, pc.pc),
+      new ProgramCounter(pc.pc),
       new ConditionRegister(ctx, ccr.ccr),
       new PathCondition(ctx, path.path))
   }

@@ -9,13 +9,14 @@ import scala.collection.mutable.ArrayBuffer
 /**
  * Created by ryosuke on 14/11/18.
  */
-class ProgramCounter(c: Z3Context, p: Int) {
+
+//記号的に扱うべきか悩ましいところ
+class ProgramCounter(p: Int) {
 
   var pc = p
-  private val ctx = c
   private val limit = 0x0000FFFF
 
-  def setPc(p: Int) = pc = p
+  def setPc(p: Int) = pc = p & limit
 
 
 }

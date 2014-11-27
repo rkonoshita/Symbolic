@@ -3,6 +3,8 @@ package parser
 /**
  * Created by rkonoshita on 14/11/19.
  */
+
+//意味解析用のクラス群
 trait AST
 
 case class Add(left: AST, right: AST) extends AST

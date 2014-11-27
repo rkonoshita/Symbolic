@@ -14,6 +14,8 @@ import scala.io.Source
 /**
  * Created by rkonoshita on 14/11/20.
  */
+
+//意味解析用
 class ASTVisitor {
 
   val label = new mutable.HashMap[String, Int]
@@ -25,15 +27,21 @@ class ASTVisitor {
   val tmppc = new MyHashMap
   tmppc ++= Parameter.start
 
+  //ここでメモリにオペランドを配置する
   def makeProgram(ctx: Z3Context, file: File): Memory = {
+    //構文解析
     file.listFiles.foreach { f => Source.fromFile(f).getLines.foreach { l => parseResult += new ASTParser().parse(l).get}}
 
+    //意味解析１回目：ラベルの位置を決める
     parseResult.foreach { p =>
+      //count.putの中にnumの中身を直接入れたらダメ
+      //numを介して代入すること
       val num = search(p).asInstanceOf[VisitInt].item
       count.put(section, num)
     }
 
     val memory = new mutable.HashMap[Int, MySymbol]
+    //意味解析してメモリ上にデータを配置していく
     parseResult.foreach { p =>
       println(p)
       val array = visit(p)
@@ -206,7 +214,7 @@ class ASTVisitor {
     }
   }
 
-  //とりあえず置いといて
+  //メモリに命令やデータを配置
   def visit(ast: AST): Visit = {
     ast match {
       case Add(left, right) =>
