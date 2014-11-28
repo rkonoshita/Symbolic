@@ -36,13 +36,9 @@ class Register(c: Z3Context, r: mutable.HashMap[Int, MySymbol]) {
     else getByteHigh(num)
   }
 
-  private def getByteHigh(num: Int): MySymbol =
-    if (reg(num & limit).isInstanceOf[IntSymbol]) (reg(num & limit).asInstanceOf[IntSymbol] >> 8) & 0xFF
-    else (reg(num & limit).asInstanceOf[CtxSymbol] >> 8) & 0xFF
+  private def getByteHigh(num: Int): MySymbol = (reg(num & limit) >> 8) & 0xFF
 
-  private def getByteLow(num: Int): MySymbol =
-    if (reg(num & limit).isInstanceOf[IntSymbol]) reg(num & limit).asInstanceOf[IntSymbol] & 0xFF
-    else reg(num & limit).asInstanceOf[CtxSymbol] & 0xFF
+  private def getByteLow(num: Int): MySymbol = reg(num & limit) & 0xFF
 
   def getWord(num: MySymbol): ArrayBuffer[MySymbol] = {
     val ans = new ArrayBuffer[MySymbol]
@@ -61,13 +57,9 @@ class Register(c: Z3Context, r: mutable.HashMap[Int, MySymbol]) {
     else getWordLow(num)
   }
 
-  private def getWordHigh(num: Int): MySymbol =
-    if (reg(num & limit).isInstanceOf[IntSymbol]) (reg(num & limit).asInstanceOf[IntSymbol] >> 16) & 0xFFFF
-    else (reg(num & limit).asInstanceOf[CtxSymbol] >> 16) & 0xFFFF
+  private def getWordHigh(num: Int): MySymbol = (reg(num & limit) >> 16) & 0xFFFF
 
-  private def getWordLow(num: Int): MySymbol =
-    if (reg(num & limit).isInstanceOf[IntSymbol]) reg(num & limit).asInstanceOf[IntSymbol] & 0xFFFF
-    else reg(num & limit).asInstanceOf[CtxSymbol] & 0xFFFF
+  private def getWordLow(num: Int): MySymbol = reg(num & limit) & 0xFFFF
 
   def getLong(num: Int): MySymbol = {
     check(num)
@@ -81,35 +73,9 @@ class Register(c: Z3Context, r: mutable.HashMap[Int, MySymbol]) {
     else setByteHigh(data, num)
   }
 
-  private def setByteHigh(data: MySymbol, num: Int): Unit =
-    reg(num & limit) =
-      data match {
-        case d: IntSymbol =>
-          reg(num & limit) match {
-            case r: IntSymbol => (r & 0xFFFF00FF) | ((d & 0xFF) << 8)
-            case r: CtxSymbol => (r & 0xFFFF00FF) | ((d & 0xFF) << 8)
-          }
-        case d: CtxSymbol =>
-          reg(num & limit) match {
-            case r: IntSymbol => (r & 0xFFFF00FF) | ((d & 0xFF) << 8)
-            case r: CtxSymbol => (r & 0xFFFF00FF) | ((d & 0xFF) << 8)
-          }
-      }
+  private def setByteHigh(data: MySymbol, num: Int): Unit = reg(num & limit) = (reg(num & limit) & 0xFFFF00FF) | ((data & 0xFF) << 8)
 
-  private def setByteLow(data: MySymbol, num: Int): Unit =
-    reg(num & limit) =
-      data match {
-        case d: IntSymbol =>
-          reg(num & limit) match {
-            case r: IntSymbol => (r & 0xFFFFFF00) | (d & 0xFF)
-            case r: CtxSymbol => (r & 0xFFFFFF00) | (d & 0xFF)
-          }
-        case d: CtxSymbol =>
-          reg(num & limit) match {
-            case r: IntSymbol => (r & 0xFFFFFF00) | (d & 0xFF)
-            case r: CtxSymbol => (r & 0xFFFFFF00) | (d & 0xFF)
-          }
-      }
+  private def setByteLow(data: MySymbol, num: Int): Unit = reg(num & limit) = (reg(num & limit) & 0xFFFFFF00) | (data & 0xFF)
 
   def setLong(data: MySymbol, num: Int) = reg(num & limit) = data
 

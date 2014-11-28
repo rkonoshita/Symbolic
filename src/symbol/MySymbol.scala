@@ -10,6 +10,34 @@ import z3.scala.{Z3Context, Z3AST}
 trait MySymbol {
   type T
   val symbol: T
+
+  def +(s: MySymbol): MySymbol
+
+  def +(s: Int): MySymbol
+
+  def |(s: MySymbol): MySymbol
+
+  def |(s: Int): MySymbol
+
+  def &(s: MySymbol): MySymbol
+
+  def &(s: Int): MySymbol
+
+  def <<(s: MySymbol): MySymbol
+
+  def <<(s: Int): MySymbol
+
+  def >>(s: MySymbol): MySymbol
+
+  def >>(s: Int): MySymbol
+
+  def eq(s: MySymbol): MySymbol
+
+  def &&(s: MySymbol): MySymbol
+
+  def ||(s: MySymbol): MySymbol
+
+  def bitset(s: Int): MySymbol
 }
 
 class CtxSymbol(ast: Z3AST) extends MySymbol {
@@ -64,6 +92,24 @@ class CtxSymbol(ast: Z3AST) extends MySymbol {
   def eq(s: Int): CtxSymbol = eq(ctx.mkInt(s, symbol.getSort))
 
   def eq(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkEq(symbol, s))
+
+  def not: CtxSymbol = new CtxSymbol(ctx.mkNot(symbol))
+
+  def &&(s: MySymbol): CtxSymbol =
+    if (s.isInstanceOf[IntSymbol]) &&(s.asInstanceOf[IntSymbol].symbol)
+    else &&(s.asInstanceOf[CtxSymbol].symbol)
+
+  def &&(s: Int): CtxSymbol = &&(ctx.mkInt(s, symbol.getSort))
+
+  def &&(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkAnd(symbol, s))
+
+  def ||(s: MySymbol): CtxSymbol =
+    if (s.isInstanceOf[IntSymbol]) ||(s.asInstanceOf[IntSymbol].symbol)
+    else ||(s.asInstanceOf[CtxSymbol].symbol)
+
+  def ||(s: Int): CtxSymbol = ||(ctx.mkInt(s, symbol.getSort))
+
+  def ||(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkAnd(symbol, s))
 
   def >=(s: MySymbol): CtxSymbol =
     if (s.isInstanceOf[IntSymbol]) >=(s.asInstanceOf[IntSymbol].symbol)
@@ -125,6 +171,16 @@ class IntSymbol(ast: Int) extends MySymbol {
   def eq(s: MySymbol): MySymbol = eq(s.asInstanceOf[CtxSymbol].symbol)
 
   def eq(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkEq(s.context.mkInt(symbol, s.getSort), s))
+
+  def eq(s: Int): Boolean = symbol == s
+
+  def &&(s: MySymbol): MySymbol = &&(s.asInstanceOf[CtxSymbol].symbol)
+
+  def &&(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkAnd(s.context.mkInt(symbol, s.getSort), s))
+
+  def ||(s: MySymbol): MySymbol = ||(s.asInstanceOf[CtxSymbol].symbol)
+
+  def ||(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkOr(s.context.mkInt(symbol, s.getSort), s))
 
   def >=(s: MySymbol): MySymbol = >=(s.asInstanceOf[CtxSymbol].symbol)
 

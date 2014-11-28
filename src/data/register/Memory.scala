@@ -15,7 +15,7 @@ class Memory(c: Z3Context, m: mutable.HashMap[Int, MySymbol]) {
   private val ctx = c
   private val limit = 0xFFFF
 
-  private def check(num: Int) = if (!mem.contains(num & limit)) mem += (num & limit) -> new CtxSymbol(Main.makeSymbol)
+  private def check(num: Int*) = num.foreach(n => if (!mem.contains(n & limit)) mem += (n & limit) -> new CtxSymbol(Main.makeSymbol))
 
   def getByte(num: Int): MySymbol = {
     check(num)
@@ -23,33 +23,27 @@ class Memory(c: Z3Context, m: mutable.HashMap[Int, MySymbol]) {
   }
 
   def getWord(num: Int): MySymbol = {
-    check(num)
-    check(num + 1)
-    mem(num & limit) match {
-      case m0: IntSymbol =>
-        mem((num + 1) & limit) match {
-          case m1: IntSymbol => ((m0 & 0xFF) << 8) | (m1 & 0xFF)
-          case m1: CtxSymbol => ((m0 & 0xFF) << 8) | (m1 & 0xFF)
-        }
-      case m0: CtxSymbol =>
-        mem((num + 1) & limit) match {
-          case m1: IntSymbol => ((m0 & 0xFF) << 8) | (m1 & 0xFF)
-          case m1: CtxSymbol => ((m0 & 0xFF) << 8) | (m1 & 0xFF)
-        }
-    }
+    check(num, num + 1)
+    (((mem(num & limit)) & 0xFF) << 8) | (mem((num + 1) & limit) & 0xFF)
+  }
+
+  def getLong(num: Int): MySymbol = {
+    check(num, num + 1, num + 2, num + 3)
+    ((mem(num & limit) & 0xFF) << 24) | ((mem((num + 1) & limit) & 0xFF) << 16) | ((mem((num + 2) & limit) & 0xFF) << 8) | (mem((num + 1) & limit) & 0xFF)
   }
 
   def setByte(data: MySymbol, num: Int): Unit = mem(num & limit) = data
 
   def setWord(data: MySymbol, num: Int): Unit = {
-    data match {
-      case d: IntSymbol =>
-        mem(num & limit) = (d >> 8) & 0xFF
-        mem((num + 1) & limit) = d & 0xFF
-      case d: CtxSymbol =>
-        mem(num) = (d >> 8) & 0xFF
-        mem((num + 1) & limit) = d & 0xFF
-    }
+    mem(num & limit) = (data >> 8) & 0xFF
+    mem((num + 1) & limit) = data & 0xFF
+  }
+
+  def setLong(data: MySymbol, num: Int): Unit = {
+    mem(num & limit) = (data >> 24) & 0xFF
+    mem((num + 1) & limit) = (data >> 16) & 0xFF
+    mem((num + 2) & limit) = (data >> 8) & 0xFF
+    mem((num + 3) & limit) = data & 0xFF
   }
 
 }

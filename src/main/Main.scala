@@ -21,9 +21,11 @@ object Main {
   def main(args: Array[String]): Unit = {
     val m = new Memory(ctx, new mutable.HashMap[Int, MySymbol])
     val r = new Register(ctx, new mutable.HashMap[Int, MySymbol])
-    val file = new File("target") -> new File("asm")
-    new ConvertToInputForm(file._1, file._2).convert()
-    new ASTVisitor().makeProgram(ctx, file._2)
+    println(m.getWord(0))
+    println(m.getLong(0))
+//    val file = new File("target") -> new File("asm")
+//    new ConvertToInputForm(file._1, file._2).convert()
+//    new ASTVisitor().makeProgram(ctx, file._2)
   }
 
   def makeSymbol: Z3AST = {
