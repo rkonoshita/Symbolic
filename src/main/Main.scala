@@ -19,13 +19,14 @@ object Main {
   var symnum = -1
 
   def main(args: Array[String]): Unit = {
-    val m = new Memory(ctx, new mutable.HashMap[Int, MySymbol])
-    val r = new Register(ctx, new mutable.HashMap[Int, MySymbol])
-    println(m.getWord(0))
-    println(m.getLong(0))
-//    val file = new File("target") -> new File("asm")
-//    new ConvertToInputForm(file._1, file._2).convert()
-//    new ASTVisitor().makeProgram(ctx, file._2)
+    //    val m = new Memory(ctx, new mutable.HashMap[Int, MySymbol])
+    //    val r = new Register(ctx, new mutable.HashMap[Int, MySymbol])
+    //    println(m.getWord(0))
+    //    println(m.getLong(0))
+    val file = new File("target") -> new File("asm")
+    new ConvertToInputForm(file._1, file._2).convert()
+    new ASTVisitor().makeProgram(ctx, file._2)
+
   }
 
   def makeSymbol: Z3AST = {
@@ -33,7 +34,7 @@ object Main {
     ctx.mkConst("s" + symnum, ctx.mkBVSort(32))
   }
 
-  def extract(range: Range.Inclusive, ast: Z3AST): ArrayBuffer[Int] = {
+  def extract(range: Range, ast: Z3AST): ArrayBuffer[Int] = {
     val s = ctx.mkSolver
     val buf = new ArrayBuffer[Int]
     range.foreach { n =>

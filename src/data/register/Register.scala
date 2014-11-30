@@ -66,7 +66,6 @@ class Register(c: Z3Context, r: mutable.HashMap[Int, MySymbol]) {
     reg(num & limit)
   }
 
-  //セットすべき値を返す
   def setByte(data: MySymbol, num: Int): Unit = {
     check(num)
     if ((num & 0x8) == 0x8) setByteLow(data, num)
@@ -76,6 +75,16 @@ class Register(c: Z3Context, r: mutable.HashMap[Int, MySymbol]) {
   private def setByteHigh(data: MySymbol, num: Int): Unit = reg(num & limit) = (reg(num & limit) & 0xFFFF00FF) | ((data & 0xFF) << 8)
 
   private def setByteLow(data: MySymbol, num: Int): Unit = reg(num & limit) = (reg(num & limit) & 0xFFFFFF00) | (data & 0xFF)
+
+  def setWord(data: MySymbol, num: Int): Unit = {
+    check(num)
+    if ((num & 0x8) == 0x8) setWordHigh(data, num)
+    else setWordLow(data, num)
+  }
+
+  private def setWordHigh(data: MySymbol, num: Int): Unit = reg(num & limit) = (reg(num & limit) & 0x0000FFFF) | ((data & 0xFFFF) << 8)
+
+  private def setWordLow(data: MySymbol, num: Int): Unit = reg(num & limit) = (reg(num & limit) & 0xFFFF0000) | (data & 0xFFFF)
 
   def setLong(data: MySymbol, num: Int) = reg(num & limit) = data
 

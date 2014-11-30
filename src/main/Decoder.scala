@@ -28,6 +28,61 @@ class Decoder(c: Z3Context) {
     var buf = ArrayBuffer[DataSet](data)
     val op0 = data.mem.getByte(pc).asInstanceOf[IntSymbol].symbol
     op0 & 0xF0 match {
+      case 0x00 =>
+        op0 match {
+          case 0x04 =>
+            //ORC.B Imm,Ccr [04][imm]
+            val op1 = data.mem.getByte(pc + 1).asInstanceOf[IntSymbol].symbol
+            val imm = data.mem.getByte(op1)
+            data.ccr.ccr = data.ccr.ccr | imm
+          case 0x0B =>
+            val op1 = data.mem.getByte(pc + 1).asInstanceOf[IntSymbol].symbol
+            op1 & 0xF0 match {
+              case 0x50 =>
+                //INC.W #1,Reg [0B][5reg]
+                val reg = data.reg.getWord(op1)
+                val inc = reg + 1
+                data.reg.setWord(inc, op1)
+                buf = checkV(reg, new IntSymbol(1), inc, buf, 8)
+                buf = checkZ(inc, buf, 8)
+                buf = checkN(inc, buf, 8)
+            }
+        }
+      case 0x10 =>
+        op0 match {
+          case 0x17 =>
+            //NOT.B Reg [17][0reg]
+            val op1 = data.mem.getByte(pc + 1).asInstanceOf[IntSymbol].symbol
+            val reg = data.reg.getByte(op1)
+            val not = reg.~
+            data.reg.setByte(not, op1)
+            data.ccr.ccr = data.ccr.clearV
+            buf = checkZ(not, buf, 8)
+            buf = checkN(not, buf, 8)
+          case 0x18 =>
+            //SUB.B RegA,RegB [18][regAregB]
+            val op1 = data.mem.getByte(pc + 1).asInstanceOf[IntSymbol].symbol
+            val regA = data.reg.getByte(op1 >> 4)
+            val regB = data.reg.getByte(op1)
+            val sub = regB - regA
+            data.reg.setByte(sub, op1)
+            buf = checkC(regB, regA.neg, sub, buf, 8)
+            buf = checkV(regB, regA.neg, sub, buf, 8)
+            buf = checkZ(sub, buf, 8)
+            buf = checkN(sub, buf, 8)
+            buf = checkH(regB, regA.neg, sub, buf, 8)
+          case 0x1D =>
+            //CMP.W RegA,RegB [1D][regAregB]
+            val op1 = data.mem.getByte(pc + 1).asInstanceOf[IntSymbol].symbol
+            val regA = data.reg.getWord(op1 >> 4)
+            val regB = data.reg.getWord(op1)
+            val sub = regB - regA
+            buf = checkC(regB, regA.neg, sub, buf, 16)
+            buf = checkV(regB, regA.neg, sub, buf, 16)
+            buf = checkZ(sub, buf, 16)
+            buf = checkN(sub, buf, 16)
+            buf = checkH(regB, regA.neg, sub, buf, 16)
+        }
       case 0x50 =>
         op0 match {
           case 0x54 =>
@@ -37,7 +92,7 @@ class Decoder(c: Z3Context) {
             data.reg.setLong(new IntSymbol(sp + 2), 7)
           case 0x5E =>
             //JSR Abs:24 [5E][Abs][Abs][Abs]
-            val abs = data.mem.getLong(pc).asInstanceOf[IntSymbol].symbol & 0x00FFFFFF
+            val abs = data.mem.getLong(pc).asInstanceOf[IntSymbol].symbol
             val sp = data.reg.getLong(7).asInstanceOf[IntSymbol].symbol
             val stock = data.pc.pc
             data.mem.setWord(new IntSymbol(stock), sp - 2)
@@ -50,14 +105,26 @@ class Decoder(c: Z3Context) {
             val op1 = data.mem.getByte(pc + 1).asInstanceOf[IntSymbol].symbol
             op1 & 0xF0 match {
               case 0x80 =>
-                //MOV.B Reg,Abs [6A][8reg][absh][absl]
+                //MOV.B Reg,Abs [6A][8reg][abs][abs]
                 val reg = data.reg.getByte(op1)
                 val absh = (data.mem.getByte(pc + 2).asInstanceOf[IntSymbol].symbol & 0xFF) << 8
-                val abs = (data.mem.getByte(pc + 2).asInstanceOf[IntSymbol].symbol & 0xFF) | absh
+                val abs = ((data.mem.getByte(pc + 2).asInstanceOf[IntSymbol].symbol & 0xFF) | absh)
                 data.mem.setByte(reg, abs)
                 data.ccr.ccr = data.ccr.clearV
                 buf = checkZ(reg, buf, 8)
                 buf = checkN(reg, buf, 8)
+            }
+          case 0x6B =>
+            val op1 = data.mem.getByte(pc + 1).asInstanceOf[IntSymbol].symbol
+            op1 & 0xF0 match {
+              case 0x00 =>
+                //MOV.W Abs,Reg [6A][0Reg][abs][abs]
+                val abs = data.mem.getWord(pc + 2).asInstanceOf[IntSymbol].symbol
+                val mov = data.mem.getWord(abs)
+                data.reg.setWord(mov, op1)
+                data.ccr.ccr = data.ccr.clearV
+                buf = checkZ(mov, buf, 16)
+                buf = checkN(mov, buf, 16)
             }
           case 0x6D =>
             val op1 = data.mem.getByte(pc + 1).asInstanceOf[IntSymbol].symbol
@@ -75,13 +142,27 @@ class Decoder(c: Z3Context) {
         }
       case 0x70 =>
         op0 match {
+          case 0x79 =>
+            val op1 = data.mem.getByte(pc + 2).asInstanceOf[IntSymbol].symbol
+            op1 & 0xF0 match {
+              case 0x20 =>
+                //CMP.W Imm,Reg [79][2reg][imm][imm]
+                val imm = data.mem.getWord(pc + 2)
+                val reg = data.reg.getWord(op1)
+                val cmp = reg - imm
+                buf = checkC(reg, imm.neg, cmp, buf, 16)
+                buf = checkV(reg, imm.neg, cmp, buf, 16)
+                buf = checkZ(cmp, buf, 16)
+                buf = checkN(cmp, buf, 16)
+                buf = checkH(reg, imm.neg, cmp, buf, 16)
+            }
           case 0x7F =>
             val op2 = data.mem.getByte(pc + 2).asInstanceOf[IntSymbol].symbol
             op2 match {
               case 0x70 =>
                 //BSET.B Imm,Abs [7F][Abs][70][Imm0]
                 val abs = data.mem.getByte(pc + 1).asInstanceOf[IntSymbol].symbol
-                val imm = data.mem.getByte(pc + 3).asInstanceOf[IntSymbol].symbol & 0x07
+                val imm = data.mem.getByte(pc + 3).asInstanceOf[IntSymbol].symbol
                 val bset = data.mem.getByte(abs).bitset(imm)
                 data.mem.setByte(bset, abs)
             }

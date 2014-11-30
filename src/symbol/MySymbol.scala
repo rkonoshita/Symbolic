@@ -15,6 +15,10 @@ trait MySymbol {
 
   def +(s: Int): MySymbol
 
+  def -(s: MySymbol): MySymbol
+
+  def -(s: Int): MySymbol
+
   def |(s: MySymbol): MySymbol
 
   def |(s: Int): MySymbol
@@ -22,6 +26,10 @@ trait MySymbol {
   def &(s: MySymbol): MySymbol
 
   def &(s: Int): MySymbol
+
+  def ~(): MySymbol
+
+  def neg: MySymbol
 
   def <<(s: MySymbol): MySymbol
 
@@ -53,6 +61,14 @@ class CtxSymbol(ast: Z3AST) extends MySymbol {
 
   def +(s: Int): CtxSymbol = this.+(ctx.mkInt(s, symbol.getSort))
 
+  def -(s: MySymbol): CtxSymbol =
+    if (s.isInstanceOf[IntSymbol]) this.-(s.asInstanceOf[IntSymbol].symbol)
+    else this.-(s.asInstanceOf[CtxSymbol].symbol)
+
+  def -(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSub(symbol, s))
+
+  def -(s: Int): CtxSymbol = this.-(ctx.mkInt(s, symbol.getSort))
+
   def &(s: MySymbol): CtxSymbol =
     if (s.isInstanceOf[IntSymbol]) &(s.asInstanceOf[IntSymbol].symbol)
     else &(s.asInstanceOf[CtxSymbol].symbol)
@@ -68,6 +84,10 @@ class CtxSymbol(ast: Z3AST) extends MySymbol {
   def |(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVOr(symbol, s))
 
   def |(s: Int): CtxSymbol = |(ctx.mkInt(s, symbol.getSort))
+
+  def ~(): CtxSymbol = new CtxSymbol(ctx.mkBVNot(symbol))
+
+  def neg: CtxSymbol = new CtxSymbol(ctx.mkBVNeg(symbol))
 
   def >>(s: MySymbol): CtxSymbol =
     if (s.isInstanceOf[IntSymbol]) >>(s.asInstanceOf[IntSymbol].symbol)
@@ -136,6 +156,14 @@ class IntSymbol(ast: Int) extends MySymbol {
 
   def +(s: Int): IntSymbol = new IntSymbol(symbol + s)
 
+  def -(s: MySymbol): MySymbol =
+    if (s.isInstanceOf[IntSymbol]) this.-(s.asInstanceOf[IntSymbol].symbol)
+    else this.-(s.asInstanceOf[CtxSymbol].symbol)
+
+  def -(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVSub(s.context.mkInt(symbol, s.getSort), s))
+
+  def -(s: Int): IntSymbol = new IntSymbol(symbol - s)
+
   def &(s: MySymbol): MySymbol =
     if (s.isInstanceOf[IntSymbol]) &(s.asInstanceOf[IntSymbol].symbol)
     else &(s.asInstanceOf[CtxSymbol].symbol)
@@ -151,6 +179,10 @@ class IntSymbol(ast: Int) extends MySymbol {
   def |(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVOr(s.context.mkInt(symbol, s.getSort), s))
 
   def |(s: Int): IntSymbol = new IntSymbol(symbol | s)
+
+  def ~(): IntSymbol = new IntSymbol(~symbol)
+
+  def neg: IntSymbol = this.~ + 1
 
   def >>(s: MySymbol): MySymbol =
     if (s.isInstanceOf[IntSymbol]) >>(s.asInstanceOf[IntSymbol].symbol)
