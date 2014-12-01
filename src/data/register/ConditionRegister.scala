@@ -13,24 +13,24 @@ class ConditionRegister(ct: Z3Context, c: MySymbol) {
   var ccr = c
   private val ctx = ct
 
-  def clearC: MySymbol = ccr & 0xFE
+  def clearC = ccr = ccr & 0xFE
 
-  def clearV: MySymbol = ccr & 0xFD
+  def clearV = ccr = ccr & 0xFD
 
-  def clearZ: MySymbol = ccr & 0xFB
+  def clearZ = ccr = ccr & 0xFB
 
-  def clearN: MySymbol = ccr & 0xF7
+  def clearN = ccr = ccr & 0xF7
 
-  def clearH: MySymbol = ccr & 0xEF
+  def clearH = ccr = ccr & 0xEF
 
-  def setC: MySymbol = ccr | 0x01
+  def setC = ccr = ccr | 0x01
 
-  def setV: MySymbol = ccr | 0x02
+  def setV = ccr = ccr | 0x02
 
-  def setZ: MySymbol = ccr | 0x04
+  def setZ = ccr = ccr | 0x04
 
-  def setN: MySymbol = ccr | 0x08
+  def setN = ccr = ccr | 0x08
 
-  def setH: MySymbol = ccr | 0x10
+  def setH = ccr = ccr | 0x10
 
 }

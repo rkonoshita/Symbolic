@@ -23,10 +23,9 @@ class Register(c: Z3Context, r: mutable.HashMap[Int, MySymbol]) {
     val ans = new ArrayBuffer[MySymbol]
     num match {
       case n: IntSymbol => ans += getByte(n.symbol)
-      case n: CtxSymbol =>
-        Main.extract(0 to 0xF, n.symbol).foreach(e => ans += getByte(e))
-        ans
+      case n: CtxSymbol => Main.extract(0 to 0xF, n.symbol).foreach(e => ans += getByte(e))
     }
+    ans
   }
 
   //Intでアクセスする場合は1通り

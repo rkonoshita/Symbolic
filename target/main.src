@@ -14,7 +14,7 @@ _main:                                  ; function: main
 L59:                                     
           .LINE       9
           MOV.W       @_c_start:16,R0
-          CMP.W       #4,R0
+          CMP.W       #0,R0
           BLT         L59:8
           .LINE       12
           ORC.B       #-128,CCR

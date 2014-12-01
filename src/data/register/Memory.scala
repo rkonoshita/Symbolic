@@ -5,6 +5,7 @@ import symbol.{CtxSymbol, IntSymbol, MySymbol}
 import z3.scala.Z3Context
 
 import scala.collection.mutable
+import scala.collection.mutable.ArrayBuffer
 
 /**
  * Created by rkonoshita on 14/11/17.
@@ -16,6 +17,15 @@ class Memory(c: Z3Context, m: mutable.HashMap[Int, MySymbol]) {
   private val limit = 0xFFFF
 
   private def check(num: Int*) = num.foreach(n => if (!mem.contains(n & limit)) mem += (n & limit) -> new CtxSymbol(Main.makeSymbol))
+
+  def getByte(num: MySymbol): ArrayBuffer[MySymbol] = {
+    val ans = new ArrayBuffer[MySymbol]
+    num match {
+      case n: IntSymbol => ans += getByte(n.symbol)
+      case n: CtxSymbol => Main.extract(0 to limit, n.symbol).foreach { e => ans += getByte(e)}
+    }
+    ans
+  }
 
   def getByte(num: Int): MySymbol = {
     check(num)

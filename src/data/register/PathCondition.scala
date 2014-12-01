@@ -12,6 +12,9 @@ class PathCondition(c: Z3Context, p: Z3AST) {
   var path = p
   private final val ctx = c
 
-  def set(p: Z3AST): Unit = path = ctx.mkOr(path, p)
+  def set(p: Z3AST): Unit =
+    if (path == null) path = p
+    else path = ctx.mkOr(path, p)
 
+  def this(c: Z3Context) = this(c, null)
 }

@@ -45,6 +45,8 @@ trait MySymbol {
 
   def ||(s: MySymbol): MySymbol
 
+  def bitset(s: MySymbol): MySymbol
+
   def bitset(s: Int): MySymbol
 }
 
@@ -139,6 +141,12 @@ class CtxSymbol(ast: Z3AST) extends MySymbol {
 
   def >=(s: Int): CtxSymbol = >=(ctx.mkInt(s, symbol.getSort))
 
+  def bitset(s: MySymbol): CtxSymbol =
+    if (s.isInstanceOf[IntSymbol]) bitset(s.asInstanceOf[IntSymbol].symbol)
+    else bitset(s.asInstanceOf[CtxSymbol].symbol)
+
+  def bitset(s: Z3AST): CtxSymbol = |(new IntSymbol(1) << s)
+
   def bitset(s: Int): CtxSymbol = |(1 << s)
 
   override def toString(): String = symbol.toString
@@ -217,6 +225,12 @@ class IntSymbol(ast: Int) extends MySymbol {
   def >=(s: MySymbol): MySymbol = >=(s.asInstanceOf[CtxSymbol].symbol)
 
   def >=(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVSge(s.context.mkInt(symbol, s.getSort), s))
+
+  def bitset(s: MySymbol): MySymbol =
+    if (s.isInstanceOf[IntSymbol]) bitset(s.asInstanceOf[IntSymbol].symbol)
+    else bitset(s.asInstanceOf[CtxSymbol].symbol)
+
+  def bitset(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVOr(s.context.mkInt(symbol, s.getSort), s.context.mkBVShl(s.context.mkInt(1, s.getSort), s)))
 
   def bitset(s: Int): IntSymbol = |(1 << s)
 
