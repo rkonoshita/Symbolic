@@ -14,7 +14,7 @@ import scala.io.Source
 class ConvertToInputForm(t: File, a: File) {
 
   //ターゲットのプログラムが無いならばエラー
-  if (!t.exists) exit(-1)
+  if (!t.exists) t.mkdir
   val tar = t.listFiles
 
   //一旦asmフォルダを削除し、作りなおす

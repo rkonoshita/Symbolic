@@ -17,7 +17,14 @@ class State(data: DataSet, pr: State) {
   val pc = data.pc
   val ccr = data.ccr
   val path = data.path
-  val stop = pc.pc == (mem.getWord(0) + 14).asInstanceOf[IntSymbol].symbol
+  val pathCheck =
+    if (path.path == null) true
+    else {
+      val s = Main.ctx.mkSolver
+      s.assertCnstr(path.path)
+      s.check.get
+    }
+  val stop = pc.pc == (mem.getWord(0) + 14).asInstanceOf[IntSymbol].symbol | !pathCheck
 
   override def toString(): String = if (path.path == null) "null" else path.path.toString()
 }

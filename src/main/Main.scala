@@ -36,12 +36,12 @@ object Main {
       val dataArray = new Decoder(ctx).analyze(data)
       dataArray.foreach { d =>
         val s = new State(d, current)
+        current.next += s
         println(s)
         state += s
         if (!s.stop) stack.push(s)
-
       }
-      if(state.length >= 1000) stack.clear
+      if (state.length >= 1000) stack.clear
     }
   }
 
