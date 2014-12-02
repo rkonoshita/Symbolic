@@ -21,11 +21,11 @@ class ASTVisitor {
   val label = new mutable.HashMap[String, Int]
   //ラベルの位置を保持
   val count = new MyHashMap // 各セクションの終点アドレスを保持
-  count ++= Parameter.start
+  count ++= Parameter.getStart
   var section = ""
   val parseResult = new ListBuffer[AST]
   val tmppc = new MyHashMap
-  tmppc ++= Parameter.start
+  tmppc ++= Parameter.getStart
 
   //ここでメモリにオペランドを配置する
   def makeProgram(ctx: Z3Context, file: File): Memory = {
@@ -48,12 +48,12 @@ class ASTVisitor {
       if (array.isInstanceOf[VisitArray]) {
         (0 until array.asInstanceOf[VisitArray].item.length).foreach { op =>
           print("%x".format(array.asInstanceOf[VisitArray].item(op) & 0xFF) + ":")
-          memory += tmppc(section) + op -> new IntSymbol(array.asInstanceOf[VisitArray].item(op) & 0xFF)
+          memory += (tmppc(section) + op) -> new IntSymbol(array.asInstanceOf[VisitArray].item(op) & 0xFF)
         }
+        tmppc.put(section, array.asInstanceOf[VisitArray].item.length)
       }
       println
-      val num = search(p).asInstanceOf[VisitInt].item
-      tmppc.put(section, num)
+
     }
     Parameter.sizeset(count)
     new Memory(ctx, memory)

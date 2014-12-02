@@ -254,7 +254,7 @@ class Decoder(c: Z3Context) {
             s.assertCnstr(or)
             if (s.check.get) {
               val d = data.clone
-              d.pc.pc += 2
+              d.pc.pc = pc + 2
               buf += d
             }
             s.pop(1)
@@ -279,14 +279,14 @@ class Decoder(c: Z3Context) {
             s.assertCnstr(c.symbol)
             if (s.check.get) {
               val d = data.clone
-              d.pc.pc += pc + disp
+              d.pc.pc = pc + disp
               buf += d
             }
             s.pop(1)
             s.assertCnstr(c.not.symbol)
             if (s.check.get) {
               val d = data.clone
-              d.pc.pc += pc + 2
+              d.pc.pc = pc + 2
               buf += d
             }
         }
@@ -306,14 +306,14 @@ class Decoder(c: Z3Context) {
             s.assertCnstr(xor)
             if (s.check.get) {
               val d = data.clone
-              d.pc.pc += pc + disp
+              d.pc.pc = pc + disp
               buf += d
             }
             s.pop(1)
             s.assertCnstr(ctx.mkNot(xor))
             if (s.check.get) {
               val d = data.clone
-              d.pc.pc += pc + 2
+              d.pc.pc = pc + 2
               buf += d
             }
         }
@@ -351,7 +351,7 @@ class Decoder(c: Z3Context) {
         //JSR Abs:24 [5E][Abs][Abs][Abs]
         val abs = data.mem.getLong(pc)
         val sp = data.reg.getLong(7)
-        val stock = data.pc.pc
+        val stock = data.pc.pc + 4
         data.mem.setWord(new IntSymbol(stock), (sp - 2).asInstanceOf[IntSymbol].symbol)
         data.reg.setLong(sp - 2, 7)
         data.pc.setPc(abs.asInstanceOf[IntSymbol].symbol)

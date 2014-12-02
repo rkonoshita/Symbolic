@@ -39,7 +39,7 @@ class Memory(c: Z3Context, m: mutable.HashMap[Int, MySymbol]) {
 
   def getLong(num: Int): MySymbol = {
     check(num, num + 1, num + 2, num + 3)
-    ((mem(num & limit) & 0xFF) << 24) | ((mem((num + 1) & limit) & 0xFF) << 16) | ((mem((num + 2) & limit) & 0xFF) << 8) | (mem((num + 1) & limit) & 0xFF)
+    ((mem(num & limit) & 0xFF) << 24) | ((mem((num + 1) & limit) & 0xFF) << 16) | ((mem((num + 2) & limit) & 0xFF) << 8) | (mem((num + 3) & limit) & 0xFF)
   }
 
   def setByte(data: MySymbol, num: Int): Unit = mem(num & limit) = data

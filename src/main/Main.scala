@@ -86,4 +86,10 @@ object Parameter {
 
   def sizeset(map: mutable.HashMap[String, Int]): Unit = size ++= map
 
+  def getStart: mutable.HashMap[String, Int] = {
+    val s = new mutable.HashMap[String, Int]
+    start.foreach(v => s.put(v._1, v._2))
+    s
+  }
+
 }
