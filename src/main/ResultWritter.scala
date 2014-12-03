@@ -10,7 +10,7 @@ class ResultWritter {
   def write(result: File): Unit = {
     val writer = new PrintWriter(result)
     Main.state.foreach { s =>
-      writer.println(s.pre + "," + s.next + "," + "check:" + s.pathCheck + ",end:" + s.stop)
+      writer.println(s.number + "," + s.pre + "," + s.next + "," + "check:" + s.pathCheck + ",end:" + s.stop)
     }
     writer.close
   }

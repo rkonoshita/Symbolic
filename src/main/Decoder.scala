@@ -246,7 +246,7 @@ class Decoder(c: Z3Context) {
           case ccr: CtxSymbol =>
             val c = (ccr & 0x01).eq(0x01)
             val z = (ccr & 0x04).eq(0x04)
-            val or = ctx.mkAnd(c.symbol, z.symbol)
+            val or = ctx.mkOr(c.symbol, z.symbol)
             val dc1 = data.clone
             dc1.pc.pc = pc + 2
             dc1.path.set(or)
@@ -650,11 +650,11 @@ class Decoder(c: Z3Context) {
           val ge = (d & and).eq(and)
           val bc1 = b.clone
           bc1.ccr.setN //data < 0
-          bc1.path.set(ge.not.symbol)
+          bc1.path.set(ge.symbol)
           ans += bc1
           val bc2 = b.clone
           bc2.ccr.clearN
-          bc2.path.set(ge.symbol)
+          bc2.path.set(ge.not.symbol)
           ans += bc2
       }
     }

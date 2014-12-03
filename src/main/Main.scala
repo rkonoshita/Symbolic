@@ -19,8 +19,7 @@ object Main {
   val ctx = new Z3Context
   var symnum = -1
   val state = new ArrayBuffer[State]
-  //  val stack = new mutable.Stack[State]
-  val queue = new mutable.Queue[State]
+  val stack = new mutable.Stack[State]
 
   def main(args: Array[String]): Unit = {
     val file = new File("target") -> new File("asm")
@@ -29,27 +28,21 @@ object Main {
     val init = first(memory)
     val initState = new State(state.size, init, null)
     state += initState
-    //    stack.push(initState)
-    queue += initState
+    stack.push(initState)
 
-//    while (!stack.isEmpty) {
-    while(!queue.isEmpty) {
-//      val current = stack.pop
-      val current = queue.dequeue
+    while (!stack.isEmpty) {
+      val current = stack.pop
       val data = new DataSet(current)
       val dataArray = new Decoder(ctx).analyze(data)
       dataArray.foreach { d =>
         val s = new State(state.size, d, current)
         current.next += s
         println(s)
-        println(s.pathCheck)
         println
         state += s
-//        if (!s.stop) stack.push(s)
-        if(!s.stop) queue += s
+        if (!s.stop) stack.push(s)
       }
-//      if (state.length >= 2000) stack.clear
-      if(state.length >= 2000) queue.clear
+      if (state.length >= 5000) stack.clear
     }
     new ResultWritter().write(new File("result.txt"))
   }
