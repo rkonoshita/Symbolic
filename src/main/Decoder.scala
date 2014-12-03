@@ -33,9 +33,8 @@ class Decoder(c: Z3Context) {
       case 0x20 =>
         //MOV.B Abs,Reg [2reg][abs]
         val op1 = data.mem.getByte(pc + 1).asInstanceOf[IntSymbol].symbol
-        val abs = data.mem.getByte(op1)
-        val mov = data.mem.getByte(abs.asInstanceOf[IntSymbol].symbol)
-        data.reg.setByte(mov, op0)
+        val mov = data.mem.getByte(op1)
+        data.reg.setByte(mov, op1)
         data.pc.setPc(pc + 2)
         data.ccr.clearV
         buf += data
@@ -45,8 +44,7 @@ class Decoder(c: Z3Context) {
         //MOV.B Reg,Abs [3reg][abs]
         val op1 = data.mem.getByte(pc + 1).asInstanceOf[IntSymbol].symbol
         val mov = data.reg.getByte(op0)
-        val abs = data.mem.getByte(op1)
-        data.reg.setByte(mov, abs.asInstanceOf[IntSymbol].symbol)
+        data.reg.setByte(mov, op1)
         data.pc.setPc(pc + 2)
         data.ccr.clearV
         buf += data
@@ -227,7 +225,6 @@ class Decoder(c: Z3Context) {
     val op0 = data.mem.getByte(pc).asInstanceOf[IntSymbol].symbol
     var buf = new ArrayBuffer[DataSet]
     val op1 = data.mem.getByte(pc + 1).asInstanceOf[IntSymbol].symbol
-    val s = ctx.mkSolver
     val disp =
       if ((op1 & 0x80) == 0x80) op1 | 0xFF00
       else op1
@@ -250,20 +247,14 @@ class Decoder(c: Z3Context) {
             val c = (ccr & 0x01).eq(0x01)
             val z = (ccr & 0x04).eq(0x04)
             val or = ctx.mkAnd(c.symbol, z.symbol)
-            s.push
-            s.assertCnstr(or)
-            if (s.check.get) {
-              val d = data.clone
-              d.pc.pc = pc + 2
-              buf += d
-            }
-            s.pop(1)
-            s.assertCnstr(ctx.mkNot(or))
-            if (s.check.get) {
-              val d = data.clone
-              d.pc.pc = pc + disp
-              buf += d
-            }
+            val dc1 = data.clone
+            dc1.pc.pc = pc + 2
+            dc1.path.set(or)
+            buf += dc1
+            val dc2 = data.clone
+            dc2.pc.pc = pc + disp
+            dc2.path.set(ctx.mkNot(or))
+            buf += dc2
         }
         data.pc.pc = pc + disp
       case 0x45 =>
@@ -275,20 +266,14 @@ class Decoder(c: Z3Context) {
             else data.pc.pc += 2
           case ccr: CtxSymbol =>
             val c = (ccr & 0x01).eq(0x01)
-            s.push
-            s.assertCnstr(c.symbol)
-            if (s.check.get) {
-              val d = data.clone
-              d.pc.pc = pc + disp
-              buf += d
-            }
-            s.pop(1)
-            s.assertCnstr(c.not.symbol)
-            if (s.check.get) {
-              val d = data.clone
-              d.pc.pc = pc + 2
-              buf += d
-            }
+            val dc1 = data.clone
+            dc1.pc.pc = pc + disp
+            dc1.path.set(c.symbol)
+            buf += dc1
+            val dc2 = data.clone
+            dc2.pc.pc = pc + 2
+            dc1.path.set(c.not.symbol)
+            buf += dc2
         }
       case 0x4D =>
         //BLT N 排他的論理和 V = 1
@@ -302,20 +287,14 @@ class Decoder(c: Z3Context) {
             val n = (ccr & 0x08).eq(0x08)
             val v = (ccr & 0x02).eq(0x02)
             val xor = ctx.mkBVXor(n.symbol, v.symbol)
-            s.push
-            s.assertCnstr(xor)
-            if (s.check.get) {
-              val d = data.clone
-              d.pc.pc = pc + disp
-              buf += d
-            }
-            s.pop(1)
-            s.assertCnstr(ctx.mkNot(xor))
-            if (s.check.get) {
-              val d = data.clone
-              d.pc.pc = pc + 2
-              buf += d
-            }
+            val dc1 = data.clone
+            dc1.pc.pc = pc + disp
+            dc1.path.set(xor)
+            buf += dc1
+            val dc2 = data.clone
+            dc2.pc.pc = pc + 2
+            dc2.path.set(ctx.mkNot(xor))
+            buf += dc2
         }
     }
     buf
@@ -574,24 +553,18 @@ class Decoder(c: Z3Context) {
           if (bool1 || bool2) bc.ccr.setC else bc.ccr.clearC
           ans += bc
         case _ =>
-          val s = ctx.mkSolver
-          s.push
+
           val bool1 = (data1 & and).eq(new IntSymbol(and)) && (data2 & and).eq(new IntSymbol(and))
           val bool2 = ((data1 & and).eq(new IntSymbol(and)) || (data2 & and).eq(new IntSymbol(and))) && ((res & and).eq(new IntSymbol(and)))
           val bool = (bool1 || bool2).asInstanceOf[CtxSymbol]
-          s.assertCnstr(bool.symbol)
-          if (s.check.get) {
-            val bc = b.clone
-            bc.ccr.setC
-            ans += bc
-          }
-          s.pop(1)
-          s.assertCnstr(bool.not.symbol)
-          if (s.check.get) {
-            val bc = b.clone
-            bc.ccr.clearC
-            ans += bc
-          }
+          val bc1 = b.clone
+          bc1.ccr.setC
+          bc1.path.set(bool.symbol)
+          ans += bc1
+          val bc2 = b.clone
+          bc2.ccr.clearC
+          bc2.path.set(bool.not.symbol)
+          ans += bc2
       }
     }
     ans
@@ -614,24 +587,17 @@ class Decoder(c: Z3Context) {
           if (bool1 || bool2) bc.ccr.setV else bc.ccr.clearV
           ans += bc
         case _ =>
-          val s = ctx.mkSolver
-          s.push
           val bool1 = (data1 & and).eq(new IntSymbol(and)) && (data2 & and).eq(new IntSymbol(and)) && (res & and).eq(new IntSymbol(0))
           val bool2 = (data1 & and).eq(new IntSymbol(0)) && (data2 & and).eq(new IntSymbol(0)) && (res & and).eq(new IntSymbol(and))
           val bool = (bool1 || bool2).asInstanceOf[CtxSymbol]
-          s.assertCnstr(bool.symbol)
-          if (s.check.get) {
-            val bc = b.clone
-            bc.ccr.setV
-            ans += bc
-          }
-          s.pop(1)
-          s.assertCnstr(bool.not.symbol)
-          if (s.check.get) {
-            val bc = b.clone
-            bc.ccr.clearV
-            ans += bc
-          }
+          val bc1 = b.clone
+          bc1.ccr.setV
+          bc1.path.set(bool.symbol)
+          ans += bc1
+          val bc2 = b.clone
+          bc2.ccr.clearV
+          bc2.path.set(bool.not.symbol)
+          ans += bc2
       }
     }
     ans
@@ -652,22 +618,15 @@ class Decoder(c: Z3Context) {
           if ((d & and).symbol == 0) bc.ccr.setZ else bc.ccr.clearZ
           ans += bc
         case d: CtxSymbol =>
-          val s = ctx.mkSolver
-          s.push
           val eq = d.&(and).eq(0)
-          s.assertCnstr(eq.symbol)
-          if (s.check.get) {
-            val bc = b.clone
-            bc.ccr.setZ
-            ans += bc
-          }
-          s.pop(1)
-          s.assertCnstr(eq.not.symbol)
-          if (s.check.get) {
-            val bc = b.clone
-            bc.ccr.clearZ
-            ans += bc
-          }
+          val bc1 = b.clone
+          bc1.ccr.setZ //data = 0
+          bc1.path.set(eq.symbol)
+          ans += bc1
+          val bc2 = b.clone
+          bc2.ccr.clearZ
+          bc2.path.set(eq.not.symbol)
+          ans += bc2
       }
     }
     ans
@@ -688,22 +647,15 @@ class Decoder(c: Z3Context) {
           if ((d & and).symbol == and) bc.ccr.setN else bc.ccr.clearN
           ans += bc
         case d: CtxSymbol =>
-          val s = ctx.mkSolver
-          s.push
           val ge = (d & and).eq(and)
-          s.assertCnstr(ge.symbol)
-          if (s.check.get) {
-            val bc = b.clone
-            bc.ccr.setN
-            ans += bc
-          }
-          s.pop(1)
-          s.assertCnstr(ge.not.symbol)
-          if (s.check.get) {
-            val bc = b.clone
-            bc.ccr.clearN
-            ans += bc
-          }
+          val bc1 = b.clone
+          bc1.ccr.setN //data < 0
+          bc1.path.set(ge.not.symbol)
+          ans += bc1
+          val bc2 = b.clone
+          bc2.ccr.clearN
+          bc2.path.set(ge.symbol)
+          ans += bc2
       }
     }
     ans
@@ -726,24 +678,17 @@ class Decoder(c: Z3Context) {
           if (bool1 || bool2) bc.ccr.setH else bc.ccr.clearH
           ans += bc
         case _ =>
-          val s = ctx.mkSolver
-          s.push
           val bool1 = (data1 & and).eq(new IntSymbol(and)) && (data2 & and).eq(new IntSymbol(and))
           val bool2 = ((data1 & and).eq(new IntSymbol(and)) || (data2 & and).eq(new IntSymbol(and))) && ((res & and).eq(new IntSymbol(and)))
           val bool = (bool1 || bool2).asInstanceOf[CtxSymbol]
-          s.assertCnstr(bool.symbol)
-          if (s.check.get) {
-            val bc = b.clone
-            bc.ccr.setH
-            ans += bc
-          }
-          s.pop(1)
-          s.assertCnstr(bool.not.symbol)
-          if (s.check.get) {
-            val bc = b.clone
-            bc.ccr.clearH
-            ans += bc
-          }
+          val bc1 = b.clone
+          bc1.ccr.setH
+          bc1.path.set(bool.symbol)
+          ans += bc1
+          val bc2 = b.clone
+          bc2.ccr.clearH
+          bc2.path.set(bool.not.symbol)
+          ans += bc2
       }
     }
     ans

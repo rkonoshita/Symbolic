@@ -8,8 +8,9 @@ import scala.collection.mutable.ArrayBuffer
 /**
  * Created by rkonoshita on 14/12/01.
  */
-class State(data: DataSet, pr: State) {
+class State(num: Int, data: DataSet, pr: State) {
 
+  val number = num
   val pre = if (pr == null) null else ArrayBuffer[State](pr)
   val next = new ArrayBuffer[State]
   val reg = data.reg
@@ -18,13 +19,15 @@ class State(data: DataSet, pr: State) {
   val ccr = data.ccr
   val path = data.path
   val pathCheck =
-    if (path.path == null) true
+    if (data.path.path == null) true
     else {
       val s = Main.ctx.mkSolver
-      s.assertCnstr(path.path)
+      s.assertCnstr(data.path.path)
       s.check.get
     }
-  val stop = pc.pc == (mem.getWord(0) + 14).asInstanceOf[IntSymbol].symbol | !pathCheck
+  val stop = data.pc.pc == (data.mem.getWord(0) + 14).asInstanceOf[IntSymbol].symbol | !pathCheck
 
-  override def toString(): String = if (path.path == null) "null" else path.path.toString()
+  //  override def toString(): String = if (path.path == null) "null" else path.path.toString()
+
+  override def toString(): String = number.toString
 }
