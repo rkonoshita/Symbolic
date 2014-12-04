@@ -8,7 +8,7 @@ import scala.collection.mutable.ArrayBuffer
 /**
  * Created by rkonoshita on 14/12/01.
  */
-class State(num: Int, data: DataSet, pr: State) {
+class State(num: Int,data: DataSet, pr: State) {
 
   val number = num
   val pre = if (pr == null) null else ArrayBuffer[State](pr)
@@ -27,7 +27,7 @@ class State(num: Int, data: DataSet, pr: State) {
     }
   val stop = data.pc.pc == (data.mem.getWord(0) + 14).asInstanceOf[IntSymbol].symbol | !pathCheck
 
-  //  override def toString(): String = if (path.path == null) "null" else path.path.toString()
+  override def toString(): String = if (path.path == null) "null" else path.path.toString()
 
-  override def toString(): String = number.toString
+  //  override def toString(): String = number.toString
 }
