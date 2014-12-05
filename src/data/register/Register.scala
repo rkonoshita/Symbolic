@@ -1,7 +1,7 @@
 package data.register
 
 import main.Main
-import symbol.{CtxSymbol, IntSymbol, MySymbol}
+import symbol.CtxSymbol
 import z3.scala.Z3Context
 
 import scala.collection.mutable
@@ -10,81 +10,83 @@ import scala.collection.mutable.ArrayBuffer
 /**
  * Created by rkonoshita on 14/11/12.
  */
-class Register(c: Z3Context, r: mutable.HashMap[Int, MySymbol]) {
+class Register(c: Z3Context, r: mutable.HashMap[Int, CtxSymbol]) {
 
   val reg = r
   private val ctx = c
   private val limit = 0x07
 
-  private def check(num: Int): Unit = if (!reg.contains(num & limit)) reg += (num & limit) -> new CtxSymbol(Main.makeSymbol) //指定レジスタに初期値がなければ作る
+  private def check(num: Int): Unit = if (!reg.contains(num & limit)) reg += (num & limit) -> new CtxSymbol(Main.makeSymbol(32)) //指定レジスタに初期値がなければ作る
 
   //レジスタ値の候補を全て取得する
-  def getByte(num: MySymbol): ArrayBuffer[MySymbol] = {
-    val ans = new ArrayBuffer[MySymbol]
-    num match {
-      case n: IntSymbol => ans += getByte(n.symbol)
-      case n: CtxSymbol => Main.extract(0 to 0xF, n.symbol).foreach(e => ans += getByte(e))
-    }
+  def getByte(num: CtxSymbol): ArrayBuffer[CtxSymbol] = {
+    val ans = new ArrayBuffer[CtxSymbol]
+    Main.extract(0 to 0xF, num).foreach(e => ans += getByte(e))
     ans
   }
 
   //Intでアクセスする場合は1通り
-  def getByte(num: Int): MySymbol = {
+  def getByte(num: Int): CtxSymbol = {
     check(num)
     if ((num & 0x8) == 0x8) getByteLow(num)
     else getByteHigh(num)
   }
 
-  private def getByteHigh(num: Int): MySymbol = (reg(num & limit) >> 8) & 0xFF
+  private def getByteHigh(num: Int): CtxSymbol = reg(num & limit).extract(15, 8)
 
-  private def getByteLow(num: Int): MySymbol = reg(num & limit) & 0xFF
+  private def getByteLow(num: Int): CtxSymbol = reg(num & limit).extract(7, 0)
 
-  def getWord(num: MySymbol): ArrayBuffer[MySymbol] = {
-    val ans = new ArrayBuffer[MySymbol]
-    num match {
-      case n: IntSymbol => ans += getWord(n.symbol)
-      case n: CtxSymbol =>
-        Main.extract(0 to 0xF, n.symbol).foreach(e => ans += getWord(e))
-        ans
-    }
+  def getWord(num: CtxSymbol): ArrayBuffer[CtxSymbol] = {
+    val ans = new ArrayBuffer[CtxSymbol]
+    Main.extract(0 to 0xF, num).foreach(e => ans += getWord(e))
+    ans
   }
 
-  //Intでアクセスする場合は1通り
-  def getWord(num: Int): MySymbol = {
+  def getWord(num: Int): CtxSymbol = {
     check(num)
     if ((num & 0x8) == 0x8) getWordHigh(num)
     else getWordLow(num)
   }
 
-  private def getWordHigh(num: Int): MySymbol = (reg(num & limit) >> 16) & 0xFFFF
+  private def getWordHigh(num: Int): CtxSymbol = reg(num & limit).extract(31, 16)
 
-  private def getWordLow(num: Int): MySymbol = reg(num & limit) & 0xFFFF
+  private def getWordLow(num: Int): CtxSymbol = reg(num & limit).extract(15, 0)
 
-  def getLong(num: Int): MySymbol = {
+  def getLong(num: CtxSymbol): ArrayBuffer[CtxSymbol] = {
+    val ans = new ArrayBuffer[CtxSymbol]
+    Main.extract(0 to 0xF, num).foreach(e => ans += getLong(e))
+    ans
+  }
+
+  def getLong(num: Int): CtxSymbol = {
     check(num)
     reg(num & limit)
   }
 
-  def setByte(data: MySymbol, num: Int): Unit = {
+  def setByte(data: CtxSymbol, num: Int): Unit = {
     check(num)
     if ((num & 0x8) == 0x8) setByteLow(data, num)
     else setByteHigh(data, num)
   }
 
-  private def setByteHigh(data: MySymbol, num: Int): Unit = reg(num & limit) = (reg(num & limit) & 0xFFFF00FF) | ((data & 0xFF) << 8)
+  private def setByteHigh(data: CtxSymbol, num: Int) =
+    reg(num & limit) = reg(num & limit).extract(31, 16) :: data :: reg(num & limit).extract(7, 0)
 
-  private def setByteLow(data: MySymbol, num: Int): Unit = reg(num & limit) = (reg(num & limit) & 0xFFFFFF00) | (data & 0xFF)
+  private def setByteLow(data: CtxSymbol, num: Int) =
+    reg(num & limit) = reg(num & limit).extract(31, 8) :: data
 
-  def setWord(data: MySymbol, num: Int): Unit = {
+  def setWord(data: CtxSymbol, num: Int): Unit = {
     check(num)
     if ((num & 0x8) == 0x8) setWordHigh(data, num)
     else setWordLow(data, num)
   }
 
-  private def setWordHigh(data: MySymbol, num: Int): Unit = reg(num & limit) = (reg(num & limit) & 0x0000FFFF) | ((data & 0xFFFF) << 8)
+  private def setWordHigh(data: CtxSymbol, num: Int) =
+    reg(num & limit) = data :: reg(num & limit).extract(15, 0)
 
-  private def setWordLow(data: MySymbol, num: Int): Unit = reg(num & limit) = (reg(num & limit) & 0xFFFF0000) | (data & 0xFFFF)
+  private def setWordLow(data: CtxSymbol, num: Int) =
+    reg(num & limit) = reg(num & limit).extract(31, 16) :: data
 
-  def setLong(data: MySymbol, num: Int) = reg(num & limit) = data
+  def setLong(data: CtxSymbol, num: Int) = reg(num & limit) = data
 
 }

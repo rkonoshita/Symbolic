@@ -1,8 +1,8 @@
 package data.register
 
-import data.DataSet
-import symbol.{CtxSymbol, IntSymbol, MySymbol}
-import z3.scala.{Z3Context, Z3AST}
+import main.Main
+import symbol.CtxSymbol
+import z3.scala.Z3Context
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -15,8 +15,6 @@ class ProgramCounter(p: Int) {
 
   var pc = p
   private val limit = 0x0000FFFF
-
-  def setPc(p: Int) = pc = p & limit
-
+//  private val limit = 0x00FFFFFF //アドバンスモード
 
 }

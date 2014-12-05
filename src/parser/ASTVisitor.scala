@@ -2,10 +2,10 @@ package parser
 
 import java.io.File
 
-import data.register.Memory
+import data.register.{ROM, Memory}
 import main.Parameter
-import symbol.{IntSymbol, MySymbol}
-import z3.scala.{Z3AST, Z3Context}
+import symbol.CtxSymbol
+import z3.scala.Z3Context
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
@@ -28,7 +28,7 @@ class ASTVisitor {
   tmppc ++= Parameter.getStart
 
   //ここでメモリにオペランドを配置する
-  def makeProgram(ctx: Z3Context, file: File): Memory = {
+  def makeProgram(ctx: Z3Context, file: File): ROM = {
     //構文解析
     file.listFiles.foreach { f => Source.fromFile(f).getLines.foreach { l => parseResult += new ASTParser().parse(l).get}}
 
@@ -40,7 +40,7 @@ class ASTVisitor {
       count.put(section, num)
     }
 
-    val memory = new mutable.HashMap[Int, MySymbol]
+    val rom = new mutable.HashMap[Int, Byte]
     //意味解析してメモリ上にデータを配置していく
     parseResult.foreach { p =>
       println(p)
@@ -48,7 +48,7 @@ class ASTVisitor {
       if (array.isInstanceOf[VisitArray]) {
         (0 until array.asInstanceOf[VisitArray].item.length).foreach { op =>
           print("%x".format(array.asInstanceOf[VisitArray].item(op) & 0xFF) + ":")
-          memory += (tmppc(section) + op) -> new IntSymbol(array.asInstanceOf[VisitArray].item(op) & 0xFF)
+          rom += (tmppc(section) + op) -> array.asInstanceOf[VisitArray].item(op).toByte
         }
         tmppc.put(section, array.asInstanceOf[VisitArray].item.length)
       }
@@ -56,7 +56,7 @@ class ASTVisitor {
 
     }
     Parameter.sizeset(count)
-    new Memory(ctx, memory)
+    new ROM(rom)
   }
 
   //ラベル位置の捜索

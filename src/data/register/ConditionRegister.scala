@@ -1,14 +1,12 @@
 package data.register
 
-import symbol.{CtxSymbol, IntSymbol, MySymbol}
-import z3.scala.{Z3AST, Z3Context}
-
-import scala.collection.mutable.ArrayBuffer
+import symbol.CtxSymbol
+import z3.scala.Z3Context
 
 /**
  * Created by ryosuke on 14/11/18.
  */
-class ConditionRegister(ct: Z3Context, c: MySymbol) {
+class ConditionRegister(ct: Z3Context, c: CtxSymbol) {
 
   var ccr = c
   private val ctx = ct
