@@ -1,6 +1,7 @@
 package main
 
 import data.DataSet
+import symbol.IntSymbol
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -24,9 +25,9 @@ class State(num: Int, data: DataSet, pr: State) {
       s.assertCnstr(data.path.path)
       s.check.get
     }
-  val stop = (data.pc.pc == Main.tmprom.readWord(0) + 14) | !pathCheck
+  val stop = data.pc.pc == (data.mem.getWord(0) + 14).asInstanceOf[IntSymbol].symbol | !pathCheck
 
-  override def toString(): String = if (path.path == null) "null" else path.path.toString()
+  //  override def toString(): String = if (path.path == null) "null" else path.path.toString()
 
-  //  override def toString(): String = number.toString
+  override def toString(): String = number.toString
 }

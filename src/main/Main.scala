@@ -5,7 +5,7 @@ import java.io.File
 import data.DataSet
 import data.register._
 import parser.ASTVisitor
-import symbol.CtxSymbol
+import symbol.{CtxSymbol, IntSymbol, MySymbol}
 import z3.scala.{Z3AST, Z3Context}
 
 import scala.collection.mutable
@@ -20,22 +20,21 @@ object Main {
   var symnum = -1
   val state = new ArrayBuffer[State]
   val stack = new mutable.Stack[State]
-  var tmprom: ROM = null
+  var rom: ROM = null
 
   def main(args: Array[String]): Unit = {
     val file = new File("target") -> new File("asm")
     new ConvertToInputForm(file._1, file._2).convert()
-    val rom = new ASTVisitor().makeProgram(ctx, file._2)
+    rom = new ASTVisitor().makeProgram(ctx, file._2)
     val init = first(rom)
     val initState = new State(state.size, init, null)
     state += initState
     stack.push(initState)
-    tmprom = rom
 
     while (!stack.isEmpty) {
       val current = stack.pop
       val data = new DataSet(current)
-      val dataArray = new Decoder(ctx, rom).analyze(data)
+      val dataArray = new Decoder(ctx).analyze(data)
       dataArray.foreach { d =>
         val s = new State(state.size, d, current)
         current.next += s
@@ -44,21 +43,21 @@ object Main {
         state += s
         if (!s.stop) stack.push(s)
       }
-      if (state.length >= 1000) stack.clear
+      if (state.length >= 5000) stack.clear
     }
     new ResultWritter().write(new File("result.txt"))
   }
 
   def first(rom: ROM): DataSet = {
-    val reg = new Register(ctx, new mutable.HashMap[Int, CtxSymbol])
-    val mem = new Memory(ctx, new mutable.HashMap[Int, CtxSymbol])
-    val pc = new ProgramCounter((rom.readByte(0) << 8) | rom.readByte(1))
+    val reg = new Register(ctx, new mutable.HashMap[Int, MySymbol])
+    val mem = new Memory(ctx, new mutable.HashMap[Int, MySymbol])
+    val pc = new ProgramCounter(rom.getWord(0))
     val path = new PathCondition(ctx)
     val ccr = new ConditionRegister(ctx, new CtxSymbol(makeSymbol(8)))
     new DataSet(reg, mem, pc, ccr, path)
   }
 
-  def makeSymbol(size: Int): Z3AST = {
+  def makeSymbol(size:Int): Z3AST = {
     symnum += 1
     ctx.mkConst("s" + symnum, ctx.mkBVSort(size))
   }
@@ -69,7 +68,7 @@ object Main {
     range.foreach { n =>
       s.push
       s.assertCnstr(ctx.mkEq(ast, ctx.mkInt(n, ast.getSort)))
-      if (s.check.get && !buf.contains(n)) buf += n
+      if (s.check.get) buf += n
       s.pop(1)
     }
     buf

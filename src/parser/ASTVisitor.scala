@@ -4,8 +4,8 @@ import java.io.File
 
 import data.register.{ROM, Memory}
 import main.Parameter
-import symbol.CtxSymbol
-import z3.scala.Z3Context
+import symbol.{IntSymbol, MySymbol}
+import z3.scala.{Z3AST, Z3Context}
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
