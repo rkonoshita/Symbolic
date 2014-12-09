@@ -34,7 +34,7 @@ object Main {
     while (!stack.isEmpty) {
       val current = stack.pop
       val data = new DataSet(current)
-      val dataArray = new Decoder(ctx).analyze(data)
+      val dataArray = new Decoder(ctx, rom).analyze(data)
       dataArray.foreach { d =>
         val s = new State(state.size, d, current)
         current.next += s
@@ -43,12 +43,13 @@ object Main {
         state += s
         if (!s.stop) stack.push(s)
       }
-      if (state.length >= 5000) stack.clear
+      if (state.length >= 1000) stack.clear
     }
     new ResultWritter().write(new File("result.txt"))
   }
 
   def first(rom: ROM): DataSet = {
+    println(rom.getWord(0))
     val reg = new Register(ctx, new mutable.HashMap[Int, MySymbol])
     val mem = new Memory(ctx, new mutable.HashMap[Int, MySymbol])
     val pc = new ProgramCounter(rom.getWord(0))
@@ -57,7 +58,7 @@ object Main {
     new DataSet(reg, mem, pc, ccr, path)
   }
 
-  def makeSymbol(size:Int): Z3AST = {
+  def makeSymbol(size: Int): Z3AST = {
     symnum += 1
     ctx.mkConst("s" + symnum, ctx.mkBVSort(size))
   }

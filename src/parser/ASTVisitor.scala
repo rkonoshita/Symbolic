@@ -47,13 +47,12 @@ class ASTVisitor {
       val array = visit(p)
       if (array.isInstanceOf[VisitArray]) {
         (0 until array.asInstanceOf[VisitArray].item.length).foreach { op =>
-          print("%x".format(array.asInstanceOf[VisitArray].item(op) & 0xFF) + ":")
+          print("%x".format(array.asInstanceOf[VisitArray].item(op).toByte) + ":")
           rom += (tmppc(section) + op) -> array.asInstanceOf[VisitArray].item(op).toByte
         }
         tmppc.put(section, array.asInstanceOf[VisitArray].item.length)
       }
       println
-
     }
     Parameter.sizeset(count)
     new ROM(rom)
@@ -223,11 +222,11 @@ class ASTVisitor {
           case (l: RegByte, r: RegByte) => new VisitArray(0x08, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
           case (l: Imm, r: RegWord) =>
             val imm = visit(l).asInstanceOf[VisitInt].item
-            new VisitArray(0x79, 0x10 | visit(r).asInstanceOf[VisitInt].item, (imm >> 8) & 0xFF, imm & 0xFF)
+            new VisitArray(0x79, 0x10 | visit(r).asInstanceOf[VisitInt].item, imm >> 8, imm)
           case (l: RegWord, r: RegWord) => new VisitArray(0x09, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
           case (l: Imm, r: RegLong) =>
             val imm = visit(l).asInstanceOf[VisitInt].item
-            new VisitArray(0x7A, 0x10 | visit(r).asInstanceOf[VisitInt].item, (imm >> 24) & 0xFF, (imm >> 16) & 0xFF, (imm >> 8) & 0xFF, imm & 0xFF)
+            new VisitArray(0x7A, 0x10 | visit(r).asInstanceOf[VisitInt].item, imm >> 24, imm >> 16, imm >> 8, imm)
           case (l: RegLong, r: RegLong) => new VisitArray(0x0A, 0x80 | (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
         }
       case Inc(left, right) =>
@@ -242,11 +241,11 @@ class ASTVisitor {
           case (l: RegByte, r: RegByte) => new VisitArray(0x1C, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
           case (l: Imm, r: RegWord) =>
             val imm = visit(l).asInstanceOf[VisitInt].item
-            new VisitArray(0x79, 0x20 | visit(r).asInstanceOf[VisitInt].item, (imm >> 8) & 0xFF, imm & 0xFF)
+            new VisitArray(0x79, 0x20 | visit(r).asInstanceOf[VisitInt].item, imm >> 8, imm)
           case (l: RegWord, r: RegWord) => new VisitArray(0x1D, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
           case (l: Imm, r: RegLong) =>
             val imm = visit(l).asInstanceOf[VisitInt].item
-            new VisitArray(0x7A, 0x20 | visit(r).asInstanceOf[VisitInt].item, (imm >> 24) & 0xFF, (imm >> 16) & 0xFF, (imm >> 8) & 0xFF, imm & 0xFF)
+            new VisitArray(0x7A, 0x20 | visit(r).asInstanceOf[VisitInt].item, imm >> 24, imm >> 16, imm >> 8, imm)
           case (l: RegLong, r: RegLong) => new VisitArray(0x1F, 0x80 | (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
         }
       case Sub(left, right) =>
@@ -254,11 +253,11 @@ class ASTVisitor {
           case (l: RegByte, r: RegByte) => new VisitArray(0x18, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
           case (l: Imm, r: RegWord) =>
             val imm = visit(l).asInstanceOf[VisitInt].item
-            new VisitArray(0x79, 0x30 | visit(r).asInstanceOf[VisitInt].item, (imm >> 8) & 0xFF, imm & 0xFF)
+            new VisitArray(0x79, 0x30 | visit(r).asInstanceOf[VisitInt].item, imm >> 8, imm)
           case (l: RegWord, r: RegWord) => new VisitArray(0x19, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
           case (l: Imm, r: RegLong) =>
             val imm = visit(l).asInstanceOf[VisitInt].item
-            new VisitArray(0x7A, 0x30 | visit(r).asInstanceOf[VisitInt].item, (imm >> 24) & 0xFF, (imm >> 16) & 0xFF, (imm >> 8) & 0xFF, imm & 0xFF)
+            new VisitArray(0x7A, 0x30 | visit(r).asInstanceOf[VisitInt].item, imm >> 24, imm >> 16, imm >> 8, imm)
           case (l: RegLong, r: RegLong) => new VisitArray(0x1A, 0x80 | (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
         }
       case And(left, right) =>
@@ -267,11 +266,11 @@ class ASTVisitor {
           case (l: RegByte, r: RegByte) => new VisitArray(0x16, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
           case (l: Imm, r: RegWord) =>
             val imm = visit(l).asInstanceOf[VisitInt].item
-            new VisitArray(0x79, 0x60 | visit(r).asInstanceOf[VisitInt].item, (imm >> 8) & 0xFF, imm & 0xFF)
+            new VisitArray(0x79, 0x60 | visit(r).asInstanceOf[VisitInt].item, imm >> 8, imm)
           case (l: RegWord, r: RegWord) => new VisitArray(0x66, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
           case (l: Imm, r: RegLong) =>
             val imm = visit(l).asInstanceOf[VisitInt].item
-            new VisitArray(0x7A, 0x60 | visit(r).asInstanceOf[VisitInt].item, (imm >> 24) & 0xFF, (imm >> 16) & 0xFF, (imm >> 8) & 0xFF, imm & 0xFF)
+            new VisitArray(0x7A, 0x60 | visit(r).asInstanceOf[VisitInt].item, imm >> 24, imm >> 16, imm >> 8, imm)
           case (l: RegLong, r: RegLong) => new VisitArray(0x01, 0xF0, 0x66, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
         }
       case Not(item) =>
@@ -291,71 +290,71 @@ class ASTVisitor {
           case (l: IndirReg, r: RegByte) => new VisitArray(0x68, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
           case (l: Disp, r: RegByte) =>
             val disp = visit(l).asInstanceOf[VisitArray].item
-            if (disp(2) == 16) new VisitArray(0x6E, (disp(1) << 4) | visit(r).asInstanceOf[VisitInt].item, (disp(1) >> 8) & 0xFF, disp(1) & 0xFF)
-            else new VisitArray(0x78, disp(1) << 4, 0x6A, 0x20 | visit(r).asInstanceOf[VisitInt].item, 0x00, (disp(0) >> 16) & 0xFF, (disp(0) >> 8) & 0xFF, disp(0) & 0xFF)
+            if (disp(2) == 16) new VisitArray(0x6E, (disp(1) << 4) | visit(r).asInstanceOf[VisitInt].item, disp(0) >> 8, disp(0))
+            else new VisitArray(0x78, disp(1) << 4, 0x6A, 0x20 | visit(r).asInstanceOf[VisitInt].item, 0x00, disp(0) >> 16, disp(0) >> 8, disp(0))
           case (l: Pos, r: RegByte) => new VisitArray(0x6C, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
           case (l: AbsAddress, r: RegByte) =>
             val abs = visit(l).asInstanceOf[VisitArray].item
             if (abs(1) == 8) new VisitArray(0x20 | visit(r).asInstanceOf[VisitInt].item, abs(0))
-            else if (abs(1) == 16) new VisitArray(0x6A, visit(r).asInstanceOf[VisitInt].item, (abs(0) >> 8) & 0xFF, abs(0) & 0xFF)
-            else new VisitArray(0x6A, 0x20 | visit(r).asInstanceOf[VisitInt].item, 0x00, (abs(0) >> 16) & 0xFF, (abs(0) >> 8) & 0xFF, abs(0) & 0xFF)
+            else if (abs(1) == 16) new VisitArray(0x6A, visit(r).asInstanceOf[VisitInt].item, abs(0) >> 8, abs(0))
+            else new VisitArray(0x6A, 0x20 | visit(r).asInstanceOf[VisitInt].item, 0x00, abs(0) >> 16, abs(0) >> 8, abs(0))
           case (l: Imm, r: RegWord) =>
             val imm = visit(l).asInstanceOf[VisitInt].item
-            new VisitArray(0x79, visit(r).asInstanceOf[VisitInt].item, (imm >> 8) & 0xFF, imm & 0xFF)
+            new VisitArray(0x79, visit(r).asInstanceOf[VisitInt].item, imm >> 8, imm)
           case (l: IndirReg, r: RegWord) => new VisitArray(0x69, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
           case (l: Disp, r: RegWord) =>
             val disp = visit(l).asInstanceOf[VisitArray].item
-            if (disp(2) == 16) new VisitArray(0x6F, (disp(1) << 4) | visit(r).asInstanceOf[VisitInt].item, (disp(1) >> 8) & 0xFF, disp(1) & 0xFF)
-            else new VisitArray(0x78, disp(1) << 4, 0x6B, 0x20 | visit(r).asInstanceOf[VisitInt].item, 0x00, (disp(0) >> 16) & 0xFF, (disp(0) >> 8) & 0xFF, disp(0) & 0xFF)
+            if (disp(2) == 16) new VisitArray(0x6F, (disp(1) << 4) | visit(r).asInstanceOf[VisitInt].item, disp(0) >> 8, disp(0))
+            else new VisitArray(0x78, disp(1) << 4, 0x6B, 0x20 | visit(r).asInstanceOf[VisitInt].item, 0x00, disp(0) >> 16, disp(0) >> 8, disp(0))
           case (l: Pos, r: RegWord) => new VisitArray(0x6D, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
           case (l: AbsAddress, r: RegWord) =>
             val abs = visit(l).asInstanceOf[VisitArray].item
-            if (abs(1) == 16) new VisitArray(0x6B, visit(r).asInstanceOf[VisitInt].item, (abs(0) >> 8) & 0xFF, abs(0) & 0xFF)
-            else new VisitArray(0x6B, 0x20 | visit(r).asInstanceOf[VisitInt].item, 0x00, (abs(0) >> 16) & 0xFF, (abs(0) >> 8) & 0xFF, abs(0) & 0xFF)
+            if (abs(1) == 16) new VisitArray(0x6B, visit(r).asInstanceOf[VisitInt].item, abs(0) >> 8, abs(0))
+            else new VisitArray(0x6B, 0x20 | visit(r).asInstanceOf[VisitInt].item, 0x00, abs(0) >> 16, abs(0) >> 8, abs(0))
           case (l: Imm, r: RegLong) =>
             val imm = visit(l).asInstanceOf[VisitInt].item
-            new VisitArray(0x7A, visit(r).asInstanceOf[VisitInt].item, (imm >> 24) & 0xFF, (imm >> 16) & 0xFF, (imm >> 8) & 0xFF, imm & 0xFF)
+            new VisitArray(0x7A, visit(r).asInstanceOf[VisitInt].item, imm >> 24, imm >> 16, imm >> 8, imm)
           case (l: IndirReg, r: RegLong) => new VisitArray(0x01, 0x00, 0x69, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
           case (l: Disp, r: RegLong) =>
             val disp = visit(l).asInstanceOf[VisitArray].item
-            if (disp(2) == 16) new VisitArray(0x01, 0x00, 0x6F, (disp(1) << 4) | visit(r).asInstanceOf[VisitInt].item, (disp(1) >> 8) & 0xFF, disp(1) & 0xFF)
-            else new VisitArray(0x01, 0x00, 0x78, disp(1) << 4, 0x6B, 0x20 | visit(r).asInstanceOf[VisitInt].item, 0x00, (disp(0) >> 16) & 0xFF, (disp(0) >> 8) & 0xFF, disp(0) & 0xFF)
+            if (disp(2) == 16) new VisitArray(0x01, 0x00, 0x6F, (disp(1) << 4) | visit(r).asInstanceOf[VisitInt].item, disp(0) >> 8, disp(0))
+            else new VisitArray(0x01, 0x00, 0x78, disp(1) << 4, 0x6B, 0x20 | visit(r).asInstanceOf[VisitInt].item, 0x00, disp(0) >> 16, disp(0) >> 8, disp(0))
           case (l: Pos, r: RegLong) => new VisitArray(0x01, 0x00, 0x6D, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
           case (l: AbsAddress, r: RegLong) =>
             val abs = visit(l).asInstanceOf[VisitArray].item
-            if (abs(1) == 16) new VisitArray(0x01, 0x00, 0x6B, visit(r).asInstanceOf[VisitInt].item, (abs(0) >> 8) & 0xFF, abs(0) & 0xFF)
-            else new VisitArray(0x01, 0x00, 0x6B, 0x20 | visit(r).asInstanceOf[VisitInt].item, 0x00, (abs(0) >> 16) & 0xFF, (abs(0) >> 8) & 0xFF, abs(0) & 0xFF)
+            if (abs(1) == 16) new VisitArray(0x01, 0x00, 0x6B, visit(r).asInstanceOf[VisitInt].item, abs(0) >> 8, abs(0))
+            else new VisitArray(0x01, 0x00, 0x6B, 0x20 | visit(r).asInstanceOf[VisitInt].item, 0x00, abs(0) >> 16, abs(0) >> 8, abs(0))
           case (l: RegByte, r: IndirReg) => new VisitArray(0x68, 0x80 | (visit(r).asInstanceOf[VisitInt].item << 4) | visit(l).asInstanceOf[VisitInt].item)
           case (l: RegByte, r: Disp) =>
             val disp = visit(r).asInstanceOf[VisitArray].item
-            if (disp(2) == 16) new VisitArray(0x6E, 0x80 | (disp(1) << 4) | visit(l).asInstanceOf[VisitInt].item, (disp(1) >> 8) & 0xFF, disp(1) & 0xFF)
-            else new VisitArray(0x78, disp(1) << 4, 0x6A, 0xA0 | visit(l).asInstanceOf[VisitInt].item, 0x00, (disp(0) >> 16) & 0xFF, (disp(0) >> 8) & 0xFF, disp(0) & 0xFF)
+            if (disp(2) == 16) new VisitArray(0x6E, 0x80 | (disp(1) << 4) | visit(l).asInstanceOf[VisitInt].item, disp(0) >> 8, disp(0))
+            else new VisitArray(0x78, disp(1) << 4, 0x6A, 0xA0 | visit(l).asInstanceOf[VisitInt].item, 0x00, disp(0) >> 16, disp(0) >> 8, disp(0))
           case (l: RegByte, r: Pre) => new VisitArray(0x6C, 0x80 | (visit(r).asInstanceOf[VisitInt].item << 4) | visit(l).asInstanceOf[VisitInt].item)
           case (l: RegByte, r: AbsAddress) =>
             val abs = visit(r).asInstanceOf[VisitArray].item
             if (abs(1) == 8) new VisitArray(0x30 | visit(l).asInstanceOf[VisitInt].item, abs(0))
-            else if (abs(1) == 16) new VisitArray(0x6A, 0x80 | visit(l).asInstanceOf[VisitInt].item, (abs(0) >> 8) & 0xFF, abs(0) & 0xFF)
-            else new VisitArray(0x6A, 0xA0 | visit(l).asInstanceOf[VisitInt].item, 0x00, (abs(0) >> 16) & 0xFF, (abs(0) >> 8) & 0xFF, abs(0) & 0xFF)
+            else if (abs(1) == 16) new VisitArray(0x6A, 0x80 | visit(l).asInstanceOf[VisitInt].item, abs(0) >> 8, abs(0))
+            else new VisitArray(0x6A, 0xA0 | visit(l).asInstanceOf[VisitInt].item, 0x00, abs(0) >> 16, abs(0) >> 8, abs(0))
           case (l: RegWord, r: IndirReg) => new VisitArray(0x69, 0x80 | (visit(r).asInstanceOf[VisitInt].item << 4) | visit(l).asInstanceOf[VisitInt].item)
           case (l: RegWord, r: Disp) =>
             val disp = visit(r).asInstanceOf[VisitArray].item
-            if (disp(2) == 16) new VisitArray(0x6F, 0x80 | (disp(1) << 4) | visit(l).asInstanceOf[VisitInt].item, (disp(1) >> 8) & 0xFF, disp(1) & 0xFF)
-            else new VisitArray(0x78, disp(1) << 4, 0x6B, 0xA0 | visit(l).asInstanceOf[VisitInt].item, 0x00, (disp(0) >> 16) & 0xFF, (disp(0) >> 8) & 0xFF, disp(0) & 0xFF)
+            if (disp(2) == 16) new VisitArray(0x6F, 0x80 | (disp(1) << 4) | visit(l).asInstanceOf[VisitInt].item, disp(0) >> 8, disp(0))
+            else new VisitArray(0x78, disp(1) << 4, 0x6B, 0xA0 | visit(l).asInstanceOf[VisitInt].item, 0x00, disp(0) >> 16, disp(0) >> 8, disp(0))
           case (l: RegWord, r: Pre) => new VisitArray(0x6D, 0x80 | (visit(r).asInstanceOf[VisitInt].item << 4) | visit(l).asInstanceOf[VisitInt].item)
           case (l: RegWord, r: AbsAddress) =>
             val abs = visit(r).asInstanceOf[VisitArray].item
-            if (abs(1) == 16) new VisitArray(0x6B, 0x80 | visit(l).asInstanceOf[VisitInt].item, (abs(0) >> 8) & 0xFF, abs(0) & 0xFF)
-            else new VisitArray(0x6B, 0xA0 | visit(l).asInstanceOf[VisitInt].item, 0x00, (abs(0) >> 16) & 0xFF, (abs(0) >> 8) & 0xFF, abs(0) & 0xFF)
+            if (abs(1) == 16) new VisitArray(0x6B, 0x80 | visit(l).asInstanceOf[VisitInt].item, abs(0) >> 8, abs(0))
+            else new VisitArray(0x6B, 0xA0 | visit(l).asInstanceOf[VisitInt].item, 0x00, abs(0) >> 16, abs(0) >> 8, abs(0))
           case (l: RegLong, r: IndirReg) => new VisitArray(0x01, 0x00, 0x69, 0x80 | (visit(r).asInstanceOf[VisitInt].item << 4) | visit(l).asInstanceOf[VisitInt].item)
           case (l: RegLong, r: Disp) =>
             val disp = visit(r).asInstanceOf[VisitArray].item
-            if (disp(2) == 16) new VisitArray(0x01, 0x00, 0x6F, 0x80 | (disp(1) << 4) | visit(l).asInstanceOf[VisitInt].item, (disp(1) >> 8) & 0xFF, disp(1) & 0xFF)
-            else new VisitArray(0x01, 0x00, 0x78, 0x80 | (disp(1) << 4), 0x6B, 0xA0 | visit(l).asInstanceOf[VisitInt].item, 0x00, (disp(0) >> 16) & 0xFF, (disp(0) >> 8) & 0xFF, disp(0) & 0xFF)
+            if (disp(2) == 16) new VisitArray(0x01, 0x00, 0x6F, 0x80 | (disp(1) << 4) | visit(l).asInstanceOf[VisitInt].item, disp(0) >> 8, disp(0))
+            else new VisitArray(0x01, 0x00, 0x78, 0x80 | (disp(1) << 4), 0x6B, 0xA0 | visit(l).asInstanceOf[VisitInt].item, 0x00, disp(0) >> 16, disp(0) >> 8, disp(0))
           case (l: RegLong, r: Pre) => new VisitArray(0x01, 0x00, 0x6D, 0x80 | (visit(r).asInstanceOf[VisitInt].item << 4) | visit(l).asInstanceOf[VisitInt].item)
           case (l: RegLong, r: AbsAddress) =>
             val abs = visit(r).asInstanceOf[VisitArray].item
-            if (abs(1) == 16) new VisitArray(0x01, 0x00, 0x6B, 0x80 | visit(l).asInstanceOf[VisitInt].item, (abs(0) >> 8) & 0xFF, abs(0) & 0xFF)
-            else new VisitArray(0x01, 0x00, 0x6B, 0xA0 | visit(l).asInstanceOf[VisitInt].item, 0x00, (abs(0) >> 16) & 0xFF, (abs(0) >> 8) & 0xFF, abs(0) & 0xFF)
+            if (abs(1) == 16) new VisitArray(0x01, 0x00, 0x6B, 0x80 | visit(l).asInstanceOf[VisitInt].item, abs(0) >> 8, abs(0))
+            else new VisitArray(0x01, 0x00, 0x6B, 0xA0 | visit(l).asInstanceOf[VisitInt].item, 0x00, abs(0) >> 16, abs(0) >> 8, abs(0))
         }
       case Pop(reg) =>
         reg match {
@@ -395,7 +394,7 @@ class ASTVisitor {
           case (a: IndirReg) => new VisitArray(0x59, visit(a).asInstanceOf[VisitInt].item << 4)
           case (a: AbsAddress) =>
             val abs = visit(a).asInstanceOf[VisitArray].item
-            new VisitArray(0x5A, (abs(0) >> 16) & 0xFF, (abs(0) >> 8) & 0xFF, abs(0) & 0xFF)
+            new VisitArray(0x5A, abs(0) >> 16, abs(0) >> 8, abs(0))
           case (a: IndirAdd) => new VisitArray(0x5B, visit(a).asInstanceOf[VisitInt].item)
         }
       case Jsr(add) =>
@@ -403,25 +402,25 @@ class ASTVisitor {
           case (a: IndirReg) => new VisitArray(0x5D, visit(a).asInstanceOf[VisitInt].item << 4)
           case (a: AbsAddress) =>
             val abs = visit(a).asInstanceOf[VisitArray].item
-            new VisitArray(0x5E, (abs(0) >> 16) & 0xFF, (abs(0) >> 8) & 0xFF, abs(0) & 0xFF)
+            new VisitArray(0x5E, abs(0) >> 16, abs(0) >> 8, abs(0))
           case (a: IndirAdd) => new VisitArray(0x5F, visit(a).asInstanceOf[VisitInt].item)
         }
       case Bra(num, size) =>
         val disp = visit(num).asInstanceOf[VisitInt].item - tmppc("P")
         if (size == 8) new VisitArray(0x40, disp)
-        else new VisitArray(0x58, 0x00, (disp >> 8) & 0xFF, disp & 0xFF)
+        else new VisitArray(0x58, 0x00, disp >> 8, disp)
       case Blo(num, size) =>
         val disp = visit(num).asInstanceOf[VisitInt].item - tmppc("P")
         if (size == 8) new VisitArray(0x45, disp)
-        else new VisitArray(0x58, 0x50, (disp >> 8) & 0xFF, disp & 0xFF)
+        else new VisitArray(0x58, 0x50, disp >> 8, disp)
       case Blt(num, size) =>
         val disp = visit(num).asInstanceOf[VisitInt].item - tmppc("P")
         if (size == 8) new VisitArray(0x4D, disp)
-        else new VisitArray(0x58, 0xD0, (disp >> 8) & 0xFF, disp & 0xFF)
+        else new VisitArray(0x58, 0xD0, disp >> 8, disp)
       case Bhi(num, size) =>
         val disp = visit(num).asInstanceOf[VisitInt].item - tmppc("P")
         if (size == 8) new VisitArray(0x42, disp)
-        else new VisitArray(0x58, 0x20, (disp >> 8) & 0xFF, disp & 0xFF)
+        else new VisitArray(0x58, 0x20, disp >> 8, disp)
       case Rts() => new VisitArray(0x54, 0x70)
       case Rte() => new VisitArray(0x56, 0x70)
       case Data(num, size) =>
@@ -429,10 +428,10 @@ class ASTVisitor {
           case 8 => new VisitArray(visit(num).asInstanceOf[VisitInt].item)
           case 16 =>
             val data = visit(num).asInstanceOf[VisitInt].item
-            new VisitArray((data >> 8) & 0xFF, data & 0xFF)
+            new VisitArray(data >> 8, data)
           case 32 =>
             val data = visit(num).asInstanceOf[VisitInt].item
-            new VisitArray((data >> 24) & 0xFF, (data >> 16) & 0xFF, (data >> 8) & 0xFF, data & 0xFF)
+            new VisitArray(data >> 24, data >> 16, data >> 8, data)
         }
       case DataBlock(block, data, size) =>
         size match {
@@ -441,18 +440,18 @@ class ASTVisitor {
             val d = visit(data).asInstanceOf[VisitInt].item
             val array = new Array[Int](2 * visit(block).asInstanceOf[VisitInt].item)
             for (i <- 0 until array.length / 2) {
-              array(i) = (d >> 8) & 0xFF
-              array(i + 1) = d & 0xFF
+              array(i) = (d >> 8)
+              array(i + 1) = d
             }
             new VisitArray(array)
           case 32 =>
             val d = visit(data).asInstanceOf[VisitInt].item
             val array = new Array[Int](4 * visit(block).asInstanceOf[VisitInt].item)
             for (i <- 0 until array.length / 4) {
-              array(i) = (d >> 24) & 0xFF
-              array(i + 1) = (d >> 16) & 0xFF
-              array(i + 2) = (d >> 8) & 0xFF
-              array(i + 3) = d & 0xFF
+              array(i) = d >> 24
+              array(i + 1) = d >> 16
+              array(i + 2) = d >> 8
+              array(i + 3) = d
             }
             new VisitArray(array)
         }

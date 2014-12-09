@@ -266,9 +266,11 @@ class IntSymbol(ast: Int) extends MySymbol {
 
   def ||(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkOr(s.context.mkInt(symbol, s.getSort), s))
 
-  def >=(s: MySymbol): MySymbol = >=(s.asInstanceOf[CtxSymbol].symbol)
+  def >=(s: MySymbol): CtxSymbol = >=(s.asInstanceOf[CtxSymbol].symbol)
 
   def >=(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVSge(s.context.mkInt(symbol, s.getSort), s))
+
+  def >=(s: Int): Boolean = symbol >= s
 
   def <(s: MySymbol): CtxSymbol = <(s.asInstanceOf[CtxSymbol].symbol)
 

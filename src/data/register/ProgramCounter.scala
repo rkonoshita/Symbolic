@@ -13,10 +13,9 @@ import scala.collection.mutable.ArrayBuffer
 //記号的に扱うべきか悩ましいところ
 class ProgramCounter(p: Int) {
 
-  var pc = p
   private val limit = 0x0000FFFF
+  var pc = p & limit
 
   def setPc(p: Int) = pc = p & limit
-
 
 }
