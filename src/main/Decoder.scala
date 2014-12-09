@@ -285,7 +285,7 @@ class Decoder(c: Z3Context, r: ROM) {
           case ccr: CtxSymbol =>
             val n = (ccr & 0x08).eq(0x08)
             val v = (ccr & 0x02).eq(0x02)
-            val xor = ctx.mkBVXor(n.symbol, v.symbol)
+            val xor = ctx.mkXor(n.symbol, v.symbol)
             val dc1 = data.clone
             dc1.pc.setPc(pc + disp)
             dc1.path.set(xor)
@@ -607,8 +607,8 @@ class Decoder(c: Z3Context, r: ROM) {
           if (bool) clone.ccr.setC else clone.ccr.clearC
           ans += clone
         case _ =>
-          val bool1 = (data1 & and).eq(new IntSymbol(and)) && (data2 & and).eq(new IntSymbol(and))
-          val bool2 = ((data1 & and).eq(new IntSymbol(and)) || (data2 & and).eq(new IntSymbol(and))) && ((res & and).eq(new IntSymbol(0)))
+          val bool1 = (data1 & and).eq(new CtxSymbol(ctx, and, size)) && (data2 & and).eq(new CtxSymbol(ctx, and, size))
+          val bool2 = ((data1 & and).eq(new CtxSymbol(ctx, and, size)) || (data2 & and).eq(new CtxSymbol(ctx, and, size))) && ((res & and).eq(new CtxSymbol(ctx, 0, size)))
           val bool = (bool1 || bool2).asInstanceOf[CtxSymbol]
           val bc1 = b.clone
           bc1.ccr.setC
@@ -642,8 +642,8 @@ class Decoder(c: Z3Context, r: ROM) {
           if (bool) clone.ccr.setV else clone.ccr.clearV
           ans += clone
         case _ =>
-          val bool1 = data1 >= new IntSymbol(0) && data2 >= new IntSymbol(0) && res < new IntSymbol(0)
-          val bool2 = data1 < new IntSymbol(0) && data2 < new IntSymbol(0) && res >= new IntSymbol(0)
+          val bool1 = data1 >= new CtxSymbol(ctx, 0, size) && data2 >= new CtxSymbol(ctx, 0, size) && res < new CtxSymbol(ctx, 0, size)
+          val bool2 = data1 < new CtxSymbol(ctx, 0, size) && data2 < new CtxSymbol(ctx, 0, size) && res >= new CtxSymbol(ctx, 0, size)
           val bool = (bool1 || bool2).asInstanceOf[CtxSymbol]
           val bc1 = b.clone
           bc1.ccr.setV
@@ -728,8 +728,8 @@ class Decoder(c: Z3Context, r: ROM) {
           if (bool) clone.ccr.setH else clone.ccr.clearH
           ans += clone
         case _ =>
-          val bool1 = (data1 & and).eq(new IntSymbol(and)) && (data2 & and).eq(new IntSymbol(and))
-          val bool2 = ((data1 & and).eq(new IntSymbol(and)) || (data2 & and).eq(new IntSymbol(and))) && ((res & and).eq(new IntSymbol(0)))
+          val bool1 = (data1 & and).eq(new CtxSymbol(ctx, and, size)) && (data2 & and).eq(new CtxSymbol(ctx, and, size))
+          val bool2 = ((data1 & and).eq(new CtxSymbol(ctx, and, size)) || (data2 & and).eq(new CtxSymbol(ctx, and, size))) && ((res & and).eq(new CtxSymbol(ctx, 0, size)))
           val bool = (bool1 || bool2).asInstanceOf[CtxSymbol]
           val bc1 = b.clone
           bc1.ccr.setH

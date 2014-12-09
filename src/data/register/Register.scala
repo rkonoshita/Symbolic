@@ -19,14 +19,14 @@ class Register(c: Z3Context, r: mutable.HashMap[Int, MySymbol]) {
   private def check(num: Int): Unit = if (!reg.contains(num & limit)) reg += (num & limit) -> new CtxSymbol(Main.makeSymbol(32)) //指定レジスタに初期値がなければ作る
 
   //レジスタ値の候補を全て取得する
-//  def getByte(num: MySymbol): ArrayBuffer[MySymbol] = {
-//    val ans = new ArrayBuffer[MySymbol]
-//    num match {
-//      case n: IntSymbol => ans += getByte(n.symbol)
-//      case n: CtxSymbol => Main.extract(0 to 0xF, n).foreach(e => ans += getByte(e))
-//    }
-//    ans
-//  }
+  //  def getByte(num: MySymbol): ArrayBuffer[MySymbol] = {
+  //    val ans = new ArrayBuffer[MySymbol]
+  //    num match {
+  //      case n: IntSymbol => ans += getByte(n.symbol)
+  //      case n: CtxSymbol => Main.extract(0 to 0xF, n).foreach(e => ans += getByte(e))
+  //    }
+  //    ans
+  //  }
 
   //Intでアクセスする場合は1通り
   def getByte(num: Int): MySymbol = {
@@ -47,14 +47,14 @@ class Register(c: Z3Context, r: mutable.HashMap[Int, MySymbol]) {
       case r: CtxSymbol => r.extract(7, 0)
     }
 
-//  def getWord(num: MySymbol): ArrayBuffer[MySymbol] = {
-//    val ans = new ArrayBuffer[MySymbol]
-//    num match {
-//      case n: IntSymbol => ans += getWord(n.symbol)
-//      case n: CtxSymbol => Main.extract(0 to 0xF, n).foreach(e => ans += getWord(e))
-//    }
-//    ans
-//  }
+  //  def getWord(num: MySymbol): ArrayBuffer[MySymbol] = {
+  //    val ans = new ArrayBuffer[MySymbol]
+  //    num match {
+  //      case n: IntSymbol => ans += getWord(n.symbol)
+  //      case n: CtxSymbol => Main.extract(0 to 0xF, n).foreach(e => ans += getWord(e))
+  //    }
+  //    ans
+  //  }
 
   def getWord(num: Int): MySymbol = {
     check(num)
@@ -74,14 +74,14 @@ class Register(c: Z3Context, r: mutable.HashMap[Int, MySymbol]) {
       case r: CtxSymbol => r.extract(15, 0)
     }
 
-//  def getLong(num: MySymbol): ArrayBuffer[MySymbol] = {
-//    val ans = new ArrayBuffer[MySymbol]
-//    num match {
-//      case n: IntSymbol => ans += getLong(n.symbol)
-//      case n: CtxSymbol => Main.extract(0 to 0xF, n).foreach(e => ans += getLong(e))
-//    }
-//    ans
-//  }
+  //  def getLong(num: MySymbol): ArrayBuffer[MySymbol] = {
+  //    val ans = new ArrayBuffer[MySymbol]
+  //    num match {
+  //      case n: IntSymbol => ans += getLong(n.symbol)
+  //      case n: CtxSymbol => Main.extract(0 to 0xF, n).foreach(e => ans += getLong(e))
+  //    }
+  //    ans
+  //  }
 
   def getLong(num: Int): MySymbol = {
     check(num)
@@ -98,11 +98,11 @@ class Register(c: Z3Context, r: mutable.HashMap[Int, MySymbol]) {
     reg(num & limit) =
       (data, reg(num & limit)) match {
         case (d: IntSymbol, r: IntSymbol) => (r & 0xFFFF00FF) | ((d & 0x000000FF) << 8)
-        case (d: IntSymbol, r: CtxSymbol) => r.extract(31, 16) :: new CtxSymbol(ctx, d.symbol, 8) :: r.extract(7, 0)
+        case (d: IntSymbol, r: CtxSymbol) => r.extract(31, 16).concat(new CtxSymbol(ctx, d.symbol, 8)).concat(r.extract(7, 0))
         case (d: CtxSymbol, r: IntSymbol) =>
           val rn = new CtxSymbol(ctx, r.symbol, 32)
-          rn.extract(31, 16) :: d :: rn.extract(7, 0)
-        case (d: CtxSymbol, r: CtxSymbol) => r.extract(31, 16) :: d :: r.extract(7, 0)
+          rn.extract(31, 16).concat(d).concat(rn.extract(7, 0))
+        case (d: CtxSymbol, r: CtxSymbol) => r.extract(31, 16).concat(d).concat(r.extract(7, 0))
       }
 
 
@@ -110,9 +110,9 @@ class Register(c: Z3Context, r: mutable.HashMap[Int, MySymbol]) {
     reg(num & limit) =
       (data, reg(num & limit)) match {
         case (d: IntSymbol, r: IntSymbol) => (r & 0xFFFF00FF) | (d & 0x000000FF)
-        case (d: IntSymbol, r: CtxSymbol) => r.extract(31, 8) :: new CtxSymbol(ctx, d.symbol, 8)
-        case (d: CtxSymbol, r: IntSymbol) => new CtxSymbol(ctx, r.symbol, 32).extract(31, 8) :: d
-        case (d: CtxSymbol, r: CtxSymbol) => r.extract(31, 8) :: d
+        case (d: IntSymbol, r: CtxSymbol) => r.extract(31, 8).concat(new CtxSymbol(ctx, d.symbol, 8))
+        case (d: CtxSymbol, r: IntSymbol) => new CtxSymbol(ctx, r.symbol, 32).extract(31, 8).concat(d)
+        case (d: CtxSymbol, r: CtxSymbol) => r.extract(31, 8).concat(d)
       }
 
   def setWord(data: MySymbol, num: Int): Unit = {
@@ -125,18 +125,18 @@ class Register(c: Z3Context, r: mutable.HashMap[Int, MySymbol]) {
     reg(num & limit) =
       (data, reg(num & limit)) match {
         case (d: IntSymbol, r: IntSymbol) => ((d & 0x0000FFFF) << 16) | (r & 0x0000FFFF)
-        case (d: IntSymbol, r: CtxSymbol) => new CtxSymbol(ctx, d.symbol, 16) :: r.extract(15, 0)
-        case (d: CtxSymbol, r: IntSymbol) => d :: new CtxSymbol(ctx, r.symbol, 32).extract(15, 0)
-        case (d: CtxSymbol, r: CtxSymbol) => d :: r.extract(15, 0)
+        case (d: IntSymbol, r: CtxSymbol) => new CtxSymbol(ctx, d.symbol, 16).concat(r.extract(15, 0))
+        case (d: CtxSymbol, r: IntSymbol) => d.concat(new CtxSymbol(ctx, r.symbol, 32).extract(15, 0))
+        case (d: CtxSymbol, r: CtxSymbol) => d.concat(r.extract(15, 0))
       }
 
   private def setWordLow(data: MySymbol, num: Int) =
     reg(num & limit) =
       (data, reg(num & limit)) match {
         case (d: IntSymbol, r: IntSymbol) => ((r & 0xFFFF0000) << 16) | (d & 0x0000FFFF)
-        case (d: IntSymbol, r: CtxSymbol) => r.extract(31, 16) :: new CtxSymbol(ctx, d.symbol, 16)
-        case (d: CtxSymbol, r: IntSymbol) => new CtxSymbol(ctx, r.symbol, 32).extract(31, 16) :: d
-        case (d: CtxSymbol, r: CtxSymbol) => r.extract(31, 16) :: d
+        case (d: IntSymbol, r: CtxSymbol) => r.extract(31, 16).concat(new CtxSymbol(ctx, d.symbol, 16))
+        case (d: CtxSymbol, r: IntSymbol) => new CtxSymbol(ctx, r.symbol, 32).extract(31, 16).concat(d)
+        case (d: CtxSymbol, r: CtxSymbol) => r.extract(31, 16).concat(d)
       }
 
   def setLong(data: MySymbol, num: Int) = reg(num & limit) = data

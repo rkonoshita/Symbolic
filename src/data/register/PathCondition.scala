@@ -14,7 +14,7 @@ class PathCondition(c: Z3Context, p: Z3AST) {
 
   def set(p: Z3AST): Unit =
     if (path == null) path = p
-    else path = ctx.mkOr(path, p)
+    else path = ctx.mkAnd(path, p)
 
   def this(c: Z3Context) = this(c, null)
 }

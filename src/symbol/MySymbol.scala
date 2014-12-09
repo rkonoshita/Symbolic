@@ -45,15 +45,9 @@ trait MySymbol {
 
   def eq(s: MySymbol): MySymbol
 
-  def eq(s: Z3AST): MySymbol
-
   def >=(s: MySymbol): MySymbol
 
-  def >=(s: Z3AST): MySymbol
-
   def <(s: MySymbol): MySymbol
-
-  def <(s: Z3AST): MySymbol
 
   def &&(s: MySymbol): MySymbol
 
@@ -153,9 +147,9 @@ class CtxSymbol(ast: Z3AST) extends MySymbol {
     if (s.isInstanceOf[IntSymbol]) ||(s.asInstanceOf[IntSymbol].symbol)
     else ||(s.asInstanceOf[CtxSymbol].symbol)
 
-  def ||(s: Int): CtxSymbol = ||(ctx.mkInt(s, symbol.getSort))
-
   def ||(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkAnd(symbol, s))
+
+  def ||(s: Int): CtxSymbol = ||(ctx.mkInt(s, symbol.getSort))
 
   def >=(s: MySymbol): CtxSymbol =
     if (s.isInstanceOf[IntSymbol]) >=(s.asInstanceOf[IntSymbol].symbol)
@@ -175,7 +169,7 @@ class CtxSymbol(ast: Z3AST) extends MySymbol {
 
   def extract(high: Int, low: Int): CtxSymbol = new CtxSymbol(ctx.mkExtract(high, low, symbol))
 
-  def ::(s: CtxSymbol): CtxSymbol = new CtxSymbol(ctx.mkConcat(symbol, s.symbol))
+  def concat(s: CtxSymbol): CtxSymbol = new CtxSymbol(ctx.mkConcat(symbol, s.symbol))
 
   def bitset(s: MySymbol): CtxSymbol =
     if (s.isInstanceOf[IntSymbol]) bitset(s.asInstanceOf[IntSymbol].symbol)

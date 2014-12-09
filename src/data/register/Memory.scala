@@ -46,9 +46,9 @@ class Memory(c: Z3Context, m: mutable.HashMap[Int, MySymbol]) {
     check(num, num + 1)
     (mem(num & limit), mem((num + 1) & limit)) match {
       case (m1: IntSymbol, m2: IntSymbol) => ((m1 & 0xFF) << 8) | (m2 & 0xFF)
-      case (m1: IntSymbol, m2: CtxSymbol) => new CtxSymbol(ctx, m1.symbol, 8) :: m2
-      case (m1: CtxSymbol, m2: IntSymbol) => m1 :: new CtxSymbol(ctx, m2.symbol, 8)
-      case (m1: CtxSymbol, m2: CtxSymbol) => m1 :: m2
+      case (m1: IntSymbol, m2: CtxSymbol) => new CtxSymbol(ctx, m1.symbol, 8) concat m2
+      case (m1: CtxSymbol, m2: IntSymbol) => m1 concat new CtxSymbol(ctx, m2.symbol, 8)
+      case (m1: CtxSymbol, m2: CtxSymbol) => m1 concat m2
     }
   }
 
@@ -65,21 +65,21 @@ class Memory(c: Z3Context, m: mutable.HashMap[Int, MySymbol]) {
     check(num, num + 1, num + 2, num + 3)
     (mem(num & limit), mem((num + 1) & limit), mem((num + 2) & limit), mem((num + 3) & limit)) match {
       case (m1: IntSymbol, m2: IntSymbol, m3: IntSymbol, m4: IntSymbol) => ((m1 & 0xFF) << 24) | ((m2 & 0xFF) << 16) | ((m3 & 0xFF) << 8) | (m4 & 0xFF)
-      case (m1: IntSymbol, m2: IntSymbol, m3: IntSymbol, m4: CtxSymbol) => new CtxSymbol(ctx, (((m1 & 0xFF) << 16) | ((m2 & 0xFF) << 8) | (m3 & 0xFF)).asInstanceOf[IntSymbol].symbol, 24) :: m4
-      case (m1: IntSymbol, m2: IntSymbol, m3: CtxSymbol, m4: IntSymbol) => new CtxSymbol(ctx, (((m1 & 0xFF) << 8) | (m2 & 0xFF)).asInstanceOf[IntSymbol].symbol, 16) :: m3 :: new CtxSymbol(ctx, m4.symbol, 8)
-      case (m1: IntSymbol, m2: IntSymbol, m3: CtxSymbol, m4: CtxSymbol) => new CtxSymbol(ctx, (((m1 & 0xFF) << 8) | (m2 & 0xFF)).asInstanceOf[IntSymbol].symbol, 16) :: m3 :: m4
-      case (m1: IntSymbol, m2: CtxSymbol, m3: IntSymbol, m4: IntSymbol) => new CtxSymbol(ctx, m1.symbol, 8) :: m2 :: new CtxSymbol(ctx, (((m3 & 0xFF) << 8) | (m4 & 0xFF)).asInstanceOf[IntSymbol].symbol, 16)
-      case (m1: IntSymbol, m2: CtxSymbol, m3: IntSymbol, m4: CtxSymbol) => new CtxSymbol(ctx, m1.symbol, 8) :: m2 :: new CtxSymbol(ctx, m3.symbol, 8) :: m4
-      case (m1: IntSymbol, m2: CtxSymbol, m3: CtxSymbol, m4: IntSymbol) => new CtxSymbol(ctx, m1.symbol, 8) :: m2 :: m3 :: new CtxSymbol(ctx, m4.symbol, 8)
-      case (m1: IntSymbol, m2: CtxSymbol, m3: CtxSymbol, m4: CtxSymbol) => new CtxSymbol(ctx, m1.symbol, 8) :: m2 :: m3 :: m4
-      case (m1: CtxSymbol, m2: IntSymbol, m3: IntSymbol, m4: IntSymbol) => m1 :: new CtxSymbol(ctx, (((m2 & 0xFF) << 16) | ((m3 & 0xFF) << 8) | (m4 & 0xFF)).asInstanceOf[IntSymbol].symbol, 24)
-      case (m1: CtxSymbol, m2: IntSymbol, m3: IntSymbol, m4: CtxSymbol) => m1 :: new CtxSymbol(ctx, (((m2 & 0xFF) << 8) | (m3 & 0xFF)).asInstanceOf[IntSymbol].symbol, 16) :: m4
-      case (m1: CtxSymbol, m2: IntSymbol, m3: CtxSymbol, m4: IntSymbol) => m1 :: new CtxSymbol(ctx, m2.symbol, 8) :: m3 :: new CtxSymbol(ctx, m4.symbol, 8)
-      case (m1: CtxSymbol, m2: IntSymbol, m3: CtxSymbol, m4: CtxSymbol) => m1 :: new CtxSymbol(ctx, m2.symbol, 8) :: m3 :: m4
-      case (m1: CtxSymbol, m2: CtxSymbol, m3: IntSymbol, m4: IntSymbol) => m1 :: m2 :: new CtxSymbol(ctx, (((m3 & 0xFF) << 8) | (m4 & 0xFF)).asInstanceOf[IntSymbol].symbol, 16)
-      case (m1: CtxSymbol, m2: CtxSymbol, m3: IntSymbol, m4: CtxSymbol) => m1 :: m2 :: new CtxSymbol(ctx, m3.symbol, 8) :: m4
-      case (m1: CtxSymbol, m2: CtxSymbol, m3: CtxSymbol, m4: IntSymbol) => m1 :: m2 :: m3 :: new CtxSymbol(ctx, m4.symbol, 8)
-      case (m1: CtxSymbol, m2: CtxSymbol, m3: CtxSymbol, m4: CtxSymbol) => m1 :: m2 :: m3 :: m4
+      case (m1: IntSymbol, m2: IntSymbol, m3: IntSymbol, m4: CtxSymbol) => new CtxSymbol(ctx, (((m1 & 0xFF) << 16) | ((m2 & 0xFF) << 8) | (m3 & 0xFF)).asInstanceOf[IntSymbol].symbol, 24) concat m4
+      case (m1: IntSymbol, m2: IntSymbol, m3: CtxSymbol, m4: IntSymbol) => new CtxSymbol(ctx, (((m1 & 0xFF) << 8) | (m2 & 0xFF)).asInstanceOf[IntSymbol].symbol, 16) concat m3 concat new CtxSymbol(ctx, m4.symbol, 8)
+      case (m1: IntSymbol, m2: IntSymbol, m3: CtxSymbol, m4: CtxSymbol) => new CtxSymbol(ctx, (((m1 & 0xFF) << 8) | (m2 & 0xFF)).asInstanceOf[IntSymbol].symbol, 16) concat m3 concat m4
+      case (m1: IntSymbol, m2: CtxSymbol, m3: IntSymbol, m4: IntSymbol) => new CtxSymbol(ctx, m1.symbol, 8) concat m2 concat new CtxSymbol(ctx, (((m3 & 0xFF) << 8) | (m4 & 0xFF)).asInstanceOf[IntSymbol].symbol, 16)
+      case (m1: IntSymbol, m2: CtxSymbol, m3: IntSymbol, m4: CtxSymbol) => new CtxSymbol(ctx, m1.symbol, 8) concat m2 concat new CtxSymbol(ctx, m3.symbol, 8) concat m4
+      case (m1: IntSymbol, m2: CtxSymbol, m3: CtxSymbol, m4: IntSymbol) => new CtxSymbol(ctx, m1.symbol, 8) concat m2 concat m3 concat new CtxSymbol(ctx, m4.symbol, 8)
+      case (m1: IntSymbol, m2: CtxSymbol, m3: CtxSymbol, m4: CtxSymbol) => new CtxSymbol(ctx, m1.symbol, 8) concat m2 concat m3 concat m4
+      case (m1: CtxSymbol, m2: IntSymbol, m3: IntSymbol, m4: IntSymbol) => m1 concat new CtxSymbol(ctx, (((m2 & 0xFF) << 16) | ((m3 & 0xFF) << 8) | (m4 & 0xFF)).asInstanceOf[IntSymbol].symbol, 24)
+      case (m1: CtxSymbol, m2: IntSymbol, m3: IntSymbol, m4: CtxSymbol) => m1 concat new CtxSymbol(ctx, (((m2 & 0xFF) << 8) | (m3 & 0xFF)).asInstanceOf[IntSymbol].symbol, 16) concat m4
+      case (m1: CtxSymbol, m2: IntSymbol, m3: CtxSymbol, m4: IntSymbol) => m1 concat new CtxSymbol(ctx, m2.symbol, 8) concat m3 concat new CtxSymbol(ctx, m4.symbol, 8)
+      case (m1: CtxSymbol, m2: IntSymbol, m3: CtxSymbol, m4: CtxSymbol) => m1 concat new CtxSymbol(ctx, m2.symbol, 8) concat m3 concat m4
+      case (m1: CtxSymbol, m2: CtxSymbol, m3: IntSymbol, m4: IntSymbol) => m1 concat m2 concat new CtxSymbol(ctx, (((m3 & 0xFF) << 8) | (m4 & 0xFF)).asInstanceOf[IntSymbol].symbol, 16)
+      case (m1: CtxSymbol, m2: CtxSymbol, m3: IntSymbol, m4: CtxSymbol) => m1 concat m2 concat new CtxSymbol(ctx, m3.symbol, 8) concat m4
+      case (m1: CtxSymbol, m2: CtxSymbol, m3: CtxSymbol, m4: IntSymbol) => m1 concat m2 concat m3 concat new CtxSymbol(ctx, m4.symbol, 8)
+      case (m1: CtxSymbol, m2: CtxSymbol, m3: CtxSymbol, m4: CtxSymbol) => m1 concat m2 concat m3 concat m4
     }
   }
 

@@ -23,6 +23,7 @@ object Main {
   var rom: ROM = null
 
   def main(args: Array[String]): Unit = {
+
     val file = new File("target") -> new File("asm")
     new ConvertToInputForm(file._1, file._2).convert()
     rom = new ASTVisitor().makeProgram(ctx, file._2)
