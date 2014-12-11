@@ -17,7 +17,7 @@ class Memory(c: Z3Context, m: mutable.HashMap[Int, MySymbol]) {
   private val limit = 0xFFFF // ノーマルモード
   //private val limit = 0xFFFFFF //アドバンスモード
 
-  private def check(num: Int*) = num.foreach(n => if (!mem.contains(n & limit)) mem += (n & limit) -> new CtxSymbol(Main.makeSymbol(8)))
+  private def check(num: Int*) = num.foreach(n => if (!mem.contains(n & limit)) mem += (n & limit) -> new CtxSymbol(Main.makeMemorySymbol))
 
   //  def getByte(num: MySymbol): ArrayBuffer[MySymbol] = {
   //    val ans = new ArrayBuffer[MySymbol]

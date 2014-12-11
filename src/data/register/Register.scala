@@ -16,7 +16,7 @@ class Register(c: Z3Context, r: mutable.HashMap[Int, MySymbol]) {
   private val ctx = c
   private val limit = 0x07
 
-  private def check(num: Int): Unit = if (!reg.contains(num & limit)) reg += (num & limit) -> new CtxSymbol(Main.makeSymbol(32)) //指定レジスタに初期値がなければ作る
+  private def check(num: Int): Unit = if (!reg.contains(num & limit)) reg += (num & limit) -> new CtxSymbol(Main.makeRegisterSymbol) //指定レジスタに初期値がなければ作る
 
   //レジスタ値の候補を全て取得する
   //  def getByte(num: MySymbol): ArrayBuffer[MySymbol] = {
