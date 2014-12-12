@@ -23,6 +23,8 @@ class ConditionRegister(ct: Z3Context, c: MySymbol) {
 
   def clearH = ccr = ccr & 0xDF
 
+  def clearI = ccr = ccr & 0x7F
+
   def setC = ccr = ccr | 0x01
 
   def setV = ccr = ccr | 0x02
@@ -32,5 +34,7 @@ class ConditionRegister(ct: Z3Context, c: MySymbol) {
   def setN = ccr = ccr | 0x08
 
   def setH = ccr = ccr | 0x20
+
+  def setI = ccr = ccr | 0x80
 
 }

@@ -10,10 +10,10 @@ import scala.collection.mutable.ArrayBuffer
 /**
  * Created by rkonoshita on 14/11/17.
  */
-class Decoder(c: Z3Context, r: ROM) {
+class Decoder() {
 
-  private val ctx = c
-  private val rom = r
+  private val ctx = Main.ctx
+  private val rom = Main.rom
 
   def analyze(data: DataSet): ArrayBuffer[DataSet] = {
     decode(data.clone, data.pc.pc)
@@ -67,6 +67,26 @@ class Decoder(c: Z3Context, r: ROM) {
         buf = checkZ(add, buf)
         buf = checkN(add, buf, 8)
         buf = checkH(reg, imm, add, buf, 8)
+
+      case 0x90 =>
+        //ADDX.B Imm,Reg [9reg][imm]
+        val imm = new IntSymbol(rom.getByte(pc + 1))
+        val reg = data.reg.getByte(op0)
+        data.pc.setPc(pc + 2)
+        data.ccr.ccr match {
+          case c: IntSymbol =>
+            val immx = if ((c & 0x01).eq(0x01)) imm + 1 else imm
+            val addx = reg + immx
+            data.reg.setByte(addx, op0)
+            buf = checkC(reg, immx, addx, ArrayBuffer(data), 8)
+            buf = checkV(reg, immx, addx, buf, 8)
+            buf = checkZ(addx, buf)
+            buf = checkN(addx, buf, 8)
+            buf = checkH(reg, immx, addx, buf, 8)
+          case c: CtxSymbol =>
+            //キャリ(c)がtrueの時
+
+        }
 
       case 0xA0 =>
         //CMP.B Imm,Reg [Areg][imm]
@@ -123,6 +143,13 @@ class Decoder(c: Z3Context, r: ROM) {
       case 0x0B =>
         val op1 = rom.getByte(pc + 1)
         op1 & 0xF0 match {
+          case 0x00 =>
+            //ADDS.L #1,Reg [0B][0reg]
+            val reg = data.reg.getLong(op1)
+            val add = reg + 1
+            data.reg.setLong(add, op1)
+            data.pc.setPc(pc + 2)
+            buf += data
           case 0x50 =>
             //INC.W #1,Reg [0B][5reg]
             val reg = data.reg.getWord(op1)
@@ -132,6 +159,20 @@ class Decoder(c: Z3Context, r: ROM) {
             buf = checkV(reg, new IntSymbol(1), inc, ArrayBuffer(data), 16)
             buf = checkZ(inc, buf)
             buf = checkN(inc, buf, 16)
+          case 0x80 =>
+            //ADDS.L #2,Reg [0B][8reg]
+            val reg = data.reg.getLong(op1)
+            val add = reg + 2
+            data.reg.setLong(add, op1)
+            data.pc.setPc(pc + 2)
+            buf += data
+          case 0x90 =>
+            //ADDS.L #4,Reg [0B][9reg]
+            val reg = data.reg.getLong(op1)
+            val add = reg + 4
+            data.reg.setLong(add, op1)
+            data.pc.setPc(pc + 2)
+            buf += data
         }
 
       case 0x0D =>

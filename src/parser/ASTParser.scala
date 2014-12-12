@@ -27,6 +27,24 @@ class ASTParser extends RegexParsers {
     case left ~ c ~ right => Add(left, right)
   }
 
+  //ADDS
+  def adds: Parser[AST] = "ADDX.L" ~> imm ~ "," ~ reg ^^ {
+    case left ~ c ~ right => AddSign(left, right)
+  }
+
+  //ADDX
+  def addx: Parser[AST] = "ADDS.B" ~> (imm | reg) ~ "," ~ reg ^^ {
+    case left ~ c ~ right => AddExtends(left, right)
+  }
+
+  //AND
+  def and: Parser[AST] = "AND." ~> opsize ~> (imm | reg) ~ "," ~ reg ^^ {
+    case left ~ c ~ right => And(left, right)
+  }
+
+  //ANDC
+  def andc: Parser[AST] = "ANDC.B" ~> imm <~ "," <~ "CCR" ^^ (Andc(_))
+
   //INC
   def inc: Parser[AST] = "INC." ~> opsize ~> (imm | reg) ~ ",".? ~ reg.? ^^ {
     case left ~ c ~ right =>
@@ -46,16 +64,10 @@ class ASTParser extends RegexParsers {
     case left ~ c ~ right => Sub(left, right)
   }
 
-  //AND
-  def and: Parser[AST] = "AND." ~> opsize ~> (imm | reg) ~ "," ~ reg ^^ {
-    case left ~ c ~ right => And(left, right)
-  }
 
   //NOT
   def not: Parser[AST] = "NOT." ~> opsize ~> reg ^^ (Not(_))
 
-  //ANDC
-  def andc: Parser[AST] = "ANDC.B" ~> imm <~ "," <~ "CCR" ^^ (Andc(_))
 
   //ORC
   def orc: Parser[AST] = "ORC.B" ~> imm <~ "," <~ "CCR" ^^ (Orc(_))

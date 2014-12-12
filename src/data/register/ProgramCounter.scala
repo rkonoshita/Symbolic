@@ -18,4 +18,6 @@ class ProgramCounter(p: Int) {
 
   def setPc(p: Int) = pc = p & limit
 
+  override def toString(): String = pc.toString
+
 }

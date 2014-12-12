@@ -9,17 +9,21 @@ trait AST
 
 case class Add(left: AST, right: AST) extends AST
 
+case class AddSign(left: AST, right: AST) extends AST
+
+case class AddExtends(left: AST, right: AST) extends AST
+
+case class And(left: AST, right: AST) extends AST
+
+case class Andc(imm: AST) extends AST
+
 case class Inc(left: AST, right: AST) extends AST
 
 case class Cmp(left: AST, right: AST) extends AST
 
 case class Sub(left: AST, right: AST) extends AST
 
-case class And(left: AST, right: AST) extends AST
-
 case class Not(reg: AST) extends AST
-
-case class Andc(imm: AST) extends AST
 
 case class Orc(imm: AST) extends AST
 
