@@ -84,8 +84,29 @@ class Decoder() {
             buf = checkN(addx, buf, 8)
             buf = checkH(reg, immx, addx, buf, 8)
           case c: CtxSymbol =>
-            //キャリ(c)がtrueの時
-
+            //キャリ(c)がfalseの時
+            val d1 = data.clone
+            val add = reg + imm
+            d1.reg.setByte(add, op0)
+            d1.path.set((c & 0x01).eq(0x01).not.symbol)
+            var buff = ArrayBuffer(d1)
+            buff = checkC(reg, imm, add, buff, 8)
+            buff = checkV(reg, imm, add, buff, 8)
+            buff = checkZ(add, buff)
+            buff = checkN(add, buff, 8)
+            buf ++= checkH(reg, imm, add, buff, 8)
+            //キャリがtrueの時
+            val d2 = data.clone
+            val immx = imm + 1
+            val addx = reg + immx
+            d2.reg.setByte(addx, op0)
+            d2.path.set((c & 0x01).eq(0x01).symbol)
+            buff = ArrayBuffer(d2)
+            buff = checkC(reg, immx, addx, buff, 8)
+            buff = checkV(reg, immx, addx, buff, 8)
+            buff = checkZ(addx, buff)
+            buff = checkN(addx, buff, 8)
+            buf ++= checkH(reg, immx, addx, buff, 8)
         }
 
       case 0xA0 =>
@@ -140,6 +161,48 @@ class Decoder() {
         data.pc.setPc(pc + 2)
         buf += data
 
+      case 0x08 =>
+        //ADD.B RegA,RegB [08][regAregB]
+        val op1 = rom.getByte(pc + 1)
+        val regA = data.reg.getByte(op1 >> 4)
+        val regB = data.reg.getByte(op1)
+        val add = regB + regA
+        data.reg.setByte(add, op1)
+        data.pc.setPc(pc + 2)
+        buf = checkC(regB, regA, add, ArrayBuffer(data), 8)
+        buf = checkV(regB, regA, add, buf, 8)
+        buf = checkZ(add, buf)
+        buf = checkN(add, buf, 8)
+        buf = checkH(regB, regA, add, buf, 8)
+
+      case 0x09 =>
+        //ADD.W RegA,RegB [09][regAregB]
+        val op1 = rom.getByte(pc + 1)
+        val regA = data.reg.getWord(op1 >> 4)
+        val regB = data.reg.getWord(op1)
+        val add = regB + regA
+        data.reg.setWord(add, op1)
+        data.pc.setPc(pc + 2)
+        buf = checkC(regB, regA, add, ArrayBuffer(data), 16)
+        buf = checkV(regB, regA, add, buf, 16)
+        buf = checkZ(add, buf)
+        buf = checkN(add, buf, 16)
+        buf = checkH(regB, regA, add, buf, 16)
+
+      case 0x0A =>
+        //ADD.L RegA,RegB [09][regAregB]
+        val op1 = rom.getByte(pc + 1)
+        val regA = data.reg.getLong(op1 >> 4)
+        val regB = data.reg.getLong(op1)
+        val add = regB + regA
+        data.reg.setLong(add, op1)
+        data.pc.setPc(pc + 2)
+        buf = checkC(regB, regA, add, ArrayBuffer(data), 32)
+        buf = checkV(regB, regA, add, buf, 32)
+        buf = checkZ(add, buf)
+        buf = checkN(add, buf, 32)
+        buf = checkH(regB, regA, add, buf, 32)
+
       case 0x0B =>
         val op1 = rom.getByte(pc + 1)
         op1 & 0xF0 match {
@@ -184,6 +247,48 @@ class Decoder() {
         data.ccr.clearV
         buf = checkZ(regA, ArrayBuffer(data))
         buf = checkN(regA, buf, 16)
+
+      case 0x0E =>
+        //ADDX.B RegA,RegB [0E][regAregB]
+        val op1 = rom.getByte(pc + 1)
+        val regA = data.reg.getByte(op1 >> 4)
+        val regB = data.reg.getByte(op1)
+        data.pc.setPc(pc + 2)
+        data.ccr.ccr match {
+          case c: IntSymbol =>
+            val regAx = if ((c & 0x01).eq(0x01)) regA + 1 else regA
+            val addx = regB + regAx
+            data.reg.setByte(addx, op0)
+            buf = checkC(regB, regAx, addx, ArrayBuffer(data), 8)
+            buf = checkV(regB, regAx, addx, buf, 8)
+            buf = checkZ(addx, buf)
+            buf = checkN(addx, buf, 8)
+            buf = checkH(regB, regAx, addx, buf, 8)
+          case c: CtxSymbol =>
+            //キャリ(c)がfalseの時
+            val d1 = data.clone
+            val add = regA + regB
+            d1.reg.setByte(add, op0)
+            d1.path.set((c & 0x01).eq(0x01).not.symbol)
+            var buff = ArrayBuffer(d1)
+            buff = checkC(regB, regA, add, buff, 8)
+            buff = checkV(regB, regA, add, buff, 8)
+            buff = checkZ(add, buff)
+            buff = checkN(add, buff, 8)
+            buf ++= checkH(regB, regA, add, buff, 8)
+            //キャリがtrueの時
+            val d2 = data.clone
+            val regAx = regA + 1
+            val addx = regB + regAx
+            d2.reg.setByte(addx, op0)
+            d2.path.set((c & 0x01).eq(0x01).symbol)
+            buff = ArrayBuffer(d2)
+            buff = checkC(regB, regAx, addx, buff, 8)
+            buff = checkV(regB, regAx, addx, buff, 8)
+            buff = checkZ(addx, buff)
+            buff = checkN(addx, buff, 8)
+            buf ++= checkH(regB, regAx, addx, buff, 8)
+        }
     }
     buf
   }
@@ -192,6 +297,18 @@ class Decoder() {
     val op0 = rom.getByte(pc)
     var buf = new ArrayBuffer[DataSet]
     op0 match {
+      case 0x16 =>
+        //AND.B RegA,RegB [16][regAregB]
+        val op1 = rom.getByte(pc + 1)
+        val regA = data.reg.getByte(op1 >> 4)
+        val regB = data.reg.getByte(op1)
+        val and = regB & regA
+        data.reg.setByte(and, op1)
+        data.pc.setPc(pc + 2)
+        data.ccr.clearV
+        buf = checkZ(and, ArrayBuffer(data))
+        buf = checkN(and, buf, 8)
+
       case 0x17 =>
         val op1 = rom.getByte(pc + 1)
         op1 & 0xF0 match {
@@ -416,6 +533,18 @@ class Decoder() {
     val op0 = rom.getByte(pc)
     var buf = new ArrayBuffer[DataSet]
     op0 match {
+      case 0x66 =>
+        //AND.W RegA,RegB [66][regAregB]
+        val op1 = rom.getByte(pc + 1)
+        val regA = data.reg.getWord(op1 >> 4)
+        val regB = data.reg.getWord(op1)
+        val and = regB & regA
+        data.reg.setWord(and, op1)
+        data.pc.setPc(pc + 2)
+        data.ccr.clearV
+        buf = checkZ(and, ArrayBuffer(data))
+        buf = checkN(and, buf, 16)
+
       case 0x68 =>
         val op1 = rom.getByte(pc + 1)
         op1 & 0x80 match {
@@ -599,6 +728,17 @@ class Decoder() {
             buf = checkZ(cmp, buf)
             buf = checkN(cmp, buf, 16)
             buf = checkH(reg, imm.neg, cmp, buf, 16)
+
+          case 0x60 =>
+            //AND.W Imm,Reg [79][6reg][imm][imm]
+            val imm = rom.getWord(pc + 2)
+            val reg = data.reg.getWord(op1)
+            val and = reg & imm
+            data.reg.setWord(and, op1)
+            data.pc.setPc(pc + 4)
+            data.ccr.clearV
+            buf = checkZ(and, ArrayBuffer(data))
+            buf = checkN(and, buf, 8)
         }
 
       case 0x7A =>
@@ -612,6 +752,17 @@ class Decoder() {
             data.ccr.clearV
             buf = checkZ(imm, ArrayBuffer(data))
             buf = checkN(imm, buf, 32)
+
+          case 0x60 =>
+            //AND.L Imm,Reg [7A][6reg][imm][imm][imm][imm]
+            val imm = rom.getLong(pc + 2)
+            val reg = data.reg.getLong(op1)
+            val and = reg & imm
+            data.reg.setLong(and, op1)
+            data.pc.setPc(pc + 6)
+            data.ccr.clearV
+            buf = checkZ(and, ArrayBuffer(data))
+            buf = checkN(and, buf, 8)
         }
 
       case 0x7F =>

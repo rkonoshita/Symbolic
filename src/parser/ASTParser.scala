@@ -45,11 +45,31 @@ class ASTParser extends RegexParsers {
   //ANDC
   def andc: Parser[AST] = "ANDC.B" ~> imm <~ "," <~ "CCR" ^^ (Andc(_))
 
+  //BAND
+  def band: Parser[AST] = "BAND.B" ~> imm ~ "," ~ (reg | indirReg | abs) ^^ {
+    case left ~ c ~ right => Band(left, right)
+  }
+
+  //BCLR
+  def bclr: Parser[AST] = "BCLR.B" ~> (imm | reg) ~ "," ~ (reg | indirReg | abs) ^^ {
+    case left ~ c ~ right => Bset(left, right)
+  }
+
+  //BIAND
+  def biand: Parser[AST] = "BIAND.B" ~> imm ~ "," ~ (reg | indirReg | abs) ^^ {
+    case left ~ c ~ right => Biand(left, right)
+  }
+
+  //BSET
+  def bset: Parser[AST] = "BSET.B" ~> (imm | reg) ~ "," ~ (reg | indirReg | abs) ^^ {
+    case left ~ c ~ right => Bset(left, right)
+  }
+
   //INC
   def inc: Parser[AST] = "INC." ~> opsize ~> (imm | reg) ~ ",".? ~ reg.? ^^ {
     case left ~ c ~ right =>
       right match {
-        case Some(s) => Inc(left, s.asInstanceOf[AST])
+        case Some(s: AST) => Inc(left, s)
         case None => Inc(left, Number(0))
       }
   }
@@ -64,10 +84,8 @@ class ASTParser extends RegexParsers {
     case left ~ c ~ right => Sub(left, right)
   }
 
-
   //NOT
   def not: Parser[AST] = "NOT." ~> opsize ~> reg ^^ (Not(_))
-
 
   //ORC
   def orc: Parser[AST] = "ORC.B" ~> imm <~ "," <~ "CCR" ^^ (Orc(_))
@@ -85,16 +103,6 @@ class ASTParser extends RegexParsers {
 
   //EXTU
   def extu: Parser[AST] = "EXTU." ~> opsize ~> reg ^^ (Extu(_))
-
-  //BSET
-  def bset: Parser[AST] = "BSET.B" ~> (imm | reg) ~ "," ~ (reg | abs | indirReg) ^^ {
-    case left ~ c ~ right => Bset(left, right)
-  }
-
-  //BCLR
-  def bclr: Parser[AST] = "BCLR.B" ~> (imm | reg) ~ "," ~ (reg | abs | indirReg) ^^ {
-    case left ~ c ~ right => Bset(left, right)
-  }
 
   //JSR
   def jsr: Parser[AST] = "JSR" ~> (abs | indirReg | indirMem) ^^ (Jsr(_))

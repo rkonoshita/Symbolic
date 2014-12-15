@@ -17,6 +17,14 @@ case class And(left: AST, right: AST) extends AST
 
 case class Andc(imm: AST) extends AST
 
+case class Band(left: AST, right: AST) extends AST
+
+case class Biand(left: AST, right: AST) extends AST
+
+case class Bclr(left: AST, right: AST) extends AST
+
+case class Bset(left: AST, right: AST) extends AST
+
 case class Inc(left: AST, right: AST) extends AST
 
 case class Cmp(left: AST, right: AST) extends AST
@@ -34,10 +42,6 @@ case class Push(reg: AST) extends AST
 case class Pop(reg: AST) extends AST
 
 case class Extu(reg: AST) extends AST
-
-case class Bset(left: AST, right: AST) extends AST
-
-case class Bclr(left: AST, right: AST) extends AST
 
 case class Jsr(add: AST) extends AST
 
