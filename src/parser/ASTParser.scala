@@ -1,6 +1,6 @@
 package parser
 
-import java.io.{InputStreamReader, BufferedReader}
+import java.io.InputStreamReader
 
 import scala.util.parsing.combinator.RegexParsers
 
@@ -18,12 +18,14 @@ class ASTParser extends RegexParsers {
 
   def root: Parser[AST] = op | section | mlabel
 
-  def op: Parser[AST] = (add | inc | cmp | sub |
-    and | not | andc | orc | mov | push | pop | extu | bset | bclr |
-    jsr | jmp | rts | rte | bcc | data | dataBlock)
+  def op: Parser[AST] = (add | adds | addx | and | andc | band | bcc | bclr | biand | bild | bior |
+    bist | bixor | bld | bnot | bor | bset | bsr | bst | btst | bxor | cmp | daa | das | data | dataBlock | dec |
+    divxs | divxu | eepmov | exts | extu | inc | jmp | jsr | ldc | mov | movfpe | movtpe | mulxs | mulxu |
+    neg | nop | not | or | orc | pop | push | rotl | rotr | rotxl | rotxr | rte | rts | shal | shar | shll | shlr |
+    sleep | stc | sub | subs | subx | trapa | xor | xorc)
 
   //ADD
-  def add: Parser[AST] = "ADD." ~> opsize ~> (imm | reg) ~ "," ~ reg ^^ {
+  def add: Parser[AST] = "ADD" ~> opsize ~> (imm | reg) ~ "," ~ reg ^^ {
     case left ~ c ~ right => Add(left, right)
   }
 
@@ -38,7 +40,7 @@ class ASTParser extends RegexParsers {
   }
 
   //AND
-  def and: Parser[AST] = "AND." ~> opsize ~> (imm | reg) ~ "," ~ reg ^^ {
+  def and: Parser[AST] = "AND" ~> opsize ~> (imm | reg) ~ "," ~ reg ^^ {
     case left ~ c ~ right => And(left, right)
   }
 
@@ -48,6 +50,26 @@ class ASTParser extends RegexParsers {
   //BAND
   def band: Parser[AST] = "BAND.B" ~> imm ~ "," ~ (reg | indirReg | abs) ^^ {
     case left ~ c ~ right => Band(left, right)
+  }
+
+  //条件付き分岐
+  def bcc: Parser[AST] = "(BRA|BT|BRN|BF|BHI|BLS|BCC|BHS|BCS|BLO|BNE|BEQ|BVC|BVS|BPL|BMI|BGE|BLT|BGT|BLE)".r ~ label ~ ":" ~ ("8" | "16") ^^ {
+    case ("BRA" | "BT") ~ num ~ c ~ size => Bra(num, size.toInt)
+    case ("BRN" | "BF") ~ num ~ c ~ size => Brn(num, size.toInt)
+    case "BHI" ~ num ~ c ~ size => Bhi(num, size.toInt)
+    case "BLS" ~ num ~ c ~ size => Bls(num, size.toInt)
+    case ("BCC" | "BHS") ~ num ~ c ~ size => Bcc(num, size.toInt)
+    case ("BCS" | "BLO") ~ num ~ c ~ size => Bcs(num, size.toInt)
+    case "BNE" ~ num ~ c ~ size => Bne(num, size.toInt)
+    case "BEQ" ~ num ~ c ~ size => Beq(num, size.toInt)
+    case "BVC" ~ num ~ c ~ size => Bvc(num, size.toInt)
+    case "BVS" ~ num ~ c ~ size => Bvs(num, size.toInt)
+    case "BPL" ~ num ~ c ~ size => Bpl(num, size.toInt)
+    case "BMI" ~ num ~ c ~ size => Bmi(num, size.toInt)
+    case "BGE" ~ num ~ c ~ size => Bge(num, size.toInt)
+    case "BLT" ~ num ~ c ~ size => Blt(num, size.toInt)
+    case "BGT" ~ num ~ c ~ size => Bgt(num, size.toInt)
+    case "BLE" ~ num ~ c ~ size => Ble(num, size.toInt)
   }
 
   //BCLR
@@ -60,13 +82,110 @@ class ASTParser extends RegexParsers {
     case left ~ c ~ right => Biand(left, right)
   }
 
+  //BILD
+  def bild: Parser[AST] = "BILD.B" ~> imm ~ "," ~ (reg | indirReg | abs) ^^ {
+    case left ~ c ~ right => Bild(left, right)
+  }
+
+  //BIOR
+  def bior: Parser[AST] = "BIOR.B" ~> imm ~ "," ~ (reg | indirReg | abs) ^^ {
+    case left ~ c ~ right => Bior(left, right)
+  }
+
+  //BIST
+  def bist: Parser[AST] = "BIST.B" ~> imm ~ "," ~ (reg | indirReg | abs) ^^ {
+    case left ~ c ~ right => Bist(left, right)
+  }
+
+  //BIXOR
+  def bixor: Parser[AST] = "BIXOR.B" ~> imm ~ "," ~ (reg | indirReg | abs) ^^ {
+    case left ~ c ~ right => Bixor(left, right)
+  }
+
+  //BLD
+  def bld: Parser[AST] = "BLD.B" ~> imm ~ "," ~ (reg | indirReg | abs) ^^ {
+    case left ~ c ~ right => Bld(left, right)
+  }
+
+  //BNOT
+  def bnot: Parser[AST] = "BNOT.B" ~> (imm | reg) ~ "," ~ (reg | indirReg | abs) ^^ {
+    case left ~ c ~ right => Bnot(left, right)
+  }
+
+  //BOR
+  def bor: Parser[AST] = "BOR.B" ~> imm ~ "," ~ (reg | indirReg | abs) ^^ {
+    case left ~ c ~ right => Bor(left, right)
+  }
+
   //BSET
   def bset: Parser[AST] = "BSET.B" ~> (imm | reg) ~ "," ~ (reg | indirReg | abs) ^^ {
     case left ~ c ~ right => Bset(left, right)
   }
 
+  //BSR
+  def bsr: Parser[AST] = "BSR" ~> label ~ ":" ~ ("8" | "16") ^^ {
+    case label ~ c ~ size => Bsr(label, size.toInt)
+  }
+
+  //BST
+  def bst: Parser[AST] = "BST.B" ~> imm ~ "," ~ (reg | indirReg | abs) ^^ {
+    case left ~ c ~ right => Bst(left, right)
+  }
+
+  //BTST
+  def btst: Parser[AST] = "BTST.B" ~> (imm | reg) ~ "," ~ (reg | indirReg | abs) ^^ {
+    case left ~ c ~ right => Btst(left, right)
+  }
+
+  //BXOR
+  def bxor: Parser[AST] = "BXOR.B" ~> imm ~ "," ~ (reg | indirReg | abs) ^^ {
+    case left ~ c ~ right => Bxor(left, right)
+  }
+
+  //CMP
+  def cmp: Parser[AST] = "CMP" ~> opsize ~> (imm | reg) ~ "," ~ reg ^^ {
+    case left ~ c ~ right => Cmp(left, right)
+  }
+
+  //DAA
+  def daa: Parser[AST] = "DAA.B" ~> reg ^^ (Daa(_))
+
+  //DAS
+  def das: Parser[AST] = "DAS.B" ~> reg ^^ (Das(_))
+
+  //DEC
+  def dec: Parser[AST] = "Dec" ~> opsize ~> (imm | reg) ~ ",".? ~ reg.? ^^ {
+    case left ~ c ~ right =>
+      right match {
+        case Some(s: AST) => Dec(left, s)
+        case None => Dec(left, Number(0))
+      }
+  }
+
+  //DIVXS
+  def divxs: Parser[AST] = "DIVXS" ~> opsize ~> reg ~ "," ~ reg ^^ {
+    case left ~ c ~ right => Divxs(left, right)
+  }
+
+  //DIVXU
+  def divxu: Parser[AST] = "DIVXU" ~> opsize ~> reg ~ "," ~ reg ^^ {
+    case left ~ c ~ right => Divxu(left, right)
+  }
+
+  //EEPMOV
+  def eepmov: Parser[AST] = "EEPMOV" ~> opsize ^^ {
+    case "B" => Eepmov(8)
+    case "W" => Eepmov(16)
+  }
+
+  //EXTS
+  def exts: Parser[AST] = "EXTS" ~> opsize ~> reg ^^ (Exts(_))
+
+  //EXTU
+  def extu: Parser[AST] = "EXTU" ~> opsize ~> reg ^^ (Extu(_))
+
   //INC
-  def inc: Parser[AST] = "INC." ~> opsize ~> (imm | reg) ~ ",".? ~ reg.? ^^ {
+  def inc: Parser[AST] = "INC" ~> opsize ~> (imm | reg) ~ ",".? ~ reg.? ^^ {
     case left ~ c ~ right =>
       right match {
         case Some(s: AST) => Inc(left, s)
@@ -74,62 +193,135 @@ class ASTParser extends RegexParsers {
       }
   }
 
-  //CMP
-  def cmp: Parser[AST] = "CMP." ~> opsize ~> (imm | reg) ~ "," ~ reg ^^ {
-    case left ~ c ~ right => Cmp(left, right)
-  }
-
-  //SUB
-  def sub: Parser[AST] = "SUB." ~> opsize ~> (imm | reg) ~ "," ~ reg ^^ {
-    case left ~ c ~ right => Sub(left, right)
-  }
-
-  //NOT
-  def not: Parser[AST] = "NOT." ~> opsize ~> reg ^^ (Not(_))
-
-  //ORC
-  def orc: Parser[AST] = "ORC.B" ~> imm <~ "," <~ "CCR" ^^ (Orc(_))
-
-  //MOV
-  def mov: Parser[AST] = "MOV." ~> opsize ~> (reg | imm | indirReg | disp | pos | abs) ~ "," ~ (reg | indirReg | disp | pos | abs) ^^ {
-    case left ~ c ~ right => Mov(left, right)
-  }
-
-  //PUSH
-  def push: Parser[AST] = "PUSH." ~> opsize ~> reg ^^ (Push(_))
-
-  //POP
-  def pop: Parser[AST] = "POP." ~> opsize ~> reg ^^ (Pop(_))
-
-  //EXTU
-  def extu: Parser[AST] = "EXTU." ~> opsize ~> reg ^^ (Extu(_))
+  //JMP
+  def jmp: Parser[AST] = "JMP" ~> (indirReg | abs | indirMem) ^^ (Jmp(_))
 
   //JSR
   def jsr: Parser[AST] = "JSR" ~> (abs | indirReg | indirMem) ^^ (Jsr(_))
 
-  //JMP
-  def jmp: Parser[AST] = "JMP" ~> (indirReg | abs | indirMem) ^^ (Jmp(_))
+  //LDC
+  def ldc: Parser[AST] = "LDC" ~> opsize ~> (imm | reg | indirReg | disp | pos | abs) <~ "," <~ "CCR" ^^ (Ldc(_))
 
-  //RTS
-  def rts: Parser[AST] = "RTS" ^^ {
-    case _ => Rts()
+  //MOV
+  def mov: Parser[AST] = "MOV" ~> opsize ~> (reg | imm | indirReg | disp | pos | abs) ~ "," ~ (reg | indirReg | disp | pos | abs) ^^ {
+    case left ~ c ~ right => Mov(left, right)
   }
+
+  //MOVFPE
+  def movfpe: Parser[AST] = "MOVFPE.B" ~> abs ~ "," ~ reg ^^ {
+    case left ~ c ~ right => Movfpe(left, right)
+  }
+
+  //MOVTPE
+  def movtpe: Parser[AST] = "MOVTPE.B" ~> reg ~ "," ~ abs ^^ {
+    case left ~ c ~ right => Movfpe(left, right)
+  }
+
+  //MULXS
+  def mulxs: Parser[AST] = "MULXS" ~> opsize ~> reg ~ "," ~ reg ^^ {
+    case left ~ c ~ right => Mulxs(left, right)
+  }
+
+  //MULXU
+  def mulxu: Parser[AST] = "MULXU" ~> opsize ~> reg ~ "," ~ reg ^^ {
+    case left ~ c ~ right => Mulxu(left, right)
+  }
+
+  //NEG
+  def neg: Parser[AST] = "NEG" ~> opsize ~> reg ^^ (Neg(_))
+
+  //NOP
+  def nop: Parser[AST] = "NOP" ^^ {
+    case _ => Nop()
+  }
+
+  //NOT
+  def not: Parser[AST] = "NOT" ~> opsize ~> reg ^^ (Not(_))
+
+  //OR
+  def or: Parser[AST] = "OR" ~> opsize ~> reg ~ "," ~ reg ^^ {
+    case left ~ c ~ right => Or(left, right)
+  }
+
+  //ORC
+  def orc: Parser[AST] = "ORC.B" ~> imm <~ "," <~ "CCR" ^^ (Orc(_))
+
+  //POP
+  def pop: Parser[AST] = "POP" ~> opsize ~> reg ^^ (Pop(_))
+
+  //PUSH
+  def push: Parser[AST] = "PUSH" ~> opsize ~> reg ^^ (Push(_))
+
+  //ROTL
+  def rotl: Parser[AST] = "ROTL" ~> opsize ~> reg ^^ (Rotl(_))
+
+  //ROTR
+  def rotr: Parser[AST] = "ROTR" ~> opsize ~> reg ^^ (Rotr(_))
+
+  //ROTXL
+  def rotxl: Parser[AST] = "ROTXL" ~> opsize ~> reg ^^ (Rotxl(_))
+
+  //ROTXR
+  def rotxr: Parser[AST] = "ROTXR" ~> opsize ~> reg ^^ (Rotxr(_))
 
   //rte
   def rte: Parser[AST] = "RTE" ^^ {
     case _ => Rte()
   }
 
-  //条件付き分岐
-  def bcc: Parser[AST] = "(BRA|BLO|BLT|BHI)".r ~ label ~ ":" ~ ("8" | "16") ^^ {
-    case "BRA" ~ num ~ c ~ size => Bra(num, size.toInt)
-    case "BLO" ~ num ~ c ~ size => Blo(num, size.toInt)
-    case "BLT" ~ num ~ c ~ size => Blt(num, size.toInt)
-    case "BHI" ~ num ~ c ~ size => Bhi(num, size.toInt)
+  //RTS
+  def rts: Parser[AST] = "RTS" ^^ {
+    case _ => Rts()
   }
 
+  //SHAL
+  def shal: Parser[AST] = "SHAL" ~> opsize ~> reg ^^ (Shal(_))
+
+  //SHAR
+  def shar: Parser[AST] = "SHAL" ~> opsize ~> reg ^^ (Shar(_))
+
+  //SHLL
+  def shll: Parser[AST] = "SHAL" ~> opsize ~> reg ^^ (Shll(_))
+
+  //SHLR
+  def shlr: Parser[AST] = "SHAL" ~> opsize ~> reg ^^ (Shlr(_))
+
+  //SLEEP
+  def sleep: Parser[AST] = "SLEEP" ^^ {
+    case _ => Sleep()
+  }
+
+  //STC
+  def stc: Parser[AST] = "STC" ~> opsize ~> "CCR" ~> "," ~> (reg | indirReg | disp | pos | abs) ^^ (Stc(_))
+
+  //SUB
+  def sub: Parser[AST] = "SUB" ~> opsize ~> (imm | reg) ~ "," ~ reg ^^ {
+    case left ~ c ~ right => Sub(left, right)
+  }
+
+  //SUBS
+  def subs: Parser[AST] = "SUBS.L" ~> imm ~ "," ~ reg ^^ {
+    case left ~ c ~ right => Subs(left, right)
+  }
+
+  //SUBX
+  def subx: Parser[AST] = "SUBX.B" ~> (imm | reg) ~ "," ~ reg ^^ {
+    case left ~ c ~ right => Subx(left, right)
+  }
+
+  //TRAPA
+  def trapa: Parser[AST] = "TRAPA" ~> imm ^^ (Trapa(_))
+
+  //XOR
+  def xor: Parser[AST] = "XOR" ~> opsize ~> (imm | reg) ~ "," ~ reg ^^ {
+    case left ~ c ~ right => Xor(left, right)
+  }
+
+  //XORC
+  def xorc: Parser[AST] = "XORC.B" ~> opsize ~> imm <~ "," <~ "CCR" ^^ (Xorc(_))
+
   //オペレーションのサイズ
-  def opsize = ("B" | "W" | "L")
+  def opsize = "." ~> ("B" | "W" | "L")
 
   //現在のセクション
   def section: Parser[AST] = ".SECTION" ~> "[VPCDRB]".r <~ "," <~ ("CODE" | "DATA") <~ "," <~ "ALIGN" <~ "=" <~ "[0-9]+".r ^^ (Section(_))
@@ -253,6 +445,8 @@ class ASTParser extends RegexParsers {
     case num ~ c1 ~ size ~ c2 ~ reg => Disp(num, reg, size.toInt)
   }
 
+  //ポストインクリメント
+  //プリディクリメント
   def pos: Parser[AST] = "@" ~> (reg ~ "+" | "-" ~ reg) ^^ {
     case left ~ right =>
       (left, right) match {
@@ -260,7 +454,6 @@ class ASTParser extends RegexParsers {
         case (l: String, r: AST) => Pre(r)
       }
   }
-
 
   //16進数(文字列)を10進数（整数）へ変換
   private def hexToInt(hex: String): Int = {
@@ -270,7 +463,7 @@ class ASTParser extends RegexParsers {
     }.toInt
   }
 
-  def data: Parser[AST] = ".DATA." ~> opsize ~ expr ^^ {
+  def data: Parser[AST] = ".DATA" ~> opsize ~ expr ^^ {
     case size ~ expr =>
       size match {
         case "B" => Data(expr, 8)
@@ -279,7 +472,7 @@ class ASTParser extends RegexParsers {
       }
   }
 
-  def dataBlock: Parser[AST] = ".DATAB." ~> opsize ~ expr ~ "," ~ expr ^^ {
+  def dataBlock: Parser[AST] = ".DATAB" ~> opsize ~ expr ~ "," ~ expr ^^ {
     case size ~ num1 ~ c ~ num2 =>
       size match {
         case "B" => DataBlock(num1, num2, 8)

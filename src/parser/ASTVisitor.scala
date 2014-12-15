@@ -30,7 +30,12 @@ class ASTVisitor {
   //ここでメモリにオペランドを配置する
   def makeProgram(ctx: Z3Context, file: File): ROM = {
     //構文解析
-    file.listFiles.foreach { f => Source.fromFile(f).getLines.foreach { l => parseResult += new ASTParser().parse(l).get}}
+    file.listFiles.foreach { f =>
+      Source.fromFile(f).getLines.foreach { l =>
+        println(l)
+        parseResult += new ASTParser().parse(l).get
+      }
+    }
 
     //意味解析１回目：ラベルの位置を決める
     parseResult.foreach { p =>
@@ -45,12 +50,14 @@ class ASTVisitor {
     parseResult.foreach { p =>
       println(p)
       val array = visit(p)
-      if (array.isInstanceOf[VisitArray]) {
-        (0 until array.asInstanceOf[VisitArray].item.length).foreach { op =>
-          print("%x".format(array.asInstanceOf[VisitArray].item(op).toByte) + ":")
-          rom += (tmppc(section) + op) -> array.asInstanceOf[VisitArray].item(op).toByte
-        }
-        tmppc.put(section, array.asInstanceOf[VisitArray].item.length)
+      array match {
+        case vi: VisitArray =>
+          (0 until vi.item.length).foreach { op =>
+            print("%x".format(vi.item(op).toByte) + ":")
+            rom += (tmppc(section) + op) -> vi.item(op).toByte
+          }
+          tmppc.put(section, vi.item.length)
+        case _ =>
       }
       println
     }
@@ -59,16 +66,14 @@ class ASTVisitor {
   }
 
   //ラベル位置の捜索
+  //文法的な正しさは度外視
   def search(ast: AST): Visit = {
     ast match {
       case Add(left, right) =>
         (left, right) match {
-          case (l: Imm, r: RegByte) => new VisitInt(2)
-          case (l: RegByte, r: RegByte) => new VisitInt(2)
-          case (l: Imm, r: RegWord) => new VisitInt(4)
-          case (l: RegWord, r: RegWord) => new VisitInt(2)
-          case (l: Imm, r: RegLong) => new VisitInt(6)
-          case (l: RegLong, r: RegLong) => new VisitInt(2)
+          case (i: Imm, r: RegWord) => new VisitInt(4)
+          case (i: Imm, r: RegLong) => new VisitInt(6)
+          case _ => new VisitInt(2)
         }
 
       case AddSign(left, right) => new VisitInt(2)
@@ -77,112 +82,233 @@ class ASTVisitor {
 
       case And(left, right) =>
         (left, right) match {
-          case (l: Imm, r: RegByte) => new VisitInt(2)
-          case (l: RegByte, r: RegByte) => new VisitInt(2)
-          case (l: Imm, r: RegWord) => new VisitInt(4)
-          case (l: RegWord, r: RegWord) => new VisitInt(2)
-          case (l: Imm, r: RegLong) => new VisitInt(6)
+          case (i: Imm, r: RegWord) => new VisitInt(4)
+          case (i: Imm, r: RegLong) => new VisitInt(6)
           case (l: RegLong, r: RegLong) => new VisitInt(4)
+          case _ => new VisitInt(2)
         }
 
       case Andc(item) => new VisitInt(2)
 
       case Band(left, right) =>
         (left, right) match {
-          case (l: Imm, r: RegByte) => new VisitInt(2)
-          case (l: Imm, r: IndirReg) => new VisitInt(4)
-          case (l: Imm, r: AbsAddress) => new VisitInt(4)
+          case (i: Imm, r: RegByte) => new VisitInt(2)
+          case _ => new VisitInt(4)
+        }
+
+      case Bra(num, size) => new VisitInt(if (size == 8) 2 else 4)
+
+      case Brn(num, size) => new VisitInt(if (size == 8) 2 else 4)
+
+      case Bhi(num, size) => new VisitInt(if (size == 8) 2 else 4)
+
+      case Bls(num, size) => new VisitInt(if (size == 8) 2 else 4)
+
+      case Bcc(num, size) => new VisitInt(if (size == 8) 2 else 4)
+
+      case Bcs(num, size) => new VisitInt(if (size == 8) 2 else 4)
+
+      case Bne(num, size) => new VisitInt(if (size == 8) 2 else 4)
+
+      case Beq(num, size) => new VisitInt(if (size == 8) 2 else 4)
+
+      case Bvc(num, size) => new VisitInt(if (size == 8) 2 else 4)
+
+      case Bvs(num, size) => new VisitInt(if (size == 8) 2 else 4)
+
+      case Bpl(num, size) => new VisitInt(if (size == 8) 2 else 4)
+
+      case Bmi(num, size) => new VisitInt(if (size == 8) 2 else 4)
+
+      case Bge(num, size) => new VisitInt(if (size == 8) 2 else 4)
+
+      case Blt(num, size) => new VisitInt(if (size == 8) 2 else 4)
+
+      case Bgt(num, size) => new VisitInt(if (size == 8) 2 else 4)
+
+      case Ble(num, size) => new VisitInt(if (size == 8) 2 else 4)
+
+      case Bclr(left, right) =>
+        (left, right) match {
+          case (i: Imm, r: RegByte) => new VisitInt(2)
+          case (l: RegByte, r: RegByte) => new VisitInt(2)
+          case _ => new VisitInt(4)
         }
 
       case Biand(left, right) =>
         (left, right) match {
-          case (l: Imm, r: RegByte) => new VisitInt(2)
-          case (l: Imm, r: IndirReg) => new VisitInt(4)
-          case (l: Imm, r: AbsAddress) => new VisitInt(4)
+          case (i: Imm, r: RegByte) => new VisitInt(2)
+          case _ => new VisitInt(4)
         }
 
-      case Bclr(left, right) =>
+      case Bild(left, right) =>
         (left, right) match {
-          case (l: Imm, r: RegByte) => new VisitInt(2)
-          case (l: Imm, r: IndirReg) => new VisitInt(4)
-          case (l: Imm, r: AbsAddress) => new VisitInt(4)
-          case (l: RegByte, r: RegByte) => new VisitInt(2)
-          case (l: RegByte, r: IndirReg) => new VisitInt(4)
-          case (l: RegByte, r: AbsAddress) => new VisitInt(4)
+          case (i: Imm, r: RegByte) => new VisitInt(2)
+          case _ => new VisitInt(4)
+        }
+
+      case Bior(left, right) =>
+        (left, right) match {
+          case (i: Imm, r: RegByte) => new VisitInt(2)
+          case _ => new VisitInt(4)
+        }
+
+      case Bist(left, right) =>
+        (left, right) match {
+          case (i: Imm, r: RegByte) => new VisitInt(2)
+          case _ => new VisitInt(4)
+        }
+
+      case Bixor(left, right) =>
+        (left, right) match {
+          case (i: Imm, r: RegByte) => new VisitInt(2)
+          case _ => new VisitInt(4)
+        }
+
+      case Bld(left, right) =>
+        (left, right) match {
+          case (i: Imm, r: RegByte) => new VisitInt(2)
+          case _ => new VisitInt(4)
+        }
+
+      case Bnot(left, right) =>
+        (left, right) match {
+          case (i: Imm, r: RegByte) => new VisitInt(2)
+          case _ => new VisitInt(4)
+        }
+
+      case Bor(left, right) =>
+        (left, right) match {
+          case (i: Imm, r: RegByte) => new VisitInt(2)
+          case _ => new VisitInt(4)
         }
 
       case Bset(left, right) =>
         (left, right) match {
-          case (l: Imm, r: RegByte) => new VisitInt(2)
-          case (l: Imm, r: IndirReg) => new VisitInt(4)
-          case (l: Imm, r: AbsAddress) => new VisitInt(4)
+          case (i: Imm, r: RegByte) => new VisitInt(2)
           case (l: RegByte, r: RegByte) => new VisitInt(2)
-          case (l: RegByte, r: IndirReg) => new VisitInt(4)
-          case (l: RegByte, r: AbsAddress) => new VisitInt(4)
+          case _ => new VisitInt(4)
         }
 
-      case Inc(left, right) => new VisitInt(2)
+      case Bsr(disp, size) => new VisitInt(if (size == 8) 2 else 4)
+
+      case Bst(left, right) =>
+        (left, right) match {
+          case (i: Imm, r: RegByte) => new VisitInt(2)
+          case _ => new VisitInt(4)
+        }
+
+      case Btst(left, right) =>
+        (left, right) match {
+          case (i: Imm, r: RegByte) => new VisitInt(2)
+          case (l: RegByte, r: RegByte) => new VisitInt(2)
+          case _ => new VisitInt(4)
+        }
+
+      case Bxor(left, right) =>
+        (left, right) match {
+          case (i: Imm, r: RegByte) => new VisitInt(2)
+          case _ => new VisitInt(4)
+        }
 
       case Cmp(left, right) =>
         (left, right) match {
-          case (l: Imm, r: RegByte) => new VisitInt(2)
-          case (l: RegByte, r: RegByte) => new VisitInt(2)
-          case (l: Imm, r: RegWord) => new VisitInt(4)
-          case (l: RegWord, r: RegWord) => new VisitInt(2)
-          case (l: Imm, r: RegLong) => new VisitInt(6)
-          case (l: RegLong, r: RegLong) => new VisitInt(2)
+          case (i: Imm, r: RegWord) => new VisitInt(4)
+          case (i: Imm, r: RegLong) => new VisitInt(6)
+          case _ => new VisitInt(2)
         }
 
-      case Sub(left, right) =>
-        (left, right) match {
-          case (l: RegByte, r: RegByte) => new VisitInt(2)
-          case (l: Imm, r: RegWord) => new VisitInt(4)
-          case (l: RegWord, r: RegWord) => new VisitInt(2)
-          case (l: Imm, r: RegLong) => new VisitInt(6)
-          case (l: RegLong, r: RegLong) => new VisitInt(2)
+      case Daa(reg) => new VisitInt(2)
+
+      case Das(reg) => new VisitInt(2)
+
+      case Dec(left, right) => new VisitInt(2)
+
+      case Divxs(left, right) => new VisitInt(4)
+
+      case Divxu(left, right) => new VisitInt(2)
+
+      case Eepmov(size) => new VisitInt(4)
+
+      case Exts(reg) => new VisitInt(2)
+
+      case Extu(reg) => new VisitInt(2)
+
+      case Inc(left, right) => new VisitInt(2)
+
+      case Jmp(add) =>
+        add match {
+          case a: AbsAddress => new VisitInt(4)
+          case _ => new VisitInt(2)
         }
 
-      case Not(item) => new VisitInt(2)
+      case Jsr(add) =>
+        add match {
+          case a: AbsAddress => new VisitInt(4)
+          case _ => new VisitInt(2)
+        }
 
-      case Orc(item) => new VisitInt(2)
+      case Ldc(reg) =>
+        reg match {
+          case r: IndirReg => new VisitInt(4)
+          case r: Disp => new VisitInt(if (search(r).asInstanceOf[VisitInt].item == 16) 6 else 10)
+          case r: Pos => new VisitInt(4)
+          case r: AbsAddress =>
+            val vi = search(r).asInstanceOf[VisitInt].item
+            new VisitInt(if (vi == 8) 2 else if (vi == 16) 6 else 8)
+          case _ => new VisitInt(2)
+        }
 
       case Mov(left, right) =>
         (left, right) match {
-          case (l: RegByte, r: RegByte) => new VisitInt(2)
-          case (l: RegWord, r: RegWord) => new VisitInt(2)
-          case (l: RegLong, r: RegLong) => new VisitInt(2)
-          case (l: Imm, r: RegByte) => new VisitInt(2)
-          case (l: IndirReg, r: RegByte) => new VisitInt(2)
           case (l: Disp, r: RegByte) => new VisitInt(if (search(l).asInstanceOf[VisitInt].item == 16) 4 else 8)
-          case (l: Pos, r: RegByte) => new VisitInt(2)
           case (l: AbsAddress, r: RegByte) =>
             val vi = search(l).asInstanceOf[VisitInt].item
             new VisitInt(if (vi == 8) 2 else if (vi == 16) 4 else 6)
           case (l: Imm, r: RegWord) => new VisitInt(4)
-          case (l: IndirReg, r: RegWord) => new VisitInt(2)
           case (l: Disp, r: RegWord) => new VisitInt(if (search(l).asInstanceOf[VisitInt].item == 16) 4 else 8)
-          case (l: Pos, r: RegWord) => new VisitInt(2)
           case (l: AbsAddress, r: RegWord) => new VisitInt(if (search(l).asInstanceOf[VisitInt].item == 16) 4 else 6)
           case (l: Imm, r: RegLong) => new VisitInt(6)
           case (l: IndirReg, r: RegLong) => new VisitInt(4)
           case (l: Disp, r: RegLong) => new VisitInt(if (search(l).asInstanceOf[VisitInt].item == 16) 6 else 10)
           case (l: Pos, r: RegLong) => new VisitInt(4)
           case (l: AbsAddress, r: RegLong) => new VisitInt(if (search(l).asInstanceOf[VisitInt].item == 16) 6 else 8)
-          case (l: RegByte, r: IndirReg) => new VisitInt(2)
           case (l: RegByte, r: Disp) => new VisitInt(if (search(r).asInstanceOf[VisitInt].item == 16) 4 else 8)
-          case (l: RegByte, r: Pre) => new VisitInt(2)
           case (l: RegByte, r: AbsAddress) =>
             val vi = search(r).asInstanceOf[VisitInt].item
             new VisitInt(if (vi == 8) 2 else if (vi == 16) 4 else 6)
-          case (l: RegWord, r: IndirReg) => new VisitInt(2)
           case (l: RegWord, r: Disp) => new VisitInt(if (search(r).asInstanceOf[VisitInt].item == 16) 4 else 8)
-          case (l: RegWord, r: Pre) => new VisitInt(2)
           case (l: RegWord, r: AbsAddress) => new VisitInt(if (search(r).asInstanceOf[VisitInt].item == 16) 4 else 6)
           case (l: RegLong, r: IndirReg) => new VisitInt(4)
           case (l: RegLong, r: Disp) => new VisitInt(if (search(r).asInstanceOf[VisitInt].item == 16) 6 else 10)
           case (l: RegLong, r: Pre) => new VisitInt(4)
           case (l: RegLong, r: AbsAddress) => new VisitInt(if (search(r).asInstanceOf[VisitInt].item == 16) 4 else 6)
+          case _ => new VisitInt(2)
         }
+
+      case Movfpe(lefr, right) => new VisitInt(4)
+
+      case Movtpe(left, right) => new VisitInt(4)
+
+      case Mulxs(left, right) => new VisitInt(4)
+
+      case Mulxu(left, right) => new VisitInt(2)
+
+      case Neg(reg) => new VisitInt(2)
+
+      case Nop() => new VisitInt(2)
+
+      case Not(item) => new VisitInt(2)
+
+      case Or(left, right) =>
+        (left, right) match {
+          case (i: Imm, r: RegWord) => new VisitInt(4)
+          case (i: Imm, r: RegLong) => new VisitInt(6)
+          case (l: RegLong, r: RegLong) => new VisitInt(4)
+          case _ => new VisitInt(2)
+        }
+
+      case Orc(item) => new VisitInt(2)
 
       case Pop(reg) =>
         reg match {
@@ -196,37 +322,60 @@ class ASTVisitor {
           case (r: RegLong) => new VisitInt(4)
         }
 
-      case Extu(reg) =>
-        reg match {
-          case (r: RegWord) => new VisitInt(2)
-          case (r: RegLong) => new VisitInt(4)
-        }
+      case Rotl(reg) => new VisitInt(2)
 
-      case Jmp(add) =>
-        add match {
-          case (a: IndirReg) => new VisitInt(2)
-          case (a: AbsAddress) => new VisitInt(4)
-          case (a: IndirAdd) => new VisitInt(2)
-        }
+      case Rotr(reg) => new VisitInt(2)
 
-      case Jsr(add) =>
-        add match {
-          case (a: IndirReg) => new VisitInt(2)
-          case (a: AbsAddress) => new VisitInt(4)
-          case (a: IndirAdd) => new VisitInt(2)
-        }
+      case Rotxl(reg) => new VisitInt(2)
 
-      case Bra(num, size) => new VisitInt(if (size == 8) 2 else 4)
+      case Rotxr(reg) => new VisitInt(2)
 
-      case Blo(num, size) => new VisitInt(if (size == 8) 2 else 4)
-
-      case Blt(num, size) => new VisitInt(if (size == 8) 2 else 4)
-
-      case Bhi(num, size) => new VisitInt(if (size == 8) 2 else 4)
+      case Rte() => new VisitInt(2)
 
       case Rts() => new VisitInt(2)
 
-      case Rte() => new VisitInt(2)
+      case Shal(reg) => new VisitInt(2)
+
+      case Shar(reg) => new VisitInt(2)
+
+      case Shll(reg) => new VisitInt(2)
+
+      case Shlr(reg) => new VisitInt(2)
+
+      case Sleep() => new VisitInt(2)
+
+      case Stc(reg) =>
+        reg match {
+          case r: RegByte => new VisitInt(2)
+          case r: Disp => new VisitInt(if (search(r).asInstanceOf[VisitInt].item == 16) 6 else 10)
+          case r: AbsAddress =>
+            val vi = search(r).asInstanceOf[VisitInt].item
+            new VisitInt(if (vi == 8) 2 else if (vi == 16) 6 else 8)
+          case _ => new VisitInt(4)
+        }
+
+      case Sub(left, right) =>
+        (left, right) match {
+          case (l: Imm, r: RegWord) => new VisitInt(4)
+          case (l: Imm, r: RegLong) => new VisitInt(6)
+          case _ => new VisitInt(2)
+        }
+
+      case Subs(left, right) => new VisitInt(2)
+
+      case Subx(left, right) => new VisitInt(2)
+
+      case Trapa(imm) => new VisitInt(2)
+
+      case Xor(left, right) =>
+        (left, right) match {
+          case (i: Imm, r: RegWord) => new VisitInt(4)
+          case (i: Imm, r: RegLong) => new VisitInt(6)
+          case (l: RegLong, r: RegLong) => new VisitInt(4)
+          case _ => new VisitInt(2)
+        }
+
+      case Xorc(imm) => new VisitInt(2)
 
       case Data(num, size) =>
         size match {
@@ -497,7 +646,7 @@ class ASTVisitor {
         if (size == 8) new VisitArray(0x40, disp)
         else new VisitArray(0x58, 0x00, disp >> 8, disp)
 
-      case Blo(num, size) =>
+      case Bcs(num, size) =>
         val disp = visit(num).asInstanceOf[VisitInt].item - tmppc("P")
         if (size == 8) new VisitArray(0x45, disp)
         else new VisitArray(0x58, 0x50, disp >> 8, disp)

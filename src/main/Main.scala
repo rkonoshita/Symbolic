@@ -80,20 +80,6 @@ object Main {
     ctx.mkConst("c" + csym, ctx.mkBVSort(8))
   }
 
-  def extract(range: Range, ast: Z3AST): ArrayBuffer[Int] = {
-    val s = ctx.mkSolver
-    val buf = new ArrayBuffer[Int]
-    range.foreach { n =>
-      s.push
-      s.assertCnstr(ctx.mkEq(ast, ctx.mkInt(n, ast.getSort)))
-      if (s.check.get) buf += n
-      s.pop(1)
-    }
-    buf
-  }
-
-  def extract(range: Range, c: CtxSymbol): ArrayBuffer[Int] = extract(range, c.symbol)
-
 }
 
 object Parameter {

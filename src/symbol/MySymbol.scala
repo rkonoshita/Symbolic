@@ -53,6 +53,10 @@ trait MySymbol {
 
   def ||(s: MySymbol): MySymbol
 
+  def bitclr(s: MySymbol): MySymbol
+
+  def bitclr(s: Int): MySymbol
+
   def bitset(s: MySymbol): MySymbol
 
   def bitset(s: Int): MySymbol
@@ -171,6 +175,14 @@ class CtxSymbol(ast: Z3AST) extends MySymbol {
 
   def concat(s: CtxSymbol): CtxSymbol = new CtxSymbol(ctx.mkConcat(symbol, s.symbol))
 
+  def bitclr(s: MySymbol): CtxSymbol =
+    if (s.isInstanceOf[IntSymbol]) bitclr(s.asInstanceOf[IntSymbol].symbol)
+    else bitclr(s.asInstanceOf[CtxSymbol].symbol)
+
+  def bitclr(s: Z3AST): CtxSymbol = &((new IntSymbol(1) << s).~)
+
+  def bitclr(s: Int): CtxSymbol = &(~(1 << s))
+
   def bitset(s: MySymbol): CtxSymbol =
     if (s.isInstanceOf[IntSymbol]) bitset(s.asInstanceOf[IntSymbol].symbol)
     else bitset(s.asInstanceOf[CtxSymbol].symbol)
@@ -271,6 +283,14 @@ class IntSymbol(ast: Int) extends MySymbol {
   def <(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVSlt(s.context.mkInt(symbol, s.getSort), s))
 
   def <(s: Int): Boolean = symbol < s
+
+  def bitclr(s: MySymbol): MySymbol =
+    if (s.isInstanceOf[IntSymbol]) bitclr(s.asInstanceOf[IntSymbol].symbol)
+    else bitclr(s.asInstanceOf[CtxSymbol].symbol)
+
+  def bitclr(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVAnd(s.context.mkInt(symbol, s.getSort), s.context.mkNot(s.context.mkBVShl(s.context.mkInt(1, s.getSort), s))))
+
+  def bitclr(s: Int): IntSymbol = &(~(1 << s))
 
   def bitset(s: MySymbol): MySymbol =
     if (s.isInstanceOf[IntSymbol]) bitset(s.asInstanceOf[IntSymbol].symbol)
