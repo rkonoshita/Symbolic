@@ -264,7 +264,7 @@ class ASTParser extends RegexParsers {
   //ROTXR
   def rotxr: Parser[AST] = "ROTXR" ~> opsize ~> reg ^^ (Rotxr(_))
 
-  //rte
+  //RTE
   def rte: Parser[AST] = "RTE" ^^ {
     case _ => Rte()
   }
