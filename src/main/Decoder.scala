@@ -2,6 +2,7 @@ package main
 
 import data.DataSet
 import data.register.ROM
+import parser.Data
 import symbol.{MySymbol, CtxSymbol, IntSymbol}
 import z3.scala.{Z3AST, Z3Context}
 
@@ -214,37 +215,7 @@ class Decoder {
         buf = checkN(add, buf, 32)
         buf = checkH(regB, regA, add, buf, 32)
 
-      case 0x0B =>
-        val op1 = rom.getByte(pc + 1)
-        op1 & 0xF0 match {
-          case 0x00 =>
-            //ADDS.L #1,Reg [0B][0reg]
-            val add = data.reg.getLong(op1) + 1
-            data.reg.setLong(add, op1)
-            data.pc.setPc(pc + 2)
-            buf += data
-          case 0x50 =>
-            //INC.W #1,Reg [0B][5reg]
-            val reg = data.reg.getWord(op1) + 1
-            val inc = reg + 1
-            data.reg.setWord(inc, op1)
-            data.pc.setPc(pc + 2)
-            buf = checkV(reg, new IntSymbol(1), inc, ArrayBuffer(data), 16)
-            buf = checkZ(inc, buf)
-            buf = checkN(inc, buf, 16)
-          case 0x80 =>
-            //ADDS.L #2,Reg [0B][8reg]
-            val add = data.reg.getLong(op1) + 2
-            data.reg.setLong(add, op1)
-            data.pc.setPc(pc + 2)
-            buf += data
-          case 0x90 =>
-            //ADDS.L #4,Reg [0B][9reg]
-            val add = data.reg.getLong(op1) + 4
-            data.reg.setLong(add, op1)
-            data.pc.setPc(pc + 2)
-            buf += data
-        }
+      case 0x0B => analyze0B(data, pc)
 
       case 0x0D =>
         //MOV.W RegA,RegB [0D][regAregB]
@@ -301,6 +272,44 @@ class Decoder {
     buf
   }
 
+  private def analyze0B(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
+    var buf = new ArrayBuffer[DataSet]
+    val op1 = rom.getByte(pc + 1)
+    op1 & 0xF0 match {
+      case 0x00 =>
+        //ADDS.L #1,Reg [0B][0reg]
+        val add = data.reg.getLong(op1) + 1
+        data.reg.setLong(add, op1)
+        data.pc.setPc(pc + 2)
+        buf += data
+
+      case 0x50 =>
+        //INC.W #1,Reg [0B][5reg]
+        val reg = data.reg.getWord(op1) + 1
+        val inc = reg + 1
+        data.reg.setWord(inc, op1)
+        data.pc.setPc(pc + 2)
+        buf = checkV(reg, new IntSymbol(1), inc, ArrayBuffer(data), 16)
+        buf = checkZ(inc, buf)
+        buf = checkN(inc, buf, 16)
+
+      case 0x80 =>
+        //ADDS.L #2,Reg [0B][8reg]
+        val add = data.reg.getLong(op1) + 2
+        data.reg.setLong(add, op1)
+        data.pc.setPc(pc + 2)
+        buf += data
+
+      case 0x90 =>
+        //ADDS.L #4,Reg [0B][9reg]
+        val add = data.reg.getLong(op1) + 4
+        data.reg.setLong(add, op1)
+        data.pc.setPc(pc + 2)
+        buf += data
+    }
+    buf
+  }
+
   private def analyze1(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val op0 = rom.getByte(pc)
     var buf = new ArrayBuffer[DataSet]
@@ -317,29 +326,8 @@ class Decoder {
         buf = checkZ(and, ArrayBuffer(data))
         buf = checkN(and, buf, 8)
 
-      case 0x17 =>
-        val op1 = rom.getByte(pc + 1)
-        op1 & 0xF0 match {
-          case 0x00 =>
-            //NOT.B Reg [17][0reg]
-            val not = data.reg.getByte(op1).~
-            data.reg.setByte(not, op1)
-            data.pc.setPc(pc + 2)
-            data.ccr.clearV
-            buf = checkZ(not, ArrayBuffer(data))
-            buf = checkN(not, buf, 8)
+      case 0x17 => analyze17(data, pc)
 
-          case 0x50 =>
-            //EXTU.W Reg [17][5reg]
-            val extu = data.reg.getWord(op1) & 0xFF
-            data.reg.setWord(extu, op1)
-            data.pc.setPc(pc + 2)
-            data.ccr.clearN
-            data.ccr.clearV
-            buf += data
-            buf = checkZ(extu, ArrayBuffer(data))
-
-        }
       case 0x18 =>
         //SUB.B RegA,RegB [18][regAregB]
         val op1 = rom.getByte(pc + 1)
@@ -380,6 +368,32 @@ class Decoder {
         buf = checkZ(sub, buf)
         buf = checkN(sub, buf, 16)
         buf = checkH(regB, regA.neg, sub, buf, 16)
+    }
+    buf
+  }
+
+  private def analyze17(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
+    var buf = new ArrayBuffer[DataSet]
+    val op1 = rom.getByte(pc + 1)
+    op1 & 0xF0 match {
+      case 0x00 =>
+        //NOT.B Reg [17][0reg]
+        val not = data.reg.getByte(op1).~
+        data.reg.setByte(not, op1)
+        data.pc.setPc(pc + 2)
+        data.ccr.clearV
+        buf = checkZ(not, ArrayBuffer(data))
+        buf = checkN(not, buf, 8)
+
+      case 0x50 =>
+        //EXTU.W Reg [17][5reg]
+        val extu = data.reg.getWord(op1) & 0xFF
+        data.reg.setWord(extu, op1)
+        data.pc.setPc(pc + 2)
+        data.ccr.clearN
+        data.ccr.clearV
+        buf += data
+        buf = checkZ(extu, ArrayBuffer(data))
     }
     buf
   }
@@ -561,6 +575,50 @@ class Decoder {
         buf = checkZ(and, ArrayBuffer(data))
         buf = checkN(and, buf, 16)
 
+      case 0x67 =>
+        val op1 = rom.getByte(pc + 1)
+        val imm = (op1 >> 4) & 0x07
+        val reg = data.reg.getByte(op1)
+        val ccr = data.ccr.ccr
+        op1 & 0x80 match {
+          case 0x00 =>
+            //BST.B Imm,Reg [67][imm reg]
+            (ccr, reg) match {
+              case (c: IntSymbol, r: IntSymbol) =>
+                val bst = if ((c & 0x01).eq(0x01)) r | (1 << imm) else r & (~(1 << imm))
+                data.reg.setByte(bst, op1)
+                buf += data
+              case _ =>
+                val bool = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8)).asInstanceOf[CtxSymbol]
+                val d1 = data.clone
+                d1.reg.setByte(reg | (1 << imm), op1)
+                d1.path.set(bool.symbol)
+                buf += d1
+                val d2 = data.clone
+                d2.reg.setByte(reg & (~(1 << imm)), op1)
+                d2.path.set(bool.not.symbol)
+                buf += d2
+            }
+          case 0x80 =>
+            //BIST.B Imm,Reg [67][1imm reg]
+            (ccr, reg) match {
+              case (c: IntSymbol, r: IntSymbol) =>
+                val bst = if ((c & 0x01).eq(0x00)) r | (1 << imm) else r & (~(1 << imm))
+                data.reg.setByte(bst, op1)
+                buf += data
+              case _ =>
+                val bool = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x00, 8)).asInstanceOf[CtxSymbol]
+                val d1 = data.clone
+                d1.reg.setByte(reg | (1 << imm), op1)
+                d1.path.set(bool.symbol)
+                buf += d1
+                val d2 = data.clone
+                d2.reg.setByte(reg & (~(1 << imm)), op1)
+                d2.path.set(bool.not.symbol)
+                buf += d2
+            }
+        }
+
       case 0x68 =>
         val op1 = rom.getByte(pc + 1)
         op1 & 0x80 match {
@@ -715,6 +773,107 @@ class Decoder {
         data.pc.setPc(pc + 2)
         buf += data
 
+      case 0x74 =>
+        val op1 = rom.getByte(pc + 1)
+        val imm = (op1 >> 4) & 0x07
+        val reg = data.reg.getByte(op1) >> imm
+        val ccr = data.ccr.ccr
+        op1 & 0x80 match {
+          case 0x00 =>
+            //BOR.B Imm,Reg [74][imm reg]
+            (reg, ccr) match {
+              case (r: IntSymbol, c: IntSymbol) =>
+                val bool1 = (c & 0x01).eq(0x01)
+                val bool2 = (r & 0x01).eq(0x01)
+                if (bool1 | bool2) data.ccr.setC else data.ccr.clearC
+                buf += data
+              case _ =>
+                val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                val bool2 = (reg & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                val bool = (bool1 | bool2).asInstanceOf[CtxSymbol]
+                val d1 = data.clone
+                d1.ccr.setC
+                d1.path.set(bool.symbol)
+                buf += d1
+                val d2 = data.clone
+                d2.ccr.clearC
+                d2.path.set(bool.not.symbol)
+                buf += d2
+            }
+          case 0x80 =>
+            //BIOR.B Imm,Reg [74][1imm reg]
+            (reg, ccr) match {
+              case (r: IntSymbol, c: IntSymbol) =>
+                val bool1 = (c & 0x01).eq(0x01)
+                val bool2 = (r & 0x01).eq(0x00)
+                if (bool1 | bool2) data.ccr.setC else data.ccr.clearC
+                buf += data
+              case _ =>
+                val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                val bool2 = (reg & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x00, 8))
+                val bool = (bool1 | bool2).asInstanceOf[CtxSymbol]
+                val d1 = data.clone
+                d1.ccr.setC
+                d1.path.set(bool.symbol)
+                buf += d1
+                val d2 = data.clone
+                d2.ccr.clearC
+                d2.path.set(bool.not.symbol)
+                buf += d2
+            }
+        }
+
+      case 0x75 =>
+        val op1 = rom.getByte(pc + 1)
+        val reg = data.reg.getByte(op1) >> ((op1 >> 4) & 0x07)
+        val ccr = data.ccr.ccr
+        data.pc.setPc(pc + 2)
+        op1 & 0x80 match {
+          case 0x00 =>
+            //BXOR.B Imm,Reg [75][0imm reg]
+            (ccr, reg) match {
+              case (c: IntSymbol, r: IntSymbol) =>
+                val bool1 = (c & 0x01).eq(0x01)
+                val bool2 = (r & 0x01).eq(0x01)
+                if (bool1 ^ bool2) data.ccr.setC else data.ccr.clearC
+                buf += data
+              case _ =>
+                val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                val bool2 = (reg & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                val bool = (bool1 ^^ bool2).asInstanceOf[CtxSymbol]
+                val d1 = data.clone
+                d1.ccr.setC
+                d1.path.set(bool.symbol)
+                buf += d1
+                val d2 = data.clone
+                d2.ccr.clearC
+                d2.path.set(bool.not.symbol)
+                buf += d2
+            }
+
+          case 0x80 =>
+            //BIXOR.B Imm,Reg [75][1imm reg]
+            (ccr, reg) match {
+              case (c: IntSymbol, r: IntSymbol) =>
+                val bool1 = (c & 0x01).eq(0x01)
+                val bool2 = (r & 0x01).eq(0x00)
+                if (bool1 ^ bool2) data.ccr.setC else data.ccr.clearC
+                buf += data
+              case _ =>
+                val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                val bool2 = (reg & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x00, 8))
+                val bool = (bool1 ^^ bool2).asInstanceOf[CtxSymbol]
+                val d1 = data.clone
+                d1.ccr.setC
+                d1.path.set(bool.symbol)
+                buf += d1
+                val d2 = data.clone
+                d2.ccr.clearC
+                d2.path.set(bool.not.symbol)
+                buf += d2
+            }
+        }
+
       case 0x76 =>
         val op1 = rom.getByte(pc + 1)
         val reg = data.reg.getByte(op1) >> ((op1 >> 4) & 0x07)
@@ -787,334 +946,323 @@ class Decoder {
             buf += d2
         }
 
-      case 0x79 =>
-        val op1 = rom.getByte(pc + 1)
-        op1 & 0xF0 match {
-          case 0x00 =>
-            //MOV.W Imm,Reg [79][0reg][imm][imm]
-            val imm = new IntSymbol(rom.getWord(pc + 2))
-            data.reg.setWord(imm, op1)
-            data.pc.setPc(pc + 4)
-            data.ccr.clearV
-            buf = checkZ(imm, ArrayBuffer(data))
-            buf = checkN(imm, buf, 16)
+      case 0x79 => analyze79(data, pc)
 
-          case 0x10 =>
-            //ADD.W Imm,Reg [79][1reg][imm][imm]
-            val imm = new IntSymbol(rom.getWord(pc + 2))
-            val reg = data.reg.getWord(op1)
-            val add = reg + imm
-            data.reg.setWord(add, op1)
-            data.pc.setPc(pc + 4)
-            buf = checkC(reg, imm, add, ArrayBuffer(data), 16)
-            buf = checkV(reg, imm, add, buf, 16)
-            buf = checkZ(reg, buf)
-            buf = checkN(reg, buf, 16)
-            buf = checkH(reg, imm, add, buf, 16)
+      case 0x7A => analyze7A(data, pc)
 
-          case 0x20 =>
-            //CMP.W Imm,Reg [79][2reg][imm][imm]
-            val imm = new IntSymbol(rom.getWord(pc + 2))
-            val reg = data.reg.getWord(op1)
-            val cmp = reg - imm
-            data.pc.setPc(pc + 4)
-            buf = checkC(reg, imm.neg, cmp, ArrayBuffer(data), 16)
-            buf = checkV(reg, imm.neg, cmp, buf, 16)
-            buf = checkZ(cmp, buf)
-            buf = checkN(cmp, buf, 16)
-            buf = checkH(reg, imm.neg, cmp, buf, 16)
-
-          case 0x60 =>
-            //AND.W Imm,Reg [79][6reg][imm][imm]
-            val imm = rom.getWord(pc + 2)
-            val reg = data.reg.getWord(op1)
-            val and = reg & imm
-            data.reg.setWord(and, op1)
-            data.pc.setPc(pc + 4)
-            data.ccr.clearV
-            buf = checkZ(and, ArrayBuffer(data))
-            buf = checkN(and, buf, 8)
-        }
-
-      case 0x7A =>
-        val op1 = rom.getByte(pc + 1)
-        op1 & 0xF0 match {
-          case 0x00 =>
-            //MOV,L Imm,Reg [7A][0reg][imm][imm][imm][imm]
-            val imm = new IntSymbol(rom.getLong(pc + 2))
-            data.reg.setLong(imm, op1)
-            data.pc.setPc(pc + 6)
-            data.ccr.clearV
-            buf = checkZ(imm, ArrayBuffer(data))
-            buf = checkN(imm, buf, 32)
-
-          case 0x60 =>
-            //AND.L Imm,Reg [7A][6reg][imm][imm][imm][imm]
-            val imm = rom.getLong(pc + 2)
-            val reg = data.reg.getLong(op1)
-            val and = reg & imm
-            data.reg.setLong(and, op1)
-            data.pc.setPc(pc + 6)
-            data.ccr.clearV
-            buf = checkZ(and, ArrayBuffer(data))
-            buf = checkN(and, buf, 8)
-        }
-
-      case 0x7C =>
-        rom.getByte(pc + 2) match {
-          case 0x76 =>
-            val op3 = rom.getByte(pc + 3)
-            val imm = op3 >> 4
-            val ccr = data.ccr.ccr
-            data.pc.setPc(pc + 4)
-            op3 & 0x80 match {
-              case 0x00 =>
-                //BAND.B Imm,IndReg [7C][indreg0][76][imm0]
-                data.reg.getLong(rom.getByte(pc + 1) >> 4) match {
-                  case reg: IntSymbol =>
-                    val mem = data.mem.getByte(reg.symbol) >> imm
-                    (ccr, mem) match {
-                      case (c: IntSymbol, m: IntSymbol) =>
-                        val bool1 = (c & 0x01).eq(0x01)
-                        val bool2 = (m & 0x01).eq(0x01)
-                        if (bool1 & bool2) data.ccr.setC else data.ccr.clearC
-                        buf += data
-                      case _ =>
-                        val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
-                        val bool2 = (mem & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
-                        val bool = (bool1 && bool2).asInstanceOf[CtxSymbol]
-                        val d1 = data.clone
-                        d1.ccr.setC
-                        d1.path.set(bool.symbol)
-                        buf += d1
-                        val d2 = data.clone
-                        d2.ccr.clearC
-                        d2.path.set(bool.not.symbol)
-                        buf += d2
-                    }
-                  case reg: CtxSymbol =>
-                    extract(0 to 0xFFFF, reg.extract(15, 0).symbol).foreach { p =>
-                      val clone = data.clone
-                      val mem = clone.mem.getByte(p) >> imm
-                      clone.path.set(reg.extract(15, 0).eq(p).symbol)
-                      (ccr, mem) match {
-                        case (c: IntSymbol, m: IntSymbol) =>
-                          val bool1 = (c & 0x01).eq(0x01)
-                          val bool2 = (m & 0x01).eq(0x01)
-                          if (bool1 & bool2) clone.ccr.setC else clone.ccr.clearC
-                          buf += clone
-                        case _ =>
-                          val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
-                          val bool2 = (mem & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
-                          val bool = (bool1 && bool2).asInstanceOf[CtxSymbol]
-                          val d1 = clone.clone
-                          d1.ccr.setC
-                          d1.path.set(bool.symbol)
-                          buf += d1
-                          val d2 = clone.clone
-                          d2.ccr.clearC
-                          d2.path.set(bool.not.symbol)
-                          buf += d2
-                      }
-                    }
-                }
-
-              case 0x80 =>
-                //BIAND.B Imm,IndReg [7C][indreg0][76][1imm0]
-                data.reg.getLong(rom.getByte(pc + 1) >> 4) match {
-                  case reg: IntSymbol =>
-                    val mem = data.mem.getByte(reg.symbol) >> imm
-                    (ccr, mem) match {
-                      case (c: IntSymbol, m: IntSymbol) =>
-                        val bool1 = (c & 0x01).eq(0x01)
-                        val bool2 = (m & 0x01).eq(0x00)
-                        if (bool1 & bool2) data.ccr.setC else data.ccr.clearC
-                        buf += data
-                      case _ =>
-                        val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
-                        val bool2 = (mem & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x00, 8))
-                        val bool = (bool1 && bool2).asInstanceOf[CtxSymbol]
-                        val d1 = data.clone
-                        d1.ccr.setC
-                        d1.path.set(bool.symbol)
-                        buf += d1
-                        val d2 = data.clone
-                        d2.ccr.clearC
-                        d2.path.set(bool.not.symbol)
-                        buf += d2
-                    }
-                  case reg: CtxSymbol =>
-                    extract(0 to 0xFFFF, reg.extract(15, 0).symbol).foreach { p =>
-                      val clone = data.clone
-                      val mem = clone.mem.getByte(p) >> imm
-                      clone.path.set(reg.extract(15, 0).eq(p).symbol)
-                      (ccr, mem) match {
-                        case (c: IntSymbol, m: IntSymbol) =>
-                          val bool1 = (c & 0x01).eq(0x01)
-                          val bool2 = (m & 0x01).eq(0x00)
-                          if (bool1 & bool2) clone.ccr.setC else clone.ccr.clearC
-                          buf += clone
-                        case _ =>
-                          val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
-                          val bool2 = (mem & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x00, 8))
-                          val bool = (bool1 && bool2).asInstanceOf[CtxSymbol]
-                          val d1 = clone.clone
-                          d1.ccr.setC
-                          d1.path.set(bool.symbol)
-                          buf += d1
-                          val d2 = clone.clone
-                          d2.ccr.clearC
-                          d2.path.set(bool.not.symbol)
-                          buf += d2
-                      }
-                    }
-                }
-            }
-
-          case 0x77 =>
-            val op3 = rom.getByte(pc + 3)
-            val imm = op3 >> 4
-            val ccr = data.ccr.ccr
-            op3 & 0x80 match {
-              case 0x00 =>
-                //BLD.B Imm,IndReg [7C][indreg0][77][imm0]
-                data.reg.getLong(rom.getByte(pc + 1) >> 4) match {
-                  case ind: IntSymbol =>
-                    data.mem.getByte(ind.symbol) >> imm match {
-                      case m: IntSymbol =>
-                        if ((m & 0x01).eq(0x01)) data.ccr.setC else data.ccr.clearC
-                        buf += data
-                      case m: CtxSymbol =>
-                        val bool = (m & 0x01).eq(0x01)
-                        val d1 = data.clone
-                        d1.ccr.setC
-                        d1.path.set(bool.symbol)
-                        buf += d1
-                        val d2 = data.clone
-                        d2.ccr.clearC
-                        d2.path.set(bool.not.symbol)
-                        buf += d2
-                    }
-                  case ind: CtxSymbol =>
-                    extract(0 to 0xFFFF, ind.extract(15, 0)).foreach { p =>
-                      val clone = data.clone
-                      clone.path.set(ind.extract(15, 0).eq(p).symbol)
-                      clone.mem.getByte(p) >> imm match {
-                        case m: IntSymbol =>
-                          if ((m & 0x01).eq(0x01)) clone.ccr.setC else clone.ccr.clearC
-                          buf += clone
-                        case m: CtxSymbol =>
-                          val bool = (m & 0x01).eq(0x01)
-                          val d1 = clone.clone
-                          d1.ccr.setC
-                          d1.path.set(bool.symbol)
-                          buf += d1
-                          val d2 = clone.clone
-                          d2.ccr.clearC
-                          d2.path.set(bool.not.symbol)
-                          buf += d2
-                      }
-                    }
-                }
-              case 0x80 =>
-                //BILD.B Imm,IndReg [7C][indreg0][77][1imm0]
-                data.reg.getLong(rom.getByte(pc + 1) >> 4) match {
-                  case ind: IntSymbol =>
-                    data.mem.getByte(ind.symbol) >> imm match {
-                      case m: IntSymbol =>
-                        if ((m & 0x01).eq(0x00)) data.ccr.setC else data.ccr.clearC
-                        buf += data
-                      case m: CtxSymbol =>
-                        val bool = (m & 0x01).eq(0x00)
-                        val d1 = data.clone
-                        d1.ccr.setC
-                        d1.path.set(bool.symbol)
-                        buf += d1
-                        val d2 = data.clone
-                        d2.ccr.clearC
-                        d2.path.set(bool.not.symbol)
-                        buf += d2
-                    }
-                  case ind: CtxSymbol =>
-                    extract(0 to 0xFFFF, ind.extract(15, 0)).foreach { p =>
-                      val clone = data.clone
-                      clone.path.set(ind.extract(15, 0).eq(p).symbol)
-                      clone.mem.getByte(p) >> imm match {
-                        case m: IntSymbol =>
-                          if ((m & 0x01).eq(0x00)) clone.ccr.setC else clone.ccr.clearC
-                          buf += clone
-                        case m: CtxSymbol =>
-                          val bool = (m & 0x01).eq(0x00)
-                          val d1 = clone.clone
-                          d1.ccr.setC
-                          d1.path.set(bool.symbol)
-                          buf += d1
-                          val d2 = clone.clone
-                          d2.ccr.clearC
-                          d2.path.set(bool.not.symbol)
-                          buf += d2
-                      }
-                    }
-                }
-            }
-        }
+      case 0x7C => analyze7C(data, pc)
 
       case 0x7D =>
-        rom.getByte(pc + 2) match {
-          case 0x62 =>
-            //BCLR.B Reg,IndReg [7D][indreg0][62][reg0]
-            val reg = data.reg.getByte(rom.getByte(pc + 3) >> 4) & 0x07
-            data.pc.setPc(pc + 4)
-            data.reg.getByte(rom.getByte(pc + 1) >> 4) match {
-              case ind: IntSymbol =>
-                val mem = data.mem.getByte(ind.symbol)
-                val bclr = reg.bitclr(reg)
-                data.mem.setByte(bclr, ind.symbol)
-                buf += data
-              case ind: CtxSymbol =>
-                extract(0 to 0xFFFF, ind.extract(15, 0)).foreach { p =>
+
+      case 0x7E => analyze7E(data, pc)
+
+      case 0x7F =>
+
+    }
+    buf
+  }
+
+  private def analyze79(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
+    var buf = new ArrayBuffer[DataSet]
+    val op1 = rom.getByte(pc + 1)
+    op1 & 0xF0 match {
+      case 0x00 =>
+        //MOV.W Imm,Reg [79][0reg][imm][imm]
+        val imm = new IntSymbol(rom.getWord(pc + 2))
+        data.reg.setWord(imm, op1)
+        data.pc.setPc(pc + 4)
+        data.ccr.clearV
+        buf = checkZ(imm, ArrayBuffer(data))
+        buf = checkN(imm, buf, 16)
+
+      case 0x10 =>
+        //ADD.W Imm,Reg [79][1reg][imm][imm]
+        val imm = new IntSymbol(rom.getWord(pc + 2))
+        val reg = data.reg.getWord(op1)
+        val add = reg + imm
+        data.reg.setWord(add, op1)
+        data.pc.setPc(pc + 4)
+        buf = checkC(reg, imm, add, ArrayBuffer(data), 16)
+        buf = checkV(reg, imm, add, buf, 16)
+        buf = checkZ(reg, buf)
+        buf = checkN(reg, buf, 16)
+        buf = checkH(reg, imm, add, buf, 16)
+
+      case 0x20 =>
+        //CMP.W Imm,Reg [79][2reg][imm][imm]
+        val imm = new IntSymbol(rom.getWord(pc + 2))
+        val reg = data.reg.getWord(op1)
+        val cmp = reg - imm
+        data.pc.setPc(pc + 4)
+        buf = checkC(reg, imm.neg, cmp, ArrayBuffer(data), 16)
+        buf = checkV(reg, imm.neg, cmp, buf, 16)
+        buf = checkZ(cmp, buf)
+        buf = checkN(cmp, buf, 16)
+        buf = checkH(reg, imm.neg, cmp, buf, 16)
+
+      case 0x60 =>
+        //AND.W Imm,Reg [79][6reg][imm][imm]
+        val imm = rom.getWord(pc + 2)
+        val reg = data.reg.getWord(op1)
+        val and = reg & imm
+        data.reg.setWord(and, op1)
+        data.pc.setPc(pc + 4)
+        data.ccr.clearV
+        buf = checkZ(and, ArrayBuffer(data))
+        buf = checkN(and, buf, 8)
+    }
+    buf
+  }
+
+  private def analyze7A(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
+    var buf = new ArrayBuffer[DataSet]
+    val op1 = rom.getByte(pc + 1)
+    val imm = new IntSymbol(rom.getLong(pc + 2))
+    op1 & 0xF0 match {
+      case 0x00 =>
+        //MOV,L Imm,Reg [7A][0reg][imm][imm][imm][imm]
+        data.reg.setLong(imm, op1)
+        data.pc.setPc(pc + 6)
+        data.ccr.clearV
+        buf = checkZ(imm, ArrayBuffer(data))
+        buf = checkN(imm, buf, 32)
+
+      case 0x60 =>
+        //AND.L Imm,Reg [7A][6reg][imm][imm][imm][imm]
+        val reg = data.reg.getLong(op1)
+        val and = reg & imm
+        data.reg.setLong(and, op1)
+        data.pc.setPc(pc + 6)
+        data.ccr.clearV
+        buf = checkZ(and, ArrayBuffer(data))
+        buf = checkN(and, buf, 8)
+    }
+    buf
+  }
+
+  private def analyze7C(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
+    var buf = new ArrayBuffer[DataSet]
+    val op3 = rom.getByte(pc + 3)
+    val imm = (op3 >> 4) & 0x07
+    val ccr = data.ccr.ccr
+    data.pc.setPc(pc + 4)
+    rom.getByte(pc + 2) match {
+      case 0x74 =>
+        op3 & 0x80 match {
+          case 0x00 =>
+            //BOR.B Imm,IndReg [7C][indreg0][74][imm0]
+            data.reg.getLong(rom.getByte(pc + 1) >> 4) match {
+              case reg: IntSymbol =>
+                val mem = data.mem.getByte(reg.symbol) >> imm
+                (ccr, mem) match {
+                  case (c: IntSymbol, m: IntSymbol) =>
+                    val bool1 = (c & 0x01).eq(0x01)
+                    val bool2 = (m & 0x01).eq(0x01)
+                    if (bool1 | bool2) data.ccr.setC else data.ccr.clearC
+                    buf += data
+                  case _ =>
+                    val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                    val bool2 = (mem & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                    val bool = (bool1 || bool2).asInstanceOf[CtxSymbol]
+                    val d1 = data.clone
+                    d1.ccr.setC
+                    d1.path.set(bool.symbol)
+                    buf += d1
+                    val d2 = data.clone
+                    d2.ccr.clearC
+                    d2.path.set(bool.not.symbol)
+                    buf += d2
+                }
+              case reg: CtxSymbol =>
+                extract(0 to 0xFFFF, reg.extract(15, 0).symbol).foreach { p =>
                   val clone = data.clone
-                  val mem = clone.mem.getByte(p)
-                  clone.path.set(ind.extract(15, 0).eq(p).symbol)
-                  val bclr = reg.bitclr(reg)
-                  clone.mem.setByte(bclr, p)
-                  buf += clone
+                  val mem = clone.mem.getByte(p) >> imm
+                  clone.path.set(reg.extract(15, 0).eq(p).symbol)
+                  (ccr, mem) match {
+                    case (c: IntSymbol, m: IntSymbol) =>
+                      val bool1 = (c & 0x01).eq(0x01)
+                      val bool2 = (m & 0x01).eq(0x01)
+                      if (bool1 | bool2) clone.ccr.setC else clone.ccr.clearC
+                      buf += clone
+                    case _ =>
+                      val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                      val bool2 = (mem & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                      val bool = (bool1 || bool2).asInstanceOf[CtxSymbol]
+                      val d1 = clone.clone
+                      d1.ccr.setC
+                      d1.path.set(bool.symbol)
+                      buf += d1
+                      val d2 = clone.clone
+                      d2.ccr.clearC
+                      d2.path.set(bool.not.symbol)
+                      buf += d2
+                  }
                 }
             }
-
-          case 0x72 =>
-            //BCLR.B Imm,Indreg [7D][reg0][72][imm0]
-            val imm = rom.getByte(pc + 3) >> 4
-            val op1 = rom.getByte(pc + 1) >> 4
-            data.pc.setPc(pc + 4)
-            data.reg.getLong(op1) match {
+          case 0x80 =>
+            //BIOR.B Imm,IndReg [7C][indreg0][74][1imm0]
+            data.reg.getLong(rom.getByte(pc + 1) >> 4) match {
               case reg: IntSymbol =>
-                val mem = data.mem.getByte(reg.symbol)
-                val bclr = reg.bitclr(imm)
-                data.mem.setByte(bclr, reg.symbol)
-                buf += data
+                val mem = data.mem.getByte(reg.symbol) >> imm
+                (ccr, mem) match {
+                  case (c: IntSymbol, m: IntSymbol) =>
+                    val bool1 = (c & 0x01).eq(0x01)
+                    val bool2 = (m & 0x01).eq(0x00)
+                    if (bool1 | bool2) data.ccr.setC else data.ccr.clearC
+                    buf += data
+                  case _ =>
+                    val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                    val bool2 = (mem & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x00, 8))
+                    val bool = (bool1 || bool2).asInstanceOf[CtxSymbol]
+                    val d1 = data.clone
+                    d1.ccr.setC
+                    d1.path.set(bool.symbol)
+                    buf += d1
+                    val d2 = data.clone
+                    d2.ccr.clearC
+                    d2.path.set(bool.not.symbol)
+                    buf += d2
+                }
               case reg: CtxSymbol =>
-                extract(0 to 0xFFFF, reg.extract(15, 0)).foreach { p =>
+                extract(0 to 0xFFFF, reg.extract(15, 0).symbol).foreach { p =>
                   val clone = data.clone
-                  val mem = clone.mem.getByte(p)
+                  val mem = clone.mem.getByte(p) >> imm
                   clone.path.set(reg.extract(15, 0).eq(p).symbol)
-                  val bclr = reg.bitclr(imm)
-                  clone.mem.setByte(bclr, p)
-                  buf += clone
+                  (ccr, mem) match {
+                    case (c: IntSymbol, m: IntSymbol) =>
+                      val bool1 = (c & 0x01).eq(0x01)
+                      val bool2 = (m & 0x01).eq(0x00)
+                      if (bool1 | bool2) clone.ccr.setC else clone.ccr.clearC
+                      buf += clone
+                    case _ =>
+                      val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                      val bool2 = (mem & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x00, 8))
+                      val bool = (bool1 || bool2).asInstanceOf[CtxSymbol]
+                      val d1 = clone.clone
+                      d1.ccr.setC
+                      d1.path.set(bool.symbol)
+                      buf += d1
+                      val d2 = clone.clone
+                      d2.ccr.clearC
+                      d2.path.set(bool.not.symbol)
+                      buf += d2
+                  }
                 }
             }
         }
 
-      case 0x7E =>
-        rom.getByte(pc + 2) match {
-          case 0x76 =>
-            val op3 = rom.getByte(pc + 3)
-            val imm = (op3 >> 4) & 0x07
-            val mem = data.mem.getByte(rom.getByte(pc + 1)) >> imm
-            val ccr = data.ccr.ccr
-            op3 & 0x80 match {
-              case 0x00 =>
-                //BAND.B Imm,Abs [7E][abs][76][imm0]
+      case 0x75 =>
+        op3 & 0x80 match {
+          case 0x00 =>
+            //BXOR.B Imm,IndReg [7C][indreg0][75][imm0]
+            data.reg.getLong(rom.getByte(pc + 1) >> 4) match {
+              case reg: IntSymbol =>
+                val mem = data.mem.getByte(reg.symbol) >> imm
+                (ccr, mem) match {
+                  case (c: IntSymbol, m: IntSymbol) =>
+                    val bool1 = (c & 0x01).eq(0x01)
+                    val bool2 = (m & 0x01).eq(0x01)
+                    if (bool1 ^ bool2) data.ccr.setC else data.ccr.clearC
+                    buf += data
+                  case _ =>
+                    val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                    val bool2 = (mem & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                    val bool = (bool1 ^^ bool2).asInstanceOf[CtxSymbol]
+                    val d1 = data.clone
+                    d1.ccr.setC
+                    d1.path.set(bool.symbol)
+                    buf += d1
+                    val d2 = data.clone
+                    d2.ccr.clearC
+                    d2.path.set(bool.not.symbol)
+                    buf += d2
+                }
+              case reg: CtxSymbol =>
+                extract(0 to 0xFFFF, reg.extract(15, 0).symbol).foreach { p =>
+                  val clone = data.clone
+                  val mem = clone.mem.getByte(p) >> imm
+                  clone.path.set(reg.extract(15, 0).eq(p).symbol)
+                  (ccr, mem) match {
+                    case (c: IntSymbol, m: IntSymbol) =>
+                      val bool1 = (c & 0x01).eq(0x01)
+                      val bool2 = (m & 0x01).eq(0x01)
+                      if (bool1 ^ bool2) clone.ccr.setC else clone.ccr.clearC
+                      buf += clone
+                    case _ =>
+                      val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                      val bool2 = (mem & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                      val bool = (bool1 ^^ bool2).asInstanceOf[CtxSymbol]
+                      val d1 = clone.clone
+                      d1.ccr.setC
+                      d1.path.set(bool.symbol)
+                      buf += d1
+                      val d2 = clone.clone
+                      d2.ccr.clearC
+                      d2.path.set(bool.not.symbol)
+                      buf += d2
+                  }
+                }
+            }
+
+          case 0x80 =>
+            //BIXOR.B Imm,IndReg [7C][indreg0][75][1imm0]
+            data.reg.getLong(rom.getByte(pc + 1) >> 4) match {
+              case reg: IntSymbol =>
+                val mem = data.mem.getByte(reg.symbol) >> imm
+                (ccr, mem) match {
+                  case (c: IntSymbol, m: IntSymbol) =>
+                    val bool1 = (c & 0x01).eq(0x01)
+                    val bool2 = (m & 0x01).eq(0x00)
+                    if (bool1 ^ bool2) data.ccr.setC else data.ccr.clearC
+                    buf += data
+                  case _ =>
+                    val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                    val bool2 = (mem & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x00, 8))
+                    val bool = (bool1 ^^ bool2).asInstanceOf[CtxSymbol]
+                    val d1 = data.clone
+                    d1.ccr.setC
+                    d1.path.set(bool.symbol)
+                    buf += d1
+                    val d2 = data.clone
+                    d2.ccr.clearC
+                    d2.path.set(bool.not.symbol)
+                    buf += d2
+                }
+              case reg: CtxSymbol =>
+                extract(0 to 0xFFFF, reg.extract(15, 0).symbol).foreach { p =>
+                  val clone = data.clone
+                  val mem = clone.mem.getByte(p) >> imm
+                  clone.path.set(reg.extract(15, 0).eq(p).symbol)
+                  (ccr, mem) match {
+                    case (c: IntSymbol, m: IntSymbol) =>
+                      val bool1 = (c & 0x01).eq(0x01)
+                      val bool2 = (m & 0x01).eq(0x00)
+                      if (bool1 ^ bool2) clone.ccr.setC else clone.ccr.clearC
+                      buf += clone
+                    case _ =>
+                      val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                      val bool2 = (mem & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x00, 8))
+                      val bool = (bool1 ^^ bool2).asInstanceOf[CtxSymbol]
+                      val d1 = clone.clone
+                      d1.ccr.setC
+                      d1.path.set(bool.symbol)
+                      buf += d1
+                      val d2 = clone.clone
+                      d2.ccr.clearC
+                      d2.path.set(bool.not.symbol)
+                      buf += d2
+                  }
+                }
+            }
+        }
+
+      case 0x76 =>
+        op3 & 0x80 match {
+          case 0x00 =>
+            //BAND.B Imm,IndReg [7C][indreg0][76][imm0]
+            data.reg.getLong(rom.getByte(pc + 1) >> 4) match {
+              case reg: IntSymbol =>
+                val mem = data.mem.getByte(reg.symbol) >> imm
                 (ccr, mem) match {
                   case (c: IntSymbol, m: IntSymbol) =>
                     val bool1 = (c & 0x01).eq(0x01)
@@ -1134,9 +1282,38 @@ class Decoder {
                     d2.path.set(bool.not.symbol)
                     buf += d2
                 }
+              case reg: CtxSymbol =>
+                extract(0 to 0xFFFF, reg.extract(15, 0).symbol).foreach { p =>
+                  val clone = data.clone
+                  val mem = clone.mem.getByte(p) >> imm
+                  clone.path.set(reg.extract(15, 0).eq(p).symbol)
+                  (ccr, mem) match {
+                    case (c: IntSymbol, m: IntSymbol) =>
+                      val bool1 = (c & 0x01).eq(0x01)
+                      val bool2 = (m & 0x01).eq(0x01)
+                      if (bool1 & bool2) clone.ccr.setC else clone.ccr.clearC
+                      buf += clone
+                    case _ =>
+                      val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                      val bool2 = (mem & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                      val bool = (bool1 && bool2).asInstanceOf[CtxSymbol]
+                      val d1 = clone.clone
+                      d1.ccr.setC
+                      d1.path.set(bool.symbol)
+                      buf += d1
+                      val d2 = clone.clone
+                      d2.ccr.clearC
+                      d2.path.set(bool.not.symbol)
+                      buf += d2
+                  }
+                }
+            }
 
-              case 0x80 =>
-                //BIAND.B Imm,Abs [7E][abs][76][1imm0]
+          case 0x80 =>
+            //BIAND.B Imm,IndReg [7C][indreg0][76][1imm0]
+            data.reg.getLong(rom.getByte(pc + 1) >> 4) match {
+              case reg: IntSymbol =>
+                val mem = data.mem.getByte(reg.symbol) >> imm
                 (ccr, mem) match {
                   case (c: IntSymbol, m: IntSymbol) =>
                     val bool1 = (c & 0x01).eq(0x01)
@@ -1156,85 +1333,540 @@ class Decoder {
                     d2.path.set(bool.not.symbol)
                     buf += d2
                 }
-            }
-
-          case 0x77 =>
-            val op3 = rom.getByte(pc + 3)
-            val imm = (op3 >> 4) & 0x07
-            op3 & 0x80 match {
-              case 0x00 =>
-                //BLD.B Imm,Abs [7E][abs][77][imm0]
-                data.mem.getByte(rom.getByte(pc + 1)) >> imm match {
-                  case mem: IntSymbol =>
-                    if ((mem & 0x01).eq(0x01)) data.ccr.setC else data.ccr.clearC
-                    buf += data
-                  case mem: CtxSymbol =>
-                    val bool = (mem & 0x01).eq(0x01)
-                    val d1 = data.clone
-                    d1.ccr.setC
-                    d1.path.set(bool.symbol)
-                    buf += d1
-                    val d2 = data.clone
-                    d2.ccr.clearC
-                    d2.path.set(bool.not.symbol)
-                    buf += d2
-                }
-              case 0x80 =>
-                //BILD.B Imm,Abs [7E][abs][77][1imm0]
-                data.mem.getByte(rom.getByte(pc + 1)) >> imm match {
-                  case mem: IntSymbol =>
-                    if ((mem & 0x01).eq(0x00)) data.ccr.setC else data.ccr.clearC
-                    buf += data
-                  case mem: CtxSymbol =>
-                    val bool = (mem & 0x01).eq(0x00)
-                    val d1 = data.clone
-                    d1.ccr.setC
-                    d1.path.set(bool.symbol)
-                    buf += d1
-                    val d2 = data.clone
-                    d2.ccr.clearC
-                    d2.path.set(bool.not.symbol)
-                    buf += d2
+              case reg: CtxSymbol =>
+                extract(0 to 0xFFFF, reg.extract(15, 0).symbol).foreach { p =>
+                  val clone = data.clone
+                  val mem = clone.mem.getByte(p) >> imm
+                  clone.path.set(reg.extract(15, 0).eq(p).symbol)
+                  (ccr, mem) match {
+                    case (c: IntSymbol, m: IntSymbol) =>
+                      val bool1 = (c & 0x01).eq(0x01)
+                      val bool2 = (m & 0x01).eq(0x00)
+                      if (bool1 & bool2) clone.ccr.setC else clone.ccr.clearC
+                      buf += clone
+                    case _ =>
+                      val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                      val bool2 = (mem & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x00, 8))
+                      val bool = (bool1 && bool2).asInstanceOf[CtxSymbol]
+                      val d1 = clone.clone
+                      d1.ccr.setC
+                      d1.path.set(bool.symbol)
+                      buf += d1
+                      val d2 = clone.clone
+                      d2.ccr.clearC
+                      d2.path.set(bool.not.symbol)
+                      buf += d2
+                  }
                 }
             }
-
         }
 
-      case 0x7F =>
-        rom.getByte(pc + 2) match {
-          case 0x62 =>
-            //BCLR.B Reg,Abs [7F][abs][62][reg0]
-            val abs = rom.getByte(pc + 1)
-            val reg = data.reg.getByte(rom.getByte(pc + 3) >> 4) & 0x07
-            val bclr = data.mem.getByte(abs).bitclr(reg)
-            data.mem.setByte(bclr, abs)
-            data.pc.setPc(pc + 4)
-            buf += data
+      case 0x77 =>
+        op3 & 0x80 match {
+          case 0x00 =>
+            //BLD.B Imm,IndReg [7C][indreg0][77][imm0]
+            data.reg.getLong(rom.getByte(pc + 1) >> 4) match {
+              case ind: IntSymbol =>
+                data.mem.getByte(ind.symbol) >> imm match {
+                  case m: IntSymbol =>
+                    if ((m & 0x01).eq(0x01)) data.ccr.setC else data.ccr.clearC
+                    buf += data
+                  case m: CtxSymbol =>
+                    val bool = (m & 0x01).eq(0x01)
+                    val d1 = data.clone
+                    d1.ccr.setC
+                    d1.path.set(bool.symbol)
+                    buf += d1
+                    val d2 = data.clone
+                    d2.ccr.clearC
+                    d2.path.set(bool.not.symbol)
+                    buf += d2
+                }
+              case ind: CtxSymbol =>
+                extract(0 to 0xFFFF, ind.extract(15, 0)).foreach { p =>
+                  val clone = data.clone
+                  clone.path.set(ind.extract(15, 0).eq(p).symbol)
+                  clone.mem.getByte(p) >> imm match {
+                    case m: IntSymbol =>
+                      if ((m & 0x01).eq(0x01)) clone.ccr.setC else clone.ccr.clearC
+                      buf += clone
+                    case m: CtxSymbol =>
+                      val bool = (m & 0x01).eq(0x01)
+                      val d1 = clone.clone
+                      d1.ccr.setC
+                      d1.path.set(bool.symbol)
+                      buf += d1
+                      val d2 = clone.clone
+                      d2.ccr.clearC
+                      d2.path.set(bool.not.symbol)
+                      buf += d2
+                  }
+                }
+            }
 
-          case 0x70 =>
-            //BSET.B Imm,Abs [7F][abs][70][Imm0]
-            val abs = rom.getByte(pc + 1)
-            val imm = rom.getByte(pc + 3) >> 4
-            val bset = data.mem.getByte(abs).bitset(imm)
-            data.mem.setByte(bset, abs)
-            data.pc.setPc(pc + 4)
-            buf += data
-
-          case 0x72 =>
-            //BSET.B Imm,Abs [7F][abs][72][Imm0]
-            val abs = rom.getByte(pc + 1)
-            val imm = rom.getByte(pc + 3) >> 4
-            val bclr = data.mem.getByte(abs).bitclr(imm)
-            data.mem.setByte(bclr, abs)
-            data.pc.setPc(pc + 4)
-            buf += data
+          case 0x80 =>
+            //BILD.B Imm,IndReg [7C][indreg0][77][1imm0]
+            data.reg.getLong(rom.getByte(pc + 1) >> 4) match {
+              case ind: IntSymbol =>
+                data.mem.getByte(ind.symbol) >> imm match {
+                  case m: IntSymbol =>
+                    if ((m & 0x01).eq(0x00)) data.ccr.setC else data.ccr.clearC
+                    buf += data
+                  case m: CtxSymbol =>
+                    val bool = (m & 0x01).eq(0x00)
+                    val d1 = data.clone
+                    d1.ccr.setC
+                    d1.path.set(bool.symbol)
+                    buf += d1
+                    val d2 = data.clone
+                    d2.ccr.clearC
+                    d2.path.set(bool.not.symbol)
+                    buf += d2
+                }
+              case ind: CtxSymbol =>
+                extract(0 to 0xFFFF, ind.extract(15, 0)).foreach { p =>
+                  val clone = data.clone
+                  clone.path.set(ind.extract(15, 0).eq(p).symbol)
+                  clone.mem.getByte(p) >> imm match {
+                    case m: IntSymbol =>
+                      if ((m & 0x01).eq(0x00)) clone.ccr.setC else clone.ccr.clearC
+                      buf += clone
+                    case m: CtxSymbol =>
+                      val bool = (m & 0x01).eq(0x00)
+                      val d1 = clone.clone
+                      d1.ccr.setC
+                      d1.path.set(bool.symbol)
+                      buf += d1
+                      val d2 = clone.clone
+                      d2.ccr.clearC
+                      d2.path.set(bool.not.symbol)
+                      buf += d2
+                  }
+                }
+            }
         }
     }
     buf
   }
 
+  private def analyze7D(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
+    val buf = new ArrayBuffer[DataSet]
+    rom.getByte(pc + 2) match {
+      case 0x62 =>
+        //BCLR.B Reg,IndReg [7D][indreg0][62][reg0]
+        val reg = data.reg.getByte(rom.getByte(pc + 3) >> 4) & 0x07
+        data.pc.setPc(pc + 4)
+        data.reg.getByte(rom.getByte(pc + 1) >> 4) match {
+          case ind: IntSymbol =>
+            val mem = data.mem.getByte(ind.symbol)
+            val bclr = reg.bitclr(reg)
+            data.mem.setByte(bclr, ind.symbol)
+            buf += data
+          case ind: CtxSymbol =>
+            extract(0 to 0xFFFF, ind.extract(15, 0)).foreach { p =>
+              val clone = data.clone
+              val mem = clone.mem.getByte(p)
+              clone.path.set(ind.extract(15, 0).eq(p).symbol)
+              val bclr = reg.bitclr(reg)
+              clone.mem.setByte(bclr, p)
+              buf += clone
+            }
+        }
 
-  def extract(range: Range, ast: Z3AST): ArrayBuffer[Int] = {
+      case 0x67 =>
+        val op3 = rom.getByte(pc + 3)
+        val imm = (op3 >> 4) & 0x07
+        val ccr = data.ccr.ccr
+        op3 & 0x80 match {
+          case 0x00 =>
+            //BST.B Imm,Indreg [7D][reg0][67][imm0]
+            data.reg.getByte(rom.getByte(pc + 1) >> 4) match {
+              case reg: IntSymbol =>
+                val mem = data.mem.getByte(reg.symbol)
+                (ccr, mem) match {
+                  case (c: IntSymbol, m: IntSymbol) =>
+                    val bst = if ((c & 0x01).eq(0x01)) m | (1 << imm) else m & (~(1 << imm))
+                    data.mem.setByte(bst, reg.symbol)
+                    buf += data
+                  case _ =>
+                    val bool = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8)).asInstanceOf[CtxSymbol]
+                    val d1 = data.clone
+                    d1.mem.setByte(mem | (1 << imm), reg.symbol)
+                    d1.path.set(bool.symbol)
+                    buf += d1
+                    val d2 = data.clone
+                    d2.mem.setByte(mem & (~(1 << imm)), reg.symbol)
+                    d2.path.set(bool.not.symbol)
+                    buf += d2
+                }
+              case reg: CtxSymbol =>
+                extract(0 to 0xFFFF, reg.extract(15, 0)).foreach { p =>
+                  val clone = data.clone
+                  clone.path.set(reg.extract(15, 0).eq(p).symbol)
+                  val mem = clone.mem.getByte(p)
+                  (ccr, mem) match {
+                    case (c: IntSymbol, m: IntSymbol) =>
+                      val bst = if ((c & 0x01).eq(0x01)) m | (1 << imm) else m & (~(1 << imm))
+                      clone.mem.setByte(bst, p)
+                      buf += clone
+                    case _ =>
+                      val bool = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8)).asInstanceOf[CtxSymbol]
+                      val d1 = clone.clone
+                      d1.mem.setByte(mem | (1 << imm), p)
+                      d1.path.set(bool.symbol)
+                      buf += d1
+                      val d2 = clone.clone
+                      d2.mem.setByte(mem & (~(1 << imm)), p)
+                      d2.path.set(bool.not.symbol)
+                      buf += d2
+                  }
+                }
+            }
+          case 0x80 =>
+            //BIST.B Imm,Indreg [7D][reg0][67][1imm0]]
+            data.reg.getByte(rom.getByte(pc + 1) >> 4) match {
+              case reg: IntSymbol =>
+                val mem = data.mem.getByte(reg.symbol)
+                (ccr, mem) match {
+                  case (c: IntSymbol, m: IntSymbol) =>
+                    val bst = if ((c & 0x01).eq(0x00)) m | (1 << imm) else m & (~(1 << imm))
+                    data.mem.setByte(bst, reg.symbol)
+                    buf += data
+                  case _ =>
+                    val bool = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x00, 8)).asInstanceOf[CtxSymbol]
+                    val d1 = data.clone
+                    d1.mem.setByte(mem | (1 << imm), reg.symbol)
+                    d1.path.set(bool.symbol)
+                    buf += d1
+                    val d2 = data.clone
+                    d2.mem.setByte(mem & (~(1 << imm)), reg.symbol)
+                    d2.path.set(bool.not.symbol)
+                    buf += d2
+                }
+              case reg: CtxSymbol =>
+                extract(0 to 0xFFFF, reg.extract(15, 0)).foreach { p =>
+                  val clone = data.clone
+                  clone.path.set(reg.extract(15, 0).eq(p).symbol)
+                  val mem = clone.mem.getByte(p)
+                  (ccr, mem) match {
+                    case (c: IntSymbol, m: IntSymbol) =>
+                      val bst = if ((c & 0x01).eq(0x00)) m | (1 << imm) else m & (~(1 << imm))
+                      clone.mem.setByte(bst, p)
+                      buf += clone
+                    case _ =>
+                      val bool = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x00, 8)).asInstanceOf[CtxSymbol]
+                      val d1 = clone.clone
+                      d1.mem.setByte(mem | (1 << imm), p)
+                      d1.path.set(bool.symbol)
+                      buf += d1
+                      val d2 = clone.clone
+                      d2.mem.setByte(mem & (~(1 << imm)), p)
+                      d2.path.set(bool.not.symbol)
+                      buf += d2
+                  }
+                }
+            }
+        }
+
+      case 0x72 =>
+        //BCLR.B Imm,Indreg [7D][reg0][72][imm0]
+        val imm = rom.getByte(pc + 3) >> 4
+        val op1 = rom.getByte(pc + 1) >> 4
+        data.pc.setPc(pc + 4)
+        data.reg.getLong(op1) match {
+          case reg: IntSymbol =>
+            val mem = data.mem.getByte(reg.symbol)
+            val bclr = reg.bitclr(imm)
+            data.mem.setByte(bclr, reg.symbol)
+            buf += data
+          case reg: CtxSymbol =>
+            extract(0 to 0xFFFF, reg.extract(15, 0)).foreach { p =>
+              val clone = data.clone
+              val mem = clone.mem.getByte(p)
+              clone.path.set(reg.extract(15, 0).eq(p).symbol)
+              val bclr = reg.bitclr(imm)
+              clone.mem.setByte(bclr, p)
+              buf += clone
+            }
+        }
+    }
+    buf
+  }
+
+  private def analyze7E(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
+    var buf = new ArrayBuffer[DataSet]
+    val op3 = rom.getByte(pc + 3)
+    val imm = (op3 >> 4) & 0x07
+    rom.getByte(pc + 2) match {
+      case 0x74 =>
+        val mem = data.mem.getByte(rom.getByte(pc + 1)) >> imm
+        val ccr = data.ccr.ccr
+        op3 & 0x80 match {
+          case 0x00 =>
+            //BOR.B Imm,Abs [7E][abs][74][imm0]
+            (ccr, mem) match {
+              case (c: IntSymbol, m: IntSymbol) =>
+                val bool1 = (c & 0x01).eq(0x01)
+                val bool2 = (m & 0x01).eq(0x01)
+                if (bool1 | bool2) data.ccr.setC else data.ccr.clearC
+                buf += data
+              case _ =>
+                val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                val bool2 = (mem & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                val bool = (bool1 || bool2).asInstanceOf[CtxSymbol]
+                val d1 = data.clone
+                d1.ccr.setC
+                d1.path.set(bool.symbol)
+                buf += d1
+                val d2 = data.clone
+                d2.ccr.clearC
+                d2.path.set(bool.not.symbol)
+                buf += d2
+            }
+
+          case 0x80 =>
+            //BIOR.B Imm,Abs [7E][abs][74][1imm0]
+            (ccr, mem) match {
+              case (c: IntSymbol, m: IntSymbol) =>
+                val bool1 = (c & 0x01).eq(0x01)
+                val bool2 = (m & 0x01).eq(0x00)
+                if (bool1 | bool2) data.ccr.setC else data.ccr.clearC
+                buf += data
+              case _ =>
+                val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                val bool2 = (mem & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x00, 8))
+                val bool = (bool1 || bool2).asInstanceOf[CtxSymbol]
+                val d1 = data.clone
+                d1.ccr.setC
+                d1.path.set(bool.symbol)
+                buf += d1
+                val d2 = data.clone
+                d2.ccr.clearC
+                d2.path.set(bool.not.symbol)
+                buf += d2
+            }
+        }
+
+      case 0x75 =>
+        val mem = data.mem.getByte(rom.getByte(pc + 1)) >> imm
+        val ccr = data.ccr.ccr
+        op3 & 0x80 match {
+          case 0x00 =>
+            //BXOR.B Imm,Abs [7E][abs][75][imm0]
+            (ccr, mem) match {
+              case (c: IntSymbol, m: IntSymbol) =>
+                val bool1 = (c & 0x01).eq(0x01)
+                val bool2 = (m & 0x01).eq(0x01)
+                if (bool1 ^ bool2) data.ccr.setC else data.ccr.clearC
+                buf += data
+              case _ =>
+                val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                val bool2 = (mem & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                val bool = (bool1 ^^ bool2).asInstanceOf[CtxSymbol]
+                val d1 = data.clone
+                d1.ccr.setC
+                d1.path.set(bool.symbol)
+                buf += d1
+                val d2 = data.clone
+                d2.ccr.clearC
+                d2.path.set(bool.not.symbol)
+                buf += d2
+            }
+
+          case 0x80 =>
+            //BIXOR.B Imm,Abs [7E][abs][75][1imm0]
+            (ccr, mem) match {
+              case (c: IntSymbol, m: IntSymbol) =>
+                val bool1 = (c & 0x01).eq(0x01)
+                val bool2 = (m & 0x01).eq(0x00)
+                if (bool1 ^ bool2) data.ccr.setC else data.ccr.clearC
+                buf += data
+              case _ =>
+                val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                val bool2 = (mem & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x00, 8))
+                val bool = (bool1 ^^ bool2).asInstanceOf[CtxSymbol]
+                val d1 = data.clone
+                d1.ccr.setC
+                d1.path.set(bool.symbol)
+                buf += d1
+                val d2 = data.clone
+                d2.ccr.clearC
+                d2.path.set(bool.not.symbol)
+                buf += d2
+            }
+        }
+
+      case 0x76 =>
+        val mem = data.mem.getByte(rom.getByte(pc + 1)) >> imm
+        val ccr = data.ccr.ccr
+        op3 & 0x80 match {
+          case 0x00 =>
+            //BAND.B Imm,Abs [7E][abs][76][imm0]
+            (ccr, mem) match {
+              case (c: IntSymbol, m: IntSymbol) =>
+                val bool1 = (c & 0x01).eq(0x01)
+                val bool2 = (m & 0x01).eq(0x01)
+                if (bool1 & bool2) data.ccr.setC else data.ccr.clearC
+                buf += data
+              case _ =>
+                val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                val bool2 = (mem & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                val bool = (bool1 && bool2).asInstanceOf[CtxSymbol]
+                val d1 = data.clone
+                d1.ccr.setC
+                d1.path.set(bool.symbol)
+                buf += d1
+                val d2 = data.clone
+                d2.ccr.clearC
+                d2.path.set(bool.not.symbol)
+                buf += d2
+            }
+
+          case 0x80 =>
+            //BIAND.B Imm,Abs [7E][abs][76][1imm0]
+            (ccr, mem) match {
+              case (c: IntSymbol, m: IntSymbol) =>
+                val bool1 = (c & 0x01).eq(0x01)
+                val bool2 = (m & 0x01).eq(0x00)
+                if (bool1 & bool2) data.ccr.setC else data.ccr.clearC
+                buf += data
+              case _ =>
+                val bool1 = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8))
+                val bool2 = (mem & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x00, 8))
+                val bool = (bool1 && bool2).asInstanceOf[CtxSymbol]
+                val d1 = data.clone
+                d1.ccr.setC
+                d1.path.set(bool.symbol)
+                buf += d1
+                val d2 = data.clone
+                d2.ccr.clearC
+                d2.path.set(bool.not.symbol)
+                buf += d2
+            }
+        }
+
+      case 0x77 =>
+        op3 & 0x80 match {
+          case 0x00 =>
+            //BLD.B Imm,Abs [7E][abs][77][imm0]
+            data.mem.getByte(rom.getByte(pc + 1)) >> imm match {
+              case mem: IntSymbol =>
+                if ((mem & 0x01).eq(0x01)) data.ccr.setC else data.ccr.clearC
+                buf += data
+              case mem: CtxSymbol =>
+                val bool = (mem & 0x01).eq(0x01)
+                val d1 = data.clone
+                d1.ccr.setC
+                d1.path.set(bool.symbol)
+                buf += d1
+                val d2 = data.clone
+                d2.ccr.clearC
+                d2.path.set(bool.not.symbol)
+                buf += d2
+            }
+
+          case 0x80 =>
+            //BILD.B Imm,Abs [7E][abs][77][1imm0]
+            data.mem.getByte(rom.getByte(pc + 1)) >> imm match {
+              case mem: IntSymbol =>
+                if ((mem & 0x01).eq(0x00)) data.ccr.setC else data.ccr.clearC
+                buf += data
+              case mem: CtxSymbol =>
+                val bool = (mem & 0x01).eq(0x00)
+                val d1 = data.clone
+                d1.ccr.setC
+                d1.path.set(bool.symbol)
+                buf += d1
+                val d2 = data.clone
+                d2.ccr.clearC
+                d2.path.set(bool.not.symbol)
+                buf += d2
+            }
+        }
+    }
+    buf
+  }
+
+  private def analyze7F(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
+    var buf = new ArrayBuffer[DataSet]
+    rom.getByte(pc + 2) match {
+      case 0x62 =>
+        //BCLR.B Reg,Abs [7F][abs][62][reg0]
+        val abs = rom.getByte(pc + 1) | 0xFFFFFF00
+        val reg = data.reg.getByte(rom.getByte(pc + 3) >> 4) & 0x07
+        val bclr = data.mem.getByte(abs).bitclr(reg)
+        data.mem.setByte(bclr, abs)
+        data.pc.setPc(pc + 4)
+        buf += data
+
+      case 0x67 =>
+        val op3 = rom.getByte(pc + 3)
+        val abs = rom.getByte(pc + 1) | 0xFFFFFF00
+        val imm = (op3 >> 4) & 0x07
+        val mem = data.mem.getByte(abs)
+        val ccr = data.ccr.ccr
+        op3 & 0x80 match {
+          case 0x00 =>
+            //BST.B Imm,Abs [7F][abs][67][Imm0]
+            (ccr, mem) match {
+              case (c: IntSymbol, m: IntSymbol) =>
+                val bst = if ((c & 0x01).eq(0x01)) m | (1 << imm) else m & (~(1 << imm))
+                data.mem.setByte(bst, abs)
+                buf += data
+              case _ =>
+                val bool = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x01, 8)).asInstanceOf[CtxSymbol]
+                val d1 = data.clone
+                d1.mem.setByte(mem | (1 << imm), abs)
+                d1.path.set(bool.symbol)
+                buf += d1
+                val d2 = data.clone
+                d2.mem.setByte(mem & (~(1 << imm)), abs)
+                d2.path.set(bool.not.symbol)
+                buf += d2
+            }
+
+          case 0x80 =>
+            //BIST.B Imm,Abs [7F][abs][67][1Imm0]
+            (ccr, mem) match {
+              case (c: IntSymbol, m: IntSymbol) =>
+                val bst = if ((c & 0x01).eq(0x00)) m | (1 << imm) else m & (~(1 << imm))
+                data.mem.setByte(bst, abs)
+                buf += data
+              case _ =>
+                val bool = (ccr & new CtxSymbol(ctx, 0x01, 8)).eq(new CtxSymbol(ctx, 0x00, 8)).asInstanceOf[CtxSymbol]
+                val d1 = data.clone
+                d1.mem.setByte(mem | (1 << imm), abs)
+                d1.path.set(bool.symbol)
+                buf += d1
+                val d2 = data.clone
+                d2.mem.setByte(mem & (~(1 << imm)), abs)
+                d2.path.set(bool.not.symbol)
+                buf += d2
+            }
+        }
+
+      case 0x70 =>
+        //BSET.B Imm,Abs [7F][abs][70][Imm0]
+        val abs = rom.getByte(pc + 1) | 0xFFFFFF00
+        val imm = rom.getByte(pc + 3) >> 4
+        val bset = data.mem.getByte(abs).bitset(imm)
+        data.mem.setByte(bset, abs)
+        data.pc.setPc(pc + 4)
+        buf += data
+
+      case 0x72 =>
+        //BSET.B Imm,Abs [7F][abs][72][Imm0]
+        val abs = rom.getByte(pc + 1) | 0xFFFFFF00
+        val imm = rom.getByte(pc + 3) >> 4
+        val bclr = data.mem.getByte(abs).bitclr(imm)
+        data.mem.setByte(bclr, abs)
+        data.pc.setPc(pc + 4)
+        buf += data
+    }
+    buf
+  }
+
+  private def extract(range: Range, ast: Z3AST): ArrayBuffer[Int] = {
     val s = ctx.mkSolver
     val buf = new ArrayBuffer[Int]
     range.foreach { n =>
