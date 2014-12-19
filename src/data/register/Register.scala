@@ -10,10 +10,10 @@ import scala.collection.mutable.ArrayBuffer
 /**
  * Created by rkonoshita on 14/11/12.
  */
-class Register(c: Z3Context, r: mutable.HashMap[Int, MySymbol]) {
+class Register(r: mutable.HashMap[Int, MySymbol]) {
 
   val reg = r
-  private val ctx = c
+  private val ctx = Main.ctx
   private val limit = 0x07
 
   private def check(num: Int): Unit = if (!reg.contains(num & limit)) reg += (num & limit) -> new CtxSymbol(Main.makeRegisterSymbol) //指定レジスタに初期値がなければ作る
@@ -98,9 +98,9 @@ class Register(c: Z3Context, r: mutable.HashMap[Int, MySymbol]) {
     reg(num & limit) =
       (data, reg(num & limit)) match {
         case (d: IntSymbol, r: IntSymbol) => (r & 0xFFFF00FF) | ((d & 0x000000FF) << 8)
-        case (d: IntSymbol, r: CtxSymbol) => r.extract(31, 16).concat(new CtxSymbol(ctx, d.symbol, 8)).concat(r.extract(7, 0))
+        case (d: IntSymbol, r: CtxSymbol) => r.extract(31, 16).concat(new CtxSymbol(d.symbol, 8)).concat(r.extract(7, 0))
         case (d: CtxSymbol, r: IntSymbol) =>
-          val rn = new CtxSymbol(ctx, r.symbol, 32)
+          val rn = new CtxSymbol(r.symbol, 32)
           rn.extract(31, 16).concat(d).concat(rn.extract(7, 0))
         case (d: CtxSymbol, r: CtxSymbol) => r.extract(31, 16).concat(d).concat(r.extract(7, 0))
       }
@@ -110,8 +110,8 @@ class Register(c: Z3Context, r: mutable.HashMap[Int, MySymbol]) {
     reg(num & limit) =
       (data, reg(num & limit)) match {
         case (d: IntSymbol, r: IntSymbol) => (r & 0xFFFF00FF) | (d & 0x000000FF)
-        case (d: IntSymbol, r: CtxSymbol) => r.extract(31, 8).concat(new CtxSymbol(ctx, d.symbol, 8))
-        case (d: CtxSymbol, r: IntSymbol) => new CtxSymbol(ctx, r.symbol, 32).extract(31, 8).concat(d)
+        case (d: IntSymbol, r: CtxSymbol) => r.extract(31, 8).concat(new CtxSymbol(d.symbol, 8))
+        case (d: CtxSymbol, r: IntSymbol) => new CtxSymbol(r.symbol, 32).extract(31, 8).concat(d)
         case (d: CtxSymbol, r: CtxSymbol) => r.extract(31, 8).concat(d)
       }
 
@@ -125,8 +125,8 @@ class Register(c: Z3Context, r: mutable.HashMap[Int, MySymbol]) {
     reg(num & limit) =
       (data, reg(num & limit)) match {
         case (d: IntSymbol, r: IntSymbol) => ((d & 0x0000FFFF) << 16) | (r & 0x0000FFFF)
-        case (d: IntSymbol, r: CtxSymbol) => new CtxSymbol(ctx, d.symbol, 16).concat(r.extract(15, 0))
-        case (d: CtxSymbol, r: IntSymbol) => d.concat(new CtxSymbol(ctx, r.symbol, 32).extract(15, 0))
+        case (d: IntSymbol, r: CtxSymbol) => new CtxSymbol(d.symbol, 16).concat(r.extract(15, 0))
+        case (d: CtxSymbol, r: IntSymbol) => d.concat(new CtxSymbol(r.symbol, 32).extract(15, 0))
         case (d: CtxSymbol, r: CtxSymbol) => d.concat(r.extract(15, 0))
       }
 
@@ -134,8 +134,8 @@ class Register(c: Z3Context, r: mutable.HashMap[Int, MySymbol]) {
     reg(num & limit) =
       (data, reg(num & limit)) match {
         case (d: IntSymbol, r: IntSymbol) => ((r & 0xFFFF0000) << 16) | (d & 0x0000FFFF)
-        case (d: IntSymbol, r: CtxSymbol) => r.extract(31, 16).concat(new CtxSymbol(ctx, d.symbol, 16))
-        case (d: CtxSymbol, r: IntSymbol) => new CtxSymbol(ctx, r.symbol, 32).extract(31, 16).concat(d)
+        case (d: IntSymbol, r: CtxSymbol) => r.extract(31, 16).concat(new CtxSymbol(d.symbol, 16))
+        case (d: CtxSymbol, r: IntSymbol) => new CtxSymbol(r.symbol, 32).extract(31, 16).concat(d)
         case (d: CtxSymbol, r: CtxSymbol) => r.extract(31, 16).concat(d)
       }
 

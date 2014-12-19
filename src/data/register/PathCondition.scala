@@ -1,5 +1,6 @@
 package data.register
 
+import main.Main
 import z3.scala.{Z3AST, Z3Context}
 
 /**
@@ -7,14 +8,13 @@ import z3.scala.{Z3AST, Z3Context}
  */
 
 //分岐がある場合は、ここに条件を追加していく
-class PathCondition(c: Z3Context, p: Z3AST) {
+class PathCondition(p: Z3AST) {
 
   var path = p
-  private final val ctx = c
+  private val ctx = Main.ctx
 
   def set(p: Z3AST): Unit =
     if (path == null) path = p
     else path = ctx.mkAnd(path, p)
 
-  def this(c: Z3Context) = this(c, null)
 }

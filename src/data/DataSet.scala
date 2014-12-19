@@ -24,11 +24,11 @@ class DataSet(r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, p
     val newmem = new mutable.HashMap[Int, MySymbol]
     mem.mem.foreach(key => newmem += key._1 -> key._2)
     new DataSet(
-      new Register(Main.ctx, newreg),
-      new Memory(Main.ctx, newmem),
+      new Register(newreg),
+      new Memory(newmem),
       new ProgramCounter(pc.pc),
-      new ConditionRegister(Main.ctx, ccr.ccr),
-      new PathCondition(Main.ctx, path.path))
+      new ConditionRegister(ccr.ccr),
+      new PathCondition(path.path))
   }
 
   def this(s: State) = this(s.reg, s.mem, s.pc, s.ccr, s.path)

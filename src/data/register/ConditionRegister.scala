@@ -8,10 +8,9 @@ import scala.collection.mutable.ArrayBuffer
 /**
  * Created by ryosuke on 14/11/18.
  */
-class ConditionRegister(ct: Z3Context, c: MySymbol) {
+class ConditionRegister(c: MySymbol) {
 
   var ccr = c
-  private val ctx = ct
 
   def clearC = ccr = ccr & 0xFE
 

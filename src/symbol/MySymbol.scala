@@ -1,5 +1,6 @@
 package symbol
 
+import main.Main
 import z3.scala.{Z3Context, Z3AST}
 
 /**
@@ -18,6 +19,26 @@ trait MySymbol {
   def -(s: MySymbol): MySymbol
 
   def -(s: Int): MySymbol
+
+  def *(s: MySymbol): MySymbol
+
+  def *(s: Int): MySymbol
+
+  def sdiv(s: MySymbol): MySymbol
+
+  def sdiv(s: Int): MySymbol
+
+  def udiv(s: MySymbol): MySymbol
+
+  def udiv(s: Int): MySymbol
+
+  def smod(s: MySymbol): MySymbol
+
+  def smod(s: Int): MySymbol
+
+  def urem(s: MySymbol): MySymbol
+
+  def urem(s: Int): MySymbol
 
   def |(s: MySymbol): MySymbol
 
@@ -69,43 +90,93 @@ class CtxSymbol(ast: Z3AST) extends MySymbol {
   val symbol = ast
   val ctx = ast.context
 
-  def this(ctx: Z3Context, ast: Int, size: Int) = this(ctx.mkInt(ast, ctx.mkBVSort(size)))
+  def this(ast: Int, size: Int) = this(Main.ctx.mkInt(ast, Main.ctx.mkBVSort(size)))
 
-  def +(s: MySymbol): CtxSymbol =
-    if (s.isInstanceOf[IntSymbol]) this.+(s.asInstanceOf[IntSymbol].symbol)
-    else this.+(s.asInstanceOf[CtxSymbol].symbol)
+  def +(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => this.+(sym.symbol)
+    case sym: CtxSymbol => this.+(sym.symbol)
+  }
 
   def +(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVAdd(symbol, s))
 
   def +(s: Int): CtxSymbol = this.+(ctx.mkInt(s, symbol.getSort))
 
-  def -(s: MySymbol): CtxSymbol =
-    if (s.isInstanceOf[IntSymbol]) this.-(s.asInstanceOf[IntSymbol].symbol)
-    else this.-(s.asInstanceOf[CtxSymbol].symbol)
+  def -(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => this.-(sym.symbol)
+    case sym: CtxSymbol => this.-(sym.symbol)
+  }
 
   def -(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSub(symbol, s))
 
   def -(s: Int): CtxSymbol = this.-(ctx.mkInt(s, symbol.getSort))
 
-  def &(s: MySymbol): CtxSymbol =
-    if (s.isInstanceOf[IntSymbol]) &(s.asInstanceOf[IntSymbol].symbol)
-    else &(s.asInstanceOf[CtxSymbol].symbol)
+  def *(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => *(sym.symbol)
+    case sym: CtxSymbol => *(sym.symbol)
+  }
+
+  def *(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVMul(symbol, s))
+
+  def *(s: Int): CtxSymbol = *(ctx.mkInt(s, symbol.getSort))
+
+  def sdiv(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => sdiv(sym.symbol)
+    case sym: CtxSymbol => sdiv(sym.symbol)
+  }
+
+  def sdiv(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSdiv(symbol, s))
+
+  def sdiv(s: Int): CtxSymbol = sdiv(ctx.mkInt(s, symbol.getSort))
+
+  def udiv(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => udiv(sym.symbol)
+    case sym: CtxSymbol => udiv(sym.symbol)
+  }
+
+  def udiv(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVUdiv(symbol, s))
+
+  def udiv(s: Int): CtxSymbol = udiv(ctx.mkInt(s, symbol.getSort))
+
+  def smod(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => smod(sym.symbol)
+    case sym: CtxSymbol => smod(sym.symbol)
+  }
+
+  def smod(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSmod(symbol, s))
+
+  def smod(s: Int): CtxSymbol = smod(ctx.mkInt(s, symbol.getSort))
+
+  def urem(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => urem(sym.symbol)
+    case sym: CtxSymbol => urem(sym.symbol)
+  }
+
+  def urem(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVUrem(symbol, s))
+
+  def urem(s: Int): CtxSymbol = urem(ctx.mkInt(s, symbol.getSort))
+
+  def &(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => &(sym.symbol)
+    case sym: CtxSymbol => &(sym.symbol)
+  }
 
   def &(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVAnd(symbol, s))
 
   def &(s: Int): CtxSymbol = &(ctx.mkInt(s, symbol.getSort))
 
-  def |(s: MySymbol): CtxSymbol =
-    if (s.isInstanceOf[IntSymbol]) |(s.asInstanceOf[IntSymbol].symbol)
-    else |(s.asInstanceOf[CtxSymbol].symbol)
+  def |(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => |(sym.symbol)
+    case sym: CtxSymbol => |(sym.symbol)
+  }
 
   def |(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVOr(symbol, s))
 
   def |(s: Int): CtxSymbol = |(ctx.mkInt(s, symbol.getSort))
 
-  def ^(s: MySymbol): CtxSymbol =
-    if (s.isInstanceOf[IntSymbol]) ^(s.asInstanceOf[IntSymbol].symbol)
-    else ^(s.asInstanceOf[CtxSymbol].symbol)
+  def ^(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => ^(sym.symbol)
+    case sym: CtxSymbol => ^(sym.symbol)
+  }
 
   def ^(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVXor(symbol, s))
 
@@ -115,25 +186,28 @@ class CtxSymbol(ast: Z3AST) extends MySymbol {
 
   def neg: CtxSymbol = new CtxSymbol(ctx.mkBVNeg(symbol))
 
-  def >>(s: MySymbol): CtxSymbol =
-    if (s.isInstanceOf[IntSymbol]) >>(s.asInstanceOf[IntSymbol].symbol)
-    else >>(s.asInstanceOf[CtxSymbol].symbol)
+  def >>(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => >>(sym.symbol)
+    case sym: CtxSymbol => >>(sym.symbol)
+  }
 
   def >>(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVAshr(symbol, s))
 
   def >>(s: Int): CtxSymbol = >>(ctx.mkInt(s, symbol.getSort))
 
-  def <<(s: MySymbol): CtxSymbol =
-    if (s.isInstanceOf[IntSymbol]) <<(s.asInstanceOf[IntSymbol].symbol)
-    else <<(s.asInstanceOf[CtxSymbol].symbol)
+  def <<(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => <<(sym.symbol)
+    case sym: CtxSymbol => <<(sym.symbol)
+  }
 
   def <<(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVShl(symbol, s))
 
   def <<(s: Int): CtxSymbol = <<(ctx.mkInt(s, symbol.getSort))
 
-  def eq(s: MySymbol): CtxSymbol =
-    if (s.isInstanceOf[IntSymbol]) eq(s.asInstanceOf[IntSymbol].symbol)
-    else eq(s.asInstanceOf[CtxSymbol].symbol)
+  def eq(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => eq(sym.symbol)
+    case sym: CtxSymbol => eq(sym.symbol)
+  }
 
   def eq(s: Int): CtxSymbol = eq(ctx.mkInt(s, symbol.getSort))
 
@@ -141,41 +215,46 @@ class CtxSymbol(ast: Z3AST) extends MySymbol {
 
   def not: CtxSymbol = new CtxSymbol(ctx.mkNot(symbol))
 
-  def &&(s: MySymbol): CtxSymbol =
-    if (s.isInstanceOf[IntSymbol]) &&(s.asInstanceOf[IntSymbol].symbol)
-    else &&(s.asInstanceOf[CtxSymbol].symbol)
+  def &&(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => &&(sym.symbol)
+    case sym: CtxSymbol => &&(sym.symbol)
+  }
 
   def &&(s: Int): CtxSymbol = &&(ctx.mkInt(s, symbol.getSort))
 
   def &&(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkAnd(symbol, s))
 
-  def ||(s: MySymbol): CtxSymbol =
-    if (s.isInstanceOf[IntSymbol]) ||(s.asInstanceOf[IntSymbol].symbol)
-    else ||(s.asInstanceOf[CtxSymbol].symbol)
+  def ||(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => ||(sym.symbol)
+    case sym: CtxSymbol => ||(sym.symbol)
+  }
 
   def ||(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkAnd(symbol, s))
 
   def ||(s: Int): CtxSymbol = ||(ctx.mkInt(s, symbol.getSort))
 
-  def ^^(s: MySymbol): CtxSymbol =
-    if (s.isInstanceOf[IntSymbol]) ^^(s.asInstanceOf[IntSymbol].symbol)
-    else ^^(s.asInstanceOf[CtxSymbol].symbol)
+  def ^^(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => ^^(sym.symbol)
+    case sym: CtxSymbol => ^^(sym.symbol)
+  }
 
   def ^^(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkXor(symbol, s))
 
   def ^^(s: Int): CtxSymbol = ^^(ctx.mkInt(s, symbol.getSort))
 
-  def >=(s: MySymbol): CtxSymbol =
-    if (s.isInstanceOf[IntSymbol]) >=(s.asInstanceOf[IntSymbol].symbol)
-    else >=(s.asInstanceOf[CtxSymbol].symbol)
+  def >=(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => >=(sym.symbol)
+    case sym: CtxSymbol => >=(sym.symbol)
+  }
 
   def >=(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSge(symbol, s))
 
   def >=(s: Int): CtxSymbol = >=(ctx.mkInt(s, symbol.getSort))
 
-  def <(s: MySymbol): CtxSymbol =
-    if (s.isInstanceOf[IntSymbol]) >=(s.asInstanceOf[IntSymbol].symbol)
-    else >=(s.asInstanceOf[CtxSymbol].symbol)
+  def <(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => <(sym.symbol)
+    case sym: CtxSymbol => <(sym.symbol)
+  }
 
   def <(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSlt(symbol, s))
 
@@ -185,17 +264,19 @@ class CtxSymbol(ast: Z3AST) extends MySymbol {
 
   def concat(s: CtxSymbol): CtxSymbol = new CtxSymbol(ctx.mkConcat(symbol, s.symbol))
 
-  def bitclr(s: MySymbol): CtxSymbol =
-    if (s.isInstanceOf[IntSymbol]) bitclr(s.asInstanceOf[IntSymbol].symbol)
-    else bitclr(s.asInstanceOf[CtxSymbol].symbol)
+  def bitclr(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => bitclr(sym.symbol)
+    case sym: CtxSymbol => bitclr(sym.symbol)
+  }
 
   def bitclr(s: Z3AST): CtxSymbol = &((new IntSymbol(1) << s).~)
 
   def bitclr(s: Int): CtxSymbol = &(~(1 << s))
 
-  def bitset(s: MySymbol): CtxSymbol =
-    if (s.isInstanceOf[IntSymbol]) bitset(s.asInstanceOf[IntSymbol].symbol)
-    else bitset(s.asInstanceOf[CtxSymbol].symbol)
+  def bitset(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => bitset(sym.symbol)
+    case sym: CtxSymbol => bitset(sym.symbol)
+  }
 
   def bitset(s: Z3AST): CtxSymbol = |(new IntSymbol(1) << s)
 
@@ -208,41 +289,91 @@ class IntSymbol(ast: Int) extends MySymbol {
   type T = Int
   val symbol = ast
 
-  def +(s: MySymbol): MySymbol =
-    if (s.isInstanceOf[IntSymbol]) this.+(s.asInstanceOf[IntSymbol].symbol)
-    else this.+(s.asInstanceOf[CtxSymbol].symbol)
+  def +(s: MySymbol): MySymbol = s match {
+    case sym: IntSymbol => this.+(sym.symbol)
+    case sym: CtxSymbol => this.+(sym.symbol)
+  }
 
   def +(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVAdd(s.context.mkInt(symbol, s.getSort), s))
 
   def +(s: Int): IntSymbol = new IntSymbol(symbol + s)
 
-  def -(s: MySymbol): MySymbol =
-    if (s.isInstanceOf[IntSymbol]) this.-(s.asInstanceOf[IntSymbol].symbol)
-    else this.-(s.asInstanceOf[CtxSymbol].symbol)
+  def -(s: MySymbol): MySymbol = s match {
+    case sym: IntSymbol => |(sym.symbol)
+    case sym: CtxSymbol => |(sym.symbol)
+  }
 
   def -(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVSub(s.context.mkInt(symbol, s.getSort), s))
 
   def -(s: Int): IntSymbol = new IntSymbol(symbol - s)
 
-  def &(s: MySymbol): MySymbol =
-    if (s.isInstanceOf[IntSymbol]) &(s.asInstanceOf[IntSymbol].symbol)
-    else &(s.asInstanceOf[CtxSymbol].symbol)
+  def *(s: MySymbol): MySymbol = s match {
+    case sym: IntSymbol => *(sym.symbol)
+    case sym: CtxSymbol => *(sym.symbol)
+  }
+
+  def *(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVMul(s.context.mkInt(symbol, s.getSort), s))
+
+  def *(s: Int): IntSymbol = new IntSymbol(symbol * s)
+
+  def sdiv(s: MySymbol): MySymbol = s match {
+    case sym: IntSymbol => sdiv(sym.symbol)
+    case sym: CtxSymbol => sdiv(sym.symbol)
+  }
+
+  def sdiv(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVSdiv(s.context.mkInt(symbol, s.getSort), s))
+
+  def sdiv(s: Int): IntSymbol = new IntSymbol(symbol / s)
+
+  def udiv(s: MySymbol): MySymbol = s match {
+    case sym: IntSymbol => udiv(sym.symbol)
+    case sym: CtxSymbol => udiv(sym.symbol)
+  }
+
+  def udiv(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVUdiv(s.context.mkInt(symbol, s.getSort), s))
+
+  def udiv(s: Int): IntSymbol = new IntSymbol(Integer.divideUnsigned(symbol, s))
+
+  def smod(s: MySymbol): MySymbol = s match {
+    case sym: IntSymbol => smod(sym.symbol)
+    case sym: CtxSymbol => smod(sym.symbol)
+  }
+
+  def smod(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVSmod(s.context.mkInt(symbol, s.getSort), s))
+
+  def smod(s: Int): IntSymbol = new IntSymbol(symbol % s)
+
+  def urem(s: MySymbol): MySymbol = s match {
+    case sym: IntSymbol => urem(sym.symbol)
+    case sym: CtxSymbol => urem(sym.symbol)
+  }
+
+  def urem(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVUrem(s.context.mkInt(symbol, s.getSort), s))
+
+  def urem(s: Int): IntSymbol = new IntSymbol(Integer.remainderUnsigned(symbol, s))
+
+  def &(s: MySymbol): MySymbol = s match {
+    case sym: IntSymbol => &(sym.symbol)
+    case sym: CtxSymbol => &(sym.symbol)
+  }
 
   def &(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVAnd(s.context.mkInt(symbol, s.getSort), s))
 
   def &(s: Int): IntSymbol = new IntSymbol(symbol & s)
 
-  def |(s: MySymbol): MySymbol =
-    if (s.isInstanceOf[IntSymbol]) |(s.asInstanceOf[IntSymbol].symbol)
-    else |(s.asInstanceOf[CtxSymbol].symbol)
+  def |(s: MySymbol): MySymbol = s match {
+    case sym: IntSymbol => |(sym.symbol)
+    case sym: CtxSymbol => |(sym.symbol)
+  }
 
   def |(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVOr(s.context.mkInt(symbol, s.getSort), s))
 
   def |(s: Int): IntSymbol = new IntSymbol(symbol | s)
 
-  def ^(s: MySymbol): MySymbol =
-    if (s.isInstanceOf[IntSymbol]) ^(s.asInstanceOf[IntSymbol].symbol)
-    else ^(s.asInstanceOf[CtxSymbol].symbol)
+  def ^(s: MySymbol): MySymbol = s match {
+    case sym: IntSymbol => ^(sym.symbol)
+    case sym: CtxSymbol => ^(sym.symbol)
+  }
 
   def ^(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVXor(s.context.mkInt(symbol, s.getSort), s))
 
@@ -252,63 +383,79 @@ class IntSymbol(ast: Int) extends MySymbol {
 
   def neg: IntSymbol = this.~ + 1
 
-  def >>(s: MySymbol): MySymbol =
-    if (s.isInstanceOf[IntSymbol]) >>(s.asInstanceOf[IntSymbol].symbol)
-    else >>(s.asInstanceOf[CtxSymbol].symbol)
+  def >>(s: MySymbol): MySymbol = s match {
+    case sym: IntSymbol => >>(sym.symbol)
+    case sym: CtxSymbol => >>(sym.symbol)
+  }
 
   def >>(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVAshr(s.context.mkInt(symbol, s.getSort), s))
 
   def >>(s: Int): IntSymbol = new IntSymbol(symbol >> s)
 
-  def <<(s: MySymbol): MySymbol =
-    if (s.isInstanceOf[IntSymbol]) <<(s.asInstanceOf[IntSymbol].symbol)
-    else <<(s.asInstanceOf[CtxSymbol].symbol)
+  def <<(s: MySymbol): MySymbol = s match {
+    case sym: IntSymbol => <<(sym.symbol)
+    case sym: CtxSymbol => <<(sym.symbol)
+  }
 
   def <<(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVShl(s.context.mkInt(symbol, s.getSort), s))
 
   def <<(s: Int): IntSymbol = new IntSymbol(symbol << s)
 
-  def eq(s: MySymbol): MySymbol = eq(s.asInstanceOf[CtxSymbol].symbol)
+  def eq(s: MySymbol): MySymbol = s match {
+    case sym: CtxSymbol => eq(sym.symbol)
+  }
 
   def eq(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkEq(s.context.mkInt(symbol, s.getSort), s))
 
   def eq(s: Int): Boolean = symbol == s
 
-  def &&(s: MySymbol): MySymbol = &&(s.asInstanceOf[CtxSymbol].symbol)
+  def &&(s: MySymbol): MySymbol = s match {
+    case sym: CtxSymbol => &&(sym.symbol)
+  }
 
   def &&(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkAnd(s.context.mkInt(symbol, s.getSort), s))
 
-  def ||(s: MySymbol): MySymbol = ||(s.asInstanceOf[CtxSymbol].symbol)
+  def ||(s: MySymbol): MySymbol = s match {
+    case sym: CtxSymbol => ||(sym.symbol)
+  }
 
   def ||(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkOr(s.context.mkInt(symbol, s.getSort), s))
 
-  def ^^(s: MySymbol): MySymbol = ^^(s.asInstanceOf[CtxSymbol].symbol)
+  def ^^(s: MySymbol): MySymbol = s match {
+    case sym: CtxSymbol => ^^(sym.symbol)
+  }
 
   def ^^(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkXor(s.context.mkInt(symbol, s.getSort), s))
 
-  def >=(s: MySymbol): CtxSymbol = >=(s.asInstanceOf[CtxSymbol].symbol)
+  def >=(s: MySymbol): CtxSymbol = s match {
+    case sym: CtxSymbol => >=(sym.symbol)
+  }
 
   def >=(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVSge(s.context.mkInt(symbol, s.getSort), s))
 
   def >=(s: Int): Boolean = symbol >= s
 
-  def <(s: MySymbol): CtxSymbol = <(s.asInstanceOf[CtxSymbol].symbol)
+  def <(s: MySymbol): CtxSymbol = s match {
+    case sym: CtxSymbol => <(sym.symbol)
+  }
 
   def <(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVSlt(s.context.mkInt(symbol, s.getSort), s))
 
   def <(s: Int): Boolean = symbol < s
 
-  def bitclr(s: MySymbol): MySymbol =
-    if (s.isInstanceOf[IntSymbol]) bitclr(s.asInstanceOf[IntSymbol].symbol)
-    else bitclr(s.asInstanceOf[CtxSymbol].symbol)
+  def bitclr(s: MySymbol): MySymbol = s match {
+    case sym: IntSymbol => bitclr(sym.symbol)
+    case sym: CtxSymbol => bitclr(sym.symbol)
+  }
 
   def bitclr(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVAnd(s.context.mkInt(symbol, s.getSort), s.context.mkNot(s.context.mkBVShl(s.context.mkInt(1, s.getSort), s))))
 
   def bitclr(s: Int): IntSymbol = &(~(1 << s))
 
-  def bitset(s: MySymbol): MySymbol =
-    if (s.isInstanceOf[IntSymbol]) bitset(s.asInstanceOf[IntSymbol].symbol)
-    else bitset(s.asInstanceOf[CtxSymbol].symbol)
+  def bitset(s: MySymbol): MySymbol = s match {
+    case sym: IntSymbol => bitset(sym.symbol)
+    case sym: CtxSymbol => bitset(sym.symbol)
+  }
 
   def bitset(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVOr(s.context.mkInt(symbol, s.getSort), s.context.mkBVShl(s.context.mkInt(1, s.getSort), s)))
 

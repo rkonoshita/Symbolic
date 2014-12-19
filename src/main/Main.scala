@@ -23,6 +23,13 @@ object Main {
 
   def main(args: Array[String]): Unit = {
 
+    val s0 = ctx.mkConst("s0",ctx.mkBVSort(16))
+    val c0 = ctx.mkBVSdiv(s0,ctx.mkExtract(7,0,s0))
+    println(c0)
+    println(c0.getSort)
+
+    return
+
     val file = new File("target") -> new File("asm")
     new ConvertToInputForm(file._1, file._2).convert()
     rom = new ASTVisitor().makeProgram(ctx, file._2)
@@ -50,11 +57,11 @@ object Main {
 
   def first(): DataSet = {
     println(rom.getWord(0))
-    val reg = new Register(ctx, new mutable.HashMap[Int, MySymbol])
-    val mem = new Memory(ctx, Parameter.ioInit)
+    val reg = new Register(new mutable.HashMap[Int, MySymbol])
+    val mem = new Memory(Parameter.ioInit)
     val pc = new ProgramCounter(rom.getWord(0))
-    val path = new PathCondition(ctx)
-    val ccr = new ConditionRegister(ctx, new CtxSymbol(makeCCRSymbol))
+    val path = new PathCondition(null)
+    val ccr = new ConditionRegister(new CtxSymbol(makeCCRSymbol))
     ccr.setI
     new DataSet(reg, mem, pc, ccr, path)
   }
