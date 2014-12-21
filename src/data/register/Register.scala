@@ -18,17 +18,6 @@ class Register(r: mutable.HashMap[Int, MySymbol]) {
 
   private def check(num: Int): Unit = if (!reg.contains(num & limit)) reg += (num & limit) -> new CtxSymbol(Main.makeRegisterSymbol) //指定レジスタに初期値がなければ作る
 
-  //レジスタ値の候補を全て取得する
-  //  def getByte(num: MySymbol): ArrayBuffer[MySymbol] = {
-  //    val ans = new ArrayBuffer[MySymbol]
-  //    num match {
-  //      case n: IntSymbol => ans += getByte(n.symbol)
-  //      case n: CtxSymbol => Main.extract(0 to 0xF, n).foreach(e => ans += getByte(e))
-  //    }
-  //    ans
-  //  }
-
-  //Intでアクセスする場合は1通り
   def getByte(num: Int): MySymbol = {
     check(num)
     if ((num & 0x8) == 0x8) getByteLow(num)
@@ -47,15 +36,6 @@ class Register(r: mutable.HashMap[Int, MySymbol]) {
       case r: CtxSymbol => r.extract(7, 0)
     }
 
-  //  def getWord(num: MySymbol): ArrayBuffer[MySymbol] = {
-  //    val ans = new ArrayBuffer[MySymbol]
-  //    num match {
-  //      case n: IntSymbol => ans += getWord(n.symbol)
-  //      case n: CtxSymbol => Main.extract(0 to 0xF, n).foreach(e => ans += getWord(e))
-  //    }
-  //    ans
-  //  }
-
   def getWord(num: Int): MySymbol = {
     check(num)
     if ((num & 0x8) == 0x8) getWordHigh(num)
@@ -73,15 +53,6 @@ class Register(r: mutable.HashMap[Int, MySymbol]) {
       case r: IntSymbol => r & 0x0000FFFF
       case r: CtxSymbol => r.extract(15, 0)
     }
-
-  //  def getLong(num: MySymbol): ArrayBuffer[MySymbol] = {
-  //    val ans = new ArrayBuffer[MySymbol]
-  //    num match {
-  //      case n: IntSymbol => ans += getLong(n.symbol)
-  //      case n: CtxSymbol => Main.extract(0 to 0xF, n).foreach(e => ans += getLong(e))
-  //    }
-  //    ans
-  //  }
 
   def getLong(num: Int): MySymbol = {
     check(num)

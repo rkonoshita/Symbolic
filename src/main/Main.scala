@@ -23,9 +23,8 @@ object Main {
 
   def main(args: Array[String]): Unit = {
 
-    val s0 = ctx.mkConst("s0",ctx.mkBVSort(16))
-    val c0 = ctx.mkBVSdiv(s0,ctx.mkExtract(7,0,s0))
-    println(c0)
+    val s0 = ctx.mkConst("s0",ctx.mkBVSort(8))
+    val c0 = ctx.mkSignExt(16,s0)
     println(c0.getSort)
 
     return

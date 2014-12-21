@@ -32,9 +32,9 @@ trait MySymbol {
 
   def udiv(s: Int): MySymbol
 
-  def smod(s: MySymbol): MySymbol
+  def srem(s: MySymbol): MySymbol
 
-  def smod(s: Int): MySymbol
+  def srem(s: Int): MySymbol
 
   def urem(s: MySymbol): MySymbol
 
@@ -92,6 +92,8 @@ class CtxSymbol(ast: Z3AST) extends MySymbol {
 
   def this(ast: Int, size: Int) = this(Main.ctx.mkInt(ast, Main.ctx.mkBVSort(size)))
 
+  def this(ast: IntSymbol, size: Int) = this(ast.symbol, size)
+
   def +(s: MySymbol): CtxSymbol = s match {
     case sym: IntSymbol => this.+(sym.symbol)
     case sym: CtxSymbol => this.+(sym.symbol)
@@ -137,14 +139,14 @@ class CtxSymbol(ast: Z3AST) extends MySymbol {
 
   def udiv(s: Int): CtxSymbol = udiv(ctx.mkInt(s, symbol.getSort))
 
-  def smod(s: MySymbol): CtxSymbol = s match {
-    case sym: IntSymbol => smod(sym.symbol)
-    case sym: CtxSymbol => smod(sym.symbol)
+  def srem(s: MySymbol): CtxSymbol = s match {
+    case sym: IntSymbol => srem(sym.symbol)
+    case sym: CtxSymbol => srem(sym.symbol)
   }
 
-  def smod(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSmod(symbol, s))
+  def srem(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSrem(symbol, s))
 
-  def smod(s: Int): CtxSymbol = smod(ctx.mkInt(s, symbol.getSort))
+  def srem(s: Int): CtxSymbol = srem(ctx.mkInt(s, symbol.getSort))
 
   def urem(s: MySymbol): CtxSymbol = s match {
     case sym: IntSymbol => urem(sym.symbol)
@@ -260,6 +262,10 @@ class CtxSymbol(ast: Z3AST) extends MySymbol {
 
   def <(s: Int): CtxSymbol = <(ctx.mkInt(s, symbol.getSort))
 
+  def sextend(s: Int): CtxSymbol = new CtxSymbol(ctx.mkSignExt(s, symbol))
+
+  def zextend(s: Int): CtxSymbol = new CtxSymbol(ctx.mkZeroExt(s, symbol))
+
   def extract(high: Int, low: Int): CtxSymbol = new CtxSymbol(ctx.mkExtract(high, low, symbol))
 
   def concat(s: CtxSymbol): CtxSymbol = new CtxSymbol(ctx.mkConcat(symbol, s.symbol))
@@ -334,14 +340,14 @@ class IntSymbol(ast: Int) extends MySymbol {
 
   def udiv(s: Int): IntSymbol = new IntSymbol(Integer.divideUnsigned(symbol, s))
 
-  def smod(s: MySymbol): MySymbol = s match {
-    case sym: IntSymbol => smod(sym.symbol)
-    case sym: CtxSymbol => smod(sym.symbol)
+  def srem(s: MySymbol): MySymbol = s match {
+    case sym: IntSymbol => srem(sym.symbol)
+    case sym: CtxSymbol => srem(sym.symbol)
   }
 
-  def smod(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVSmod(s.context.mkInt(symbol, s.getSort), s))
+  def srem(s: Z3AST): CtxSymbol = new CtxSymbol(s.context.mkBVSrem(s.context.mkInt(symbol, s.getSort), s))
 
-  def smod(s: Int): IntSymbol = new IntSymbol(symbol % s)
+  def srem(s: Int): IntSymbol = new IntSymbol(symbol % s)
 
   def urem(s: MySymbol): MySymbol = s match {
     case sym: IntSymbol => urem(sym.symbol)
