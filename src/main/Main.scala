@@ -220,8 +220,8 @@ object Parameter {
     mem += 0xFFDA -> new IntSymbol(0x88) //PDR7
     mem += 0xFFDB -> new IntSymbol(0x1F) //PDR8
     mem += 0xFFE0 -> new IntSymbol(0x00) //PMR1
-    mem += 0xFFE1 -> new IntSymbol(0x00) //PMR5 ↓と逆かも？
-    mem += 0xFFE2 -> new IntSymbol(0x07) //PMR3
+    mem += 0xFFE1 -> new IntSymbol(0x07) //PMR3
+    mem += 0xFFE2 -> new IntSymbol(0x00) //PMR5
     val pcr1 = new CtxSymbol(Main.makeMemorySymbol) & 0x08
     mem += 0xFFE4 -> pcr1
     val pcr2 = new CtxSymbol(Main.makeMemorySymbol) & 0xE0
