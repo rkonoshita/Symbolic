@@ -2841,12 +2841,14 @@ class Decoder {
             tapleToArray(clone)
         }
 
-      case 0x74 =>
-      case 0x75 =>
-      case 0x76 =>
-      case 0x77 =>
+      case 0x74 => analyze74(data, pc)
+      case 0x75 => analyze75(data, pc)
+      case 0x76 => analyze76(data, pc)
+      case 0x77 => analyze77(data, pc)
+      case 0x78 => analyze78(data, pc)
       case 0x79 => analyze79(data, pc)
       case 0x7A => analyze7A(data, pc)
+      case 0x7B => analyze7B(data  pc)
       case 0x7C => analyze7C(data, pc)
       case 0x7D => analyze7D(data, pc)
       case 0x7E => analyze7E(data, pc)
@@ -2855,7 +2857,7 @@ class Decoder {
     }
   }
 
-  private def analyze74(data:DataSet,pc:Int):ArrayBuffer[DataSet] = {
+  private def analyze74(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val op1 = rom.getByte(pc + 1)
     val imm = ((op1 >> 4) & 0x07)
     val reg = data.reg.getByte(op1) >> imm
@@ -2897,7 +2899,7 @@ class Decoder {
     }
   }
 
-  private def analyze75(data:DataSet,pc:Int):ArrayBuffer[DataSet] = {
+  private def analyze75(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val op1 = rom.getByte(pc + 1)
     val imm = ((op1 >> 4) & 0x07)
     val reg = data.reg.getByte(op1) >> imm
@@ -2940,7 +2942,7 @@ class Decoder {
     }
   }
 
-  private def analyze76(data:DataSet,pc:Int):ArrayBuffer[DataSet] = {
+  private def analyze76(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val op1 = rom.getByte(pc + 1)
     val imm = ((op1 >> 4) & 0x07)
     val reg = data.reg.getByte(op1) >> imm
@@ -2983,7 +2985,7 @@ class Decoder {
     }
   }
 
-  private def analyze77(data:DataSet,pc:Int):ArrayBuffer[DataSet] = {
+  private def analyze77(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val op1 = rom.getByte(pc + 1)
     val imm = (op1 >> 4) & 0x07
     data.pc.setPc(pc + 2)
@@ -3016,7 +3018,7 @@ class Decoder {
     }
   }
 
-  private def analyze78(data:DataSet,pc:Int):ArrayBuffer[DataSet] = {
+  private def analyze78(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     //MOV.B Disp,Reg [78][dreg0][6A][2reg][00][disp][disp][disp]
     //MOV.W Disp,Reg [78][dreg0][6B][2reg][00][disp][disp][disp]
     //MOV.B Reg,Disp [78][dreg0][6A][Areg][00][disp][disp][disp]
