@@ -1,9 +1,8 @@
 package data
 
 import data.register._
-import main.{Main, State}
+import main.State
 import symbol.MySymbol
-import z3.scala.{Z3Context, Z3AST}
 
 import scala.collection.mutable
 

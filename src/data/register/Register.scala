@@ -1,11 +1,9 @@
 package data.register
 
 import main.Main
-import symbol.{IntSymbol, CtxSymbol, MySymbol}
-import z3.scala.Z3Context
+import symbol.{CtxSymbol, IntSymbol, MySymbol}
 
 import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
 
 /**
  * Created by rkonoshita on 14/11/12.

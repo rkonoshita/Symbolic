@@ -1,10 +1,8 @@
 package main
 
 import data.DataSet
-import data.register.ROM
-import parser.Data
-import symbol.{MySymbol, CtxSymbol, IntSymbol}
-import z3.scala.{Z3AST, Z3Context}
+import symbol.{CtxSymbol, IntSymbol, MySymbol}
+import z3.scala.Z3AST
 
 import scala.collection.mutable.ArrayBuffer
 

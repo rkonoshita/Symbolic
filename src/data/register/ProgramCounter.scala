@@ -1,11 +1,5 @@
 package data.register
 
-import data.DataSet
-import symbol.{CtxSymbol, IntSymbol, MySymbol}
-import z3.scala.{Z3Context, Z3AST}
-
-import scala.collection.mutable.ArrayBuffer
-
 /**
  * Created by ryosuke on 14/11/18.
  */

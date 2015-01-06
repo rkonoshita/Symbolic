@@ -1,7 +1,6 @@
 package main
 
 import data.DataSet
-import symbol.IntSymbol
 
 import scala.collection.mutable.ArrayBuffer
 

@@ -1,7 +1,7 @@
 package data.register
 
 import main.Main
-import z3.scala.{Z3AST, Z3Context}
+import z3.scala.Z3AST
 
 /**
  * Created by ryosuke on 14/11/18.

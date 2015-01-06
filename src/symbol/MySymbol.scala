@@ -1,7 +1,7 @@
 package symbol
 
 import main.Main
-import z3.scala.{Z3Context, Z3AST}
+import z3.scala.Z3AST
 
 /**
  * Created by rkonoshita on 14/11/26.

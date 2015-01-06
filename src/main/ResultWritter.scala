@@ -1,6 +1,6 @@
 package main
 
-import java.io.{PrintWriter, FileWriter, BufferedWriter, File}
+import java.io.{File, PrintWriter}
 
 /**
  * Created by ryosuke on 14/12/03.

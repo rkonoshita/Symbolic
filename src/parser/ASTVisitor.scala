@@ -2,10 +2,9 @@ package parser
 
 import java.io.File
 
-import data.register.{ROM, Memory}
+import data.register.ROM
 import main.Parameter
-import symbol.{IntSymbol, MySymbol}
-import z3.scala.{Z3AST, Z3Context}
+import z3.scala.Z3Context
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
