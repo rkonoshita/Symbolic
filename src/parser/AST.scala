@@ -214,3 +214,5 @@ case class LWord(num: AST) extends AST
 case class StartOf(sec: String) extends AST
 
 case class SizeOf(sec: String) extends AST
+
+case class Empty() extends AST

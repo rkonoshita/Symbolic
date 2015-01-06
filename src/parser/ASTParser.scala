@@ -158,7 +158,7 @@ class ASTParser extends RegexParsers {
     case left ~ c ~ right =>
       right match {
         case Some(s: AST) => Dec(left, s)
-        case None => Dec(left, Number(0))
+        case None => Dec(left, Empty())
       }
   }
 
@@ -189,7 +189,7 @@ class ASTParser extends RegexParsers {
     case left ~ c ~ right =>
       right match {
         case Some(s: AST) => Inc(left, s)
-        case None => Inc(left, Number(0))
+        case None => Inc(left, Empty())
       }
   }
 
