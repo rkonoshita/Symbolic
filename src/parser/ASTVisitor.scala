@@ -1132,7 +1132,7 @@ class ASTVisitor {
         case i: Imm => new VisitArray(0x57, visit(i).asInstanceOf[VisitInt].item << 4)
       }
 
-      case Or(left, right) => (left, right) match {
+      case Xor(left, right) => (left, right) match {
         case (l: Imm, r: RegByte) => new VisitArray(0xD0 | visit(r).asInstanceOf[VisitInt].item, visit(l).asInstanceOf[VisitInt].item)
         case (l: RegByte, r: RegByte) => new VisitArray(0x15, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
         case (l: Imm, r: RegWord) =>
@@ -1143,6 +1143,10 @@ class ASTVisitor {
           val imm = visit(l).asInstanceOf[VisitInt].item
           new VisitArray(0x7A, 0x50 | visit(r).asInstanceOf[VisitInt].item, imm >> 24, imm >> 16, imm >> 8, imm)
         case (l: RegLong, r: RegLong) => new VisitArray(0x01, 0xF0, 0x65, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
+      }
+
+      case Xorc(imm) => imm match {
+        case i: Imm => new VisitArray(0x05, visit(imm).asInstanceOf[VisitInt].item)
       }
 
       case Data(num, size) => size match {
