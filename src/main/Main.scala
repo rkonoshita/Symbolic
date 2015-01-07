@@ -22,13 +22,6 @@ object Main {
   var rom: ROM = null
 
   def main(args: Array[String]): Unit = {
-
-    val s0 = ctx.mkConst("s0",ctx.mkBVSort(8))
-    val c0 = ctx.mkSignExt(16,s0)
-    println(c0.getSort)
-
-    return
-
     val file = new File("target") -> new File("asm")
     new ConvertToInputForm(file._1, file._2).convert()
     rom = new ASTVisitor().makeProgram(ctx, file._2)
@@ -49,7 +42,8 @@ object Main {
         state += s
         if (!s.stop) stack += s
       }
-      if (state.length >= 1000) stack.clear
+//      current.path.path = null
+      if (state.length >= 300) stack.clear
     }
     new ResultWritter().write(new File("result.txt"))
   }

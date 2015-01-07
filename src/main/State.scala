@@ -26,7 +26,7 @@ class State(num: Int, data: DataSet, pr: State) {
     }
   val stop = data.pc.pc == (Main.rom.getWord(0) + 14) | !pathCheck
 
-    override def toString(): String = if (path.path == null) "null" else path.path.toString()
+  override def toString(): String = if (path.path == null) "null" else path.path.toString()
 
-//  override def toString(): String = number.toString
+  //  override def toString(): String = number.toString
 }

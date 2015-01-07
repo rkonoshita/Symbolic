@@ -1542,7 +1542,7 @@ class Decoder {
         data.ccr.clearV
         checkZ(extu, ArrayBuffer(data), 16)
 
-      case 0x50 =>
+      case 0x70 =>
         //EXTU.L Reg [17][7reg]
         val extu = data.reg.getLong(op1) & 0xFFFF
         data.reg.setLong(extu, op1)
