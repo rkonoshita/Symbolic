@@ -48,7 +48,7 @@ object Main {
     new ResultWritter().write(new File("result.txt"))
   }
 
-  def first(): DataSet = {
+  val first: DataSet = {
     println(rom.getWord(0))
     val reg = new Register(new mutable.HashMap[Int, MySymbol])
     val mem = new Memory(Parameter.ioInit)

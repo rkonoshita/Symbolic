@@ -296,7 +296,7 @@ class ASTVisitor {
 
       case Mov(left, right) => (left, right) match {
         case (l: Disp, _: RegByte) => new VisitInt(search(l) match {
-          case s: Int => s.item match {
+          case s: VisitInt => s.item match {
             case 16 => 4
             case 24 => 8
           }
@@ -991,9 +991,9 @@ class ASTVisitor {
       }
 
       case Neg(reg) => reg match {
-        case r: RegByte => new VisitArray()(0x17, 0x80 | visit(r).asInstanceOf[VisitInt].item)
-        case r: RegWord => new VisitArray()(0x17, 0x90 | visit(r).asInstanceOf[VisitInt].item)
-        case r: RegLong => new VisitArray()(0x17, 0xB0 | visit(r).asInstanceOf[VisitInt].item)
+        case r: RegByte => new VisitArray(0x17, 0x80 | visit(r).asInstanceOf[VisitInt].item)
+        case r: RegWord => new VisitArray(0x17, 0x90 | visit(r).asInstanceOf[VisitInt].item)
+        case r: RegLong => new VisitArray(0x17, 0xB0 | visit(r).asInstanceOf[VisitInt].item)
       }
 
       case Nop() => new VisitArray(0x00, 0x00)
