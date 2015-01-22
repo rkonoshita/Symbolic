@@ -2,9 +2,6 @@ package data
 
 import data.register._
 import main.State
-import symbol.MySymbol
-
-import scala.collection.mutable
 
 /**
  * Created by rkonoshita on 14/11/12.
@@ -30,7 +27,7 @@ class DataSet(r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, p
       new Register(reg.reg, newcounter),
       new Memory(mem.mem, newcounter),
       new ProgramCounter(pc.pc),
-      new ConditionRegister(ccr.ccr),
+      new ConditionRegister(ccr.getCcr),
       new PathCondition(path.path),
       newcounter
     )

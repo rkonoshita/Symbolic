@@ -1,14 +1,18 @@
 package data.register
 
 import main.Main
-import symbol.{CtxSymbol, MySymbol}
+import symbol.CtxSymbol
 
 /**
  * Created by ryosuke on 14/11/18.
  */
-class ConditionRegister(c: MySymbol) {
+class ConditionRegister(c: CtxSymbol) {
 
-  var ccr = c
+  private var ccr = c
+
+  def getCcr: CtxSymbol = Main.simple(ccr)
+
+  def setCcr(c: CtxSymbol) = ccr = Main.simple(c)
 
   def clearC = ccr = Main.simple(ccr & 0xFE)
 

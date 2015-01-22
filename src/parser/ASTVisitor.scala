@@ -30,7 +30,7 @@ class ASTVisitor {
   def makeProgram(ctx: Z3Context, file: File): ROM = {
     //構文解析
     file.listFiles.foreach { f => Source.fromFile(f).getLines.foreach { l =>
-      println(l)
+//      println(l)
       parseResult += new ASTParser().parse(l).get
     }}
 
