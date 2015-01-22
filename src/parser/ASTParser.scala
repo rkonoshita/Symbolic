@@ -30,12 +30,12 @@ class ASTParser extends RegexParsers {
   }
 
   //ADDS
-  def adds: Parser[AST] = "ADDX.L" ~> imm ~ "," ~ reg ^^ {
+  def adds: Parser[AST] = "ADDS.L" ~> imm ~ "," ~ reg ^^ {
     case left ~ c ~ right => AddSign(left, right)
   }
 
   //ADDX
-  def addx: Parser[AST] = "ADDS.B" ~> (imm | reg) ~ "," ~ reg ^^ {
+  def addx: Parser[AST] = "ADDX.B" ~> (imm | reg) ~ "," ~ reg ^^ {
     case left ~ c ~ right => AddExtends(left, right)
   }
 
@@ -154,7 +154,7 @@ class ASTParser extends RegexParsers {
   def das: Parser[AST] = "DAS.B" ~> reg ^^ (Das(_))
 
   //DEC
-  def dec: Parser[AST] = "Dec" ~> opsize ~> (imm | reg) ~ ",".? ~ reg.? ^^ {
+  def dec: Parser[AST] = "DEC" ~> opsize ~> (imm | reg) ~ ",".? ~ reg.? ^^ {
     case left ~ c ~ right =>
       right match {
         case Some(s: AST) => Dec(left, s)
@@ -327,21 +327,23 @@ class ASTParser extends RegexParsers {
   def section: Parser[AST] = ".SECTION" ~> "[VPCDRB]".r <~ "," <~ ("CODE" | "DATA") <~ "," <~ "ALIGN" <~ "=" <~ "[0-9]+".r ^^ (Section(_))
 
   //レジスタ
-  def reg: Parser[AST] = ("ER" | "R" | "E") ~ "[0-7]".r ~ ("H" | "L").? ^^ {
-    case str1 ~ num ~ str2 =>
-      str1 match {
-        case "ER" => RegLong(num.toInt)
-        case "E" => RegWord(num.toInt | 0x08)
-        case "R" =>
-          str2 match {
-            case Some(s) =>
-              s match {
-                case "H" => RegByte(num.toInt)
-                case "L" => RegByte(num.toInt | 0x08)
-              }
-            case None => RegWord(num.toInt)
-          }
-      }
+  def reg: Parser[AST] = (regByte | regWord | regLong | "SP") ^^ {
+    case s: AST => s
+    case s: String => RegLong(7)
+  }
+
+  def regLong: Parser[AST] = "ER" ~> "[0-7]".r ^^ {
+    case num => RegLong(num.toInt)
+  }
+
+  def regWord: Parser[AST] = ("E" | "R") ~ "[0-7]".r ^^ {
+    case "E" ~ num => RegWord(num.toInt | 0x08)
+    case "R" ~ num => RegWord(num.toInt)
+  }
+
+  def regByte: Parser[AST] = "R" ~> "[0-7]".r ~ ("H" | "L") ^^ {
+    case num ~ "H" => RegByte(num.toInt)
+    case num ~ "L" => RegByte(num.toInt | 0x80)
   }
 
   //スタックポインタ(register7)

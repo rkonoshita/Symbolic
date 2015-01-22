@@ -1,0 +1,18 @@
+          .CPU        300HN
+          .EXPORT     _led_set
+          .SECTION    P,CODE,ALIGN=2
+          .LINE       "C:\Users\ryousuke\Desktop\linetrace\linetrace\led.c",17
+_led_set:                               ; function: led_set
+          .STACK      _led_set=6
+          PUSH.W      R6
+          MOV.W       R7,R6
+          PUSH.W      R5
+          MOV.W       R0,R5
+          .LINE       18
+          .LINE       19
+          MOV.B       R5L,@65496:8
+          .LINE       20
+          POP.W       R5
+          POP.W       R6
+          RTS
+          .END

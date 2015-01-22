@@ -14,7 +14,8 @@ class PathCondition(p: Z3AST) {
   private val ctx = Main.ctx
 
   def set(p: Z3AST): Unit =
-    if (path == null) path = p
-    else path = ctx.mkAnd(path, p)
+    path =
+      if (path == null) ctx.simplifyAst(p)
+      else ctx.simplifyAst(ctx.mkAnd(path, p))
 
 }

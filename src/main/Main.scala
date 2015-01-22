@@ -2,7 +2,7 @@ package main
 
 import java.io.File
 
-import data.DataSet
+import data.{SymbolCounter, DataSet}
 import data.register._
 import parser.ASTVisitor
 import symbol.{CtxSymbol, IntSymbol, MySymbol}
@@ -18,20 +18,24 @@ object Main {
 
   val ctx = new Z3Context
   val state = new ArrayBuffer[State]
-  val stack = new mutable.Queue[State]
+  val stack = new mutable.Stack[State]
+  val queue = new mutable.Queue[State]
   var rom: ROM = null
 
   def main(args: Array[String]): Unit = {
-    val file = new File("target") -> new File("asm")
+
+    val file = new File("test_code") -> new File("asm")
     new ConvertToInputForm(file._1, file._2).convert()
     rom = new ASTVisitor().makeProgram(ctx, file._2)
     val init = first
     val initState = new State(state.size, init, null)
     state += initState
-    stack.+=(initState)
+    stack.push(initState)
+    //    queue += initState
 
     while (!stack.isEmpty) {
-      val current = stack.dequeue
+      val current = stack.pop
+      //      val current = queue.dequeue
       val data = new DataSet(current)
       val dataArray = new Decoder().analyze(data)
       dataArray.foreach { d =>
@@ -40,45 +44,57 @@ object Main {
         println(s)
         println
         state += s
-        if (!s.stop) stack += s
+        if (!s.stop) stack.push(s)
+        //        if (!s.stop) queue += s
       }
-//      current.path.path = null
-      if (state.length >= 300) stack.clear
+      //      current.path.path = null
+      if (state.length >= 200) stack.clear
+      //      if (state.length >= 500) queue.clear
     }
     new ResultWritter().write(new File("result.txt"))
   }
 
-  val first: DataSet = {
-    println(rom.getWord(0))
-    val reg = new Register(new mutable.HashMap[Int, MySymbol])
-    val mem = new Memory(Parameter.ioInit)
+  def first: DataSet = {
+    val make = new SymbolCounter(new mutable.HashMap[String, Int])
+    val reg = new Register(new mutable.HashMap[Int, MySymbol], make)
+    val mem = new Memory(Parameter.ioInit(make), make)
     val pc = new ProgramCounter(rom.getWord(0))
     val path = new PathCondition(null)
-    val ccr = new ConditionRegister(new CtxSymbol(makeCCRSymbol))
+    val ccr = new ConditionRegister(make.makeSymbol(0, "c"))
     ccr.setI
-    new DataSet(reg, mem, pc, ccr, path)
+    new DataSet(reg, mem, pc, ccr, path, make)
   }
 
-  var rsym = -1
+  def simple(symbol: MySymbol): MySymbol =
+    symbol match {
+      case s: IntSymbol => s
+      case s: CtxSymbol =>
+        val c = new CtxSymbol(ctx.simplifyAst(s.symbol))
+        if (c.toString() == s.toString()) s
+        else c
+    }
 
-  def makeRegisterSymbol: Z3AST = {
-    rsym += 1
-    ctx.mkConst("r" + rsym, ctx.mkBVSort(32))
-  }
-
-  var msym = -1
-
-  def makeMemorySymbol: Z3AST = {
-    msym += 1
-    ctx.mkConst("m" + msym, ctx.mkBVSort(8))
-  }
-
-  var csym = -1
-
-  def makeCCRSymbol: Z3AST = {
-    csym += 1
-    ctx.mkConst("c" + csym, ctx.mkBVSort(8))
-  }
+  //
+  //  var rsym = -1
+  //
+  //  def makeRegisterSymbol: Z3AST = {
+  //    rsym += 1
+  //    ctx.mkConst("r" + rsym, ctx.mkBVSort(32))
+  //  }
+  //
+  //  var msym = -1
+  //
+  //  def makeMemorySymbol: Z3AST = {
+  //    msym += 1
+  //    ctx.mkConst("m" + msym, ctx.mkBVSort(8))
+  //  }
+  //
+  //  var csym = -1
+  //
+  //  def makeCCRSymbol: Z3AST = {
+  //    csym += 1
+  //    ctx.mkConst("c" + csym, ctx.mkBVSort(8))
+  //  }
 
 }
 
@@ -102,7 +118,7 @@ object Parameter {
     s
   }
 
-  def ioInit(): mutable.HashMap[Int, MySymbol] = {
+  def ioInit(s: SymbolCounter): mutable.HashMap[Int, MySymbol] = {
     val mem = new mutable.HashMap[Int, MySymbol]
     mem += 0xF700 -> new IntSymbol(0) //TCR_0
     mem += 0xF701 -> new IntSymbol(0x88) //TIORA_0
@@ -142,11 +158,11 @@ object Parameter {
     mem += 0xF723 -> new IntSymbol(0x80) //TFCR
     mem += 0xF724 -> new IntSymbol(0xFF) //TOER
     mem += 0xF725 -> new IntSymbol(0x00) //TOCR
-    val rwkdr = new CtxSymbol(Main.makeMemorySymbol) & 0x87
+    val rwkdr = s.makeSymbol(0xF72B, "m") & 0x87
     mem += 0xF72B -> rwkdr
-    val rtccr1 = new CtxSymbol(Main.makeMemorySymbol) & 0xE0
+    val rtccr1 = s.makeSymbol(0xF72C, "m") & 0xE0
     mem += 0xF72C -> rtccr1
-    val rtccr2 = new CtxSymbol(Main.makeMemorySymbol) & 0x3F
+    val rtccr2 = s.makeSymbol(0xF72D, "m") & 0x3F
     mem += 0xF72D -> rtccr2
     mem += 0xF72F -> new IntSymbol(0x08) //RTCCSR
     mem += 0xF730 -> new IntSymbol(0x40) //LVDCR
@@ -216,16 +232,16 @@ object Parameter {
     mem += 0xFFE0 -> new IntSymbol(0x00) //PMR1
     mem += 0xFFE1 -> new IntSymbol(0x07) //PMR3
     mem += 0xFFE2 -> new IntSymbol(0x00) //PMR5
-    val pcr1 = new CtxSymbol(Main.makeMemorySymbol) & 0x08
+    val pcr1 = s.makeSymbol(0xFFE4, "m") & 0x08
     mem += 0xFFE4 -> pcr1
-    val pcr2 = new CtxSymbol(Main.makeMemorySymbol) & 0xE0
+    val pcr2 = s.makeSymbol(0xFFE5, "m") & 0xE0
     mem += 0xFFE5 -> pcr2
     mem += 0xFFE6 -> new IntSymbol(0x00) //PCR3
     mem += 0xFFE8 -> new IntSymbol(0x00) //PCR5
     mem += 0xFFE9 -> new IntSymbol(0x00) //PCR6
-    val pcr7 = new CtxSymbol(Main.makeMemorySymbol) & 0x88
+    val pcr7 = s.makeSymbol(0xFFEA, "m") & 0x88
     mem += 0xFFEA -> pcr7
-    val pcr8 = new CtxSymbol(Main.makeMemorySymbol) & 0x1F
+    val pcr8 = s.makeSymbol(0xFFEB, "m") & 0x1F
     mem += 0xFFEB -> pcr8
     mem += 0xFFF0 -> new IntSymbol(0x00) //SYSCR1
     mem += 0xFFF1 -> new IntSymbol(0x00) //SYSCR2

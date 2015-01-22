@@ -1,0 +1,25 @@
+          .CPU        300HN
+          .EXPORT     _init
+          .SECTION    P,CODE,ALIGN=2
+          .LINE       "C:\Users\ryousuke\Desktop\linetrace\linetrace\init.c",18
+_init:                                  ; function: init
+          .STACK      _init=4
+          PUSH.W      R6
+          MOV.W       R7,R6
+          .LINE       19
+          .LINE       21
+          SUB.B       R0L,R0L
+          MOV.B       R0L,@65524:8
+          .LINE       22
+          SUB.B       R0L,R0L
+          MOV.B       R0L,@65525:8
+          .LINE       25
+          SUB.B       R0L,R0L
+          MOV.B       R0L,@65510:8
+          .LINE       26
+          MOV.B       #112,R0L
+          MOV.B       R0L,@65512:8
+          .LINE       28
+          POP.W       R6
+          RTS
+          .END

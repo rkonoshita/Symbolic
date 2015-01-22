@@ -1,0 +1,53 @@
+          .CPU        300HN
+          .IMPORT     _led_set
+          .IMPORT     _tsensor_get
+          .EXPORT     _loop
+          .SECTION    P,CODE,ALIGN=2
+          .LINE       "C:\Users\ryousuke\Desktop\linetrace\linetrace\control.c",9
+_loop:                                  ; function: loop
+          .STACK      _loop=10
+          PUSH.W      R6
+          MOV.W       R7,R6
+          PUSH.W      R5
+          SUBS.L      #4,SP
+          MOV.W       R0,R5
+          .LINE       9
+          .LINE       11
+          JSR         @_tsensor_get:16
+          EXTU.W      R0
+          MOV.W       R0,@(-6:16,ER6)
+          .LINE       13
+          CMP.W       #1000,R5
+          BLT         L106:8
+          .LINE       13
+          BRA         L107:8
+L106:                                    
+          .LINE       15
+          MOV.W       @(-6:16,ER6),R0
+          DEC.W       #2,R0
+          BNE         L108:8
+          .LINE       15
+          .LINE       16
+          MOV.W       #32,R0
+          MOV.W       R0,@(-4:16,ER6)
+          BRA         L109:8
+L108:                                    
+          .LINE       17
+          .LINE       18
+          SUB.W       R0,R0
+          MOV.W       R0,@(-4:16,ER6)
+L109:                                    
+          .LINE       21
+          MOV.W       @(-4:16,ER6),R0
+          JSR         @_led_set:16
+          .LINE       23
+          MOV.W       R5,R0
+          INC.W       #1,R5
+          BSR         _loop:8
+          .LINE       24
+L107:                                    
+          ADDS.L      #4,SP
+          POP.W       R5
+          POP.W       R6
+          RTS
+          .END
