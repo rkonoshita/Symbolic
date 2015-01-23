@@ -1,11 +1,8 @@
 package main
 
 import data.DataSet
-import symbol.{CtxSymbol, IntSymbol, MySymbol}
-import z3.scala.Z3AST
 
-import scala.collection.mutable
-import scala.collection.mutable.{ArrayBuffer, HashMap}
+import scala.collection.mutable.ArrayBuffer
 
 /**
  * Created by rkonoshita on 14/12/01.
@@ -24,9 +21,10 @@ class State(num: Int, data: DataSet, pr: State) {
   val pathCheck =
     if (path.path == null) true
     else {
-      val s = Main.ctx.mkSolver
-      s.assertCnstr(path.path)
-      s.check.get
+      Main.sol.assertCnstr(path.path)
+      val ans = Main.sol.check.get
+      Main.sol.reset
+      ans
     }
   val stop = data.pc.pc == (Main.rom.getWord(0) + 14) | !pathCheck
 

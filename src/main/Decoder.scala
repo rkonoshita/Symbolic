@@ -1400,16 +1400,14 @@ class Decoder {
       case 0x54 =>
         //RTS [54][70]
         val sp = data.reg.getLong(7)
+        val intSp = getSp(sp)
         data.reg.setLong(sp + 2, 7)
         val buf = new ArrayBuffer[DataSet]
-        extract(0 to 0xFFFF, sp.extract(15, 0)).foreach { p =>
-          val clone = pathClone(sp.extract(15, 0).eq(p), data)
-          val mem = clone.mem.getWord(p)
-          extract(0 to 0xFFFF, mem).foreach { q =>
-            val clone2 = pathClone(mem.eq(q), clone)
-            clone2.pc.setPc(q)
-            buf += clone2
-          }
+        val mem = data.mem.getWord(intSp)
+        extract(0 to 0xFFFF, mem).foreach { p =>
+          val clone = pathClone(mem.eq(p), data)
+          clone.pc.setPc(p)
+          buf += clone
         }
         buf
 
@@ -1417,31 +1415,25 @@ class Decoder {
         //BSR disp [55][disp]
         val op1 = rom.getByte(pc + 1)
         val disp = op1 | (if ((op1 & 0x80) == 0x80) 0xFFFFFF00 else 0)
-        val sp = data.reg.getLong(7) + 2
+        val sp = data.reg.getLong(7) - 2
+        val intSp = getSp(sp)
         data.reg.setLong(sp, 7)
         data.pc.setPc(pc + disp)
-        val buf = new ArrayBuffer[DataSet]
-        extract(0 to 0xFFFF, sp.extract(15, 0)).foreach { p =>
-          val clone = pathClone(sp.extract(15, 0).eq(p), data)
-          clone.mem.setWord(new CtxSymbol(pc + 2, 16), p)
-          buf += clone
-        }
-        buf
+        data.mem.setWord(new CtxSymbol(pc + 2, 16), intSp)
+        ArrayBuffer(data)
 
       case 0x56 =>
         //RTE [56][70]
         val sp = data.reg.getLong(7)
+        val intSp = getSp(sp)
         data.reg.setLong(sp + 4, 7)
         val buf = new ArrayBuffer[DataSet]
-        extract(0 to 0xFFFF, sp.extract(15, 0)).foreach { p =>
-          val clone = pathClone(sp.extract(15, 0).eq(p), data)
-          val mem = clone.mem.getLong(p)
-          clone.ccr.setCcr(mem.extract(31, 24))
-          extract(0 to 0xFFFF, mem).foreach { q =>
-            val clone2 = pathClone(mem.eq(q), clone)
-            clone2.pc.setPc(q)
-            buf += clone2
-          }
+        val mem = data.mem.getLong(intSp)
+        data.ccr.setCcr(mem.extract(31, 24))
+        extract(0 to 0xFFFF, mem).foreach { p =>
+          val clone = pathClone(mem.eq(p), data)
+          clone.pc.setPc(p)
+          buf += clone
         }
         buf
 
@@ -1479,7 +1471,7 @@ class Decoder {
       case 0x5C =>
         //BSR disp [5C][00][disp][disp]
         val disp = rom.getByte(pc + 1)
-        val sp = data.reg.getLong(7) + 2
+        val sp = data.reg.getLong(7) - 2
         data.reg.setLong(sp, 7)
         data.pc.setPc(pc + disp)
         val buf = new ArrayBuffer[DataSet]
@@ -1492,48 +1484,40 @@ class Decoder {
 
       case 0x5D =>
         //JSR IndReg [59][reg0]
-        val sp = data.reg.getLong(7) + 2
+        val sp = data.reg.getLong(7) - 2
+        val intSp = getSp(sp)
         data.reg.setLong(sp, 7)
         val buf = new ArrayBuffer[DataSet]
-        extract(0 to 0xFFFF, sp.extract(15, 0)).foreach { p =>
-          val clone = pathClone(sp.extract(15, 0).eq(p), data)
-          clone.mem.setWord(new CtxSymbol(pc + 2, 16), p)
-          val ind = clone.reg.getLong(rom.getByte(pc + 1) >> 4)
-          extract(0 to 0xFFFF, ind.extract(15, 0)).foreach { q =>
-            val clone2 = pathClone(ind.extract(15, 0).eq(q), clone)
-            clone2.pc.setPc(q)
-            buf += clone2
-          }
+        data.mem.setWord(new CtxSymbol(pc + 2, 16), intSp)
+        val ind = data.reg.getLong(rom.getByte(pc + 1) >> 4)
+        extract(0 to 0xFFFF, ind.extract(15, 0)).foreach { p =>
+          val clone = pathClone(ind.extract(15, 0).eq(p), data)
+          clone.pc.setPc(p)
+          buf += clone
         }
         buf
 
       case 0x5E =>
         //JSR Abs:24 [5E][Abs][Abs][Abs]
-        val sp = data.reg.getLong(7)
-        data.reg.setLong(sp - 2, 7)
+        val sp = data.reg.getLong(7) - 2
+        val intSp = getSp(sp)
+        data.reg.setLong(sp, 7)
         data.pc.setPc(rom.getLong(pc))
-        val buf = new ArrayBuffer[DataSet]
-        extract(0 to 0xFFFF, sp.extract(15, 0)).foreach { p =>
-          val clone = pathClone(sp.extract(15, 0).eq(p), data)
-          clone.mem.setWord(new CtxSymbol(pc + 4, 16), p)
-          buf += clone
-        }
-        buf
+        data.mem.setWord(new CtxSymbol(pc + 4, 16), intSp)
+        ArrayBuffer(data)
 
       case 0x5F =>
         //JSR IndReg [5F][abs]
-        val sp = data.reg.getLong(7) + 2
+        val sp = data.reg.getLong(7) - 2
+        val intSp = getSp(sp)
         data.reg.setLong(sp, 7)
         val buf = new ArrayBuffer[DataSet]
-        extract(0 to 0xFFFF, sp.extract(15,0)).foreach{ p =>
-          val clone = pathClone(sp.extract(15,0).eq(p),data)
-          clone.mem.setWord(new CtxSymbol(pc + 2,16), p)
-          val ind = clone.mem.getWord(rom.getByte(pc + 1))
-          extract(0 to 0xFFFF, ind).foreach { q =>
-            val clone2 = pathClone(ind.eq(q), clone)
-            clone2.pc.setPc(p)
-            buf += clone2
-          }
+        data.mem.setWord(new CtxSymbol(pc + 2, 16), intSp)
+        val ind = data.mem.getWord(rom.getByte(pc + 1))
+        extract(0 to 0xFFFF, ind).foreach { p =>
+          val clone = pathClone(ind.eq(p), data)
+          clone.pc.setPc(p)
+          buf += clone
         }
         buf
     }
@@ -2911,15 +2895,27 @@ class Decoder {
 
   private def extract(range: Range, ast: Z3AST): ArrayBuffer[Int] = {
     val buf = new ArrayBuffer[Int]
+    val sim = ctx.simplifyAst(ast)
     range.foreach { n =>
-      val s = ctx.mkSolver
-      s.assertCnstr(ctx.mkEq(ast, ctx.mkInt(n, ast.getSort)))
-      if (s.check.get) buf += n
+      Main.sol.assertCnstr(ctx.mkEq(sim, ctx.mkInt(n, ast.getSort)))
+      if (Main.sol.check.get) buf += n
+      Main.sol.reset
     }
     buf
   }
 
   def extract(range: Range, c: CtxSymbol): ArrayBuffer[Int] = extract(range, c.symbol)
+
+  def getSp(sp: CtxSymbol): Int = {
+    val sim = Main.simple(sp)
+    val d = ctx.mkConst("range", ctx.mkBVSort(32))
+    Main.sol.assertCnstr(sim.eq(d).symbol)
+    Main.sol.check
+    val ans = Main.sol.getModel.toString
+    Main.sol.reset
+    val num = ans.split("#x")(1).replaceAll("\n","")
+    java.lang.Long.parseLong(num, 16).toInt
+  }
 
   def check2(num: CtxSymbol, size: Int, base: DataSet): ArrayBuffer[DataSet] = {
     val buf = checkZ(num, base, size)
