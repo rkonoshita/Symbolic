@@ -30,9 +30,10 @@ class ASTVisitor {
   def makeProgram(ctx: Z3Context, file: File): ROM = {
     //構文解析
     file.listFiles.foreach { f => Source.fromFile(f).getLines.foreach { l =>
-//      println(l)
+      //      println(l)
       parseResult += new ASTParser().parse(l).get
-    }}
+    }
+    }
 
     //意味解析１回目：ラベルの位置を決める
     parseResult.foreach { p =>
@@ -65,455 +66,452 @@ class ASTVisitor {
 
   //ラベル位置の捜索
   //文法的な正しさは度外視
-  def search(ast: AST): Visit = {
+  def search(ast: AST): Option[Any] = {
     ast match {
       case Add(left, right) => (left, right) match {
-        case (_: Imm, _: RegWord) => new VisitInt(4)
-        case (_: Imm, _: RegLong) => new VisitInt(6)
-        case _ => new VisitInt(2)
+        case (_: Imm, _: RegWord) => Some(4)
+        case (_: Imm, _: RegLong) => Some(4)
+        case _ => Some(2)
       }
 
-      case AddSign(left, right) => new VisitInt(2)
+      case AddSign(left, right) => Some(2)
 
-      case AddExtends(left, right) => new VisitInt(2)
+      case AddExtends(left, right) => Some(2)
 
       case And(left, right) => (left, right) match {
-        case (_: Imm, _: RegWord) => new VisitInt(4)
-        case (_: Imm, _: RegLong) => new VisitInt(6)
-        case (_: RegLong, _: RegLong) => new VisitInt(4)
-        case _ => new VisitInt(2)
+        case (_: Imm, _: RegWord) => Some(4)
+        case (_: Imm, _: RegLong) => Some(6)
+        case (_: RegLong, _: RegLong) => Some(4)
+        case _ => Some(2)
       }
 
-      case Andc(item) => new VisitInt(2)
+      case Andc(item) => Some(2)
 
       case Band(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => new VisitInt(2)
-        case _ => new VisitInt(4)
+        case (_: Imm, _: RegByte) => Some(2)
+        case _ => Some(4)
       }
 
-      case Bra(num, size) => new VisitInt(size match {
+      case Bra(num, size) => Some(size match {
         case 8 => 2
         case 16 => 4
       })
 
-      case Brn(num, size) => new VisitInt(size match {
+      case Brn(num, size) => Some(size match {
         case 8 => 2
         case 16 => 4
       })
 
-      case Bhi(num, size) => new VisitInt(size match {
+      case Bhi(num, size) => Some(size match {
         case 8 => 2
         case 16 => 4
       })
 
-      case Bls(num, size) => new VisitInt(size match {
+      case Bls(num, size) => Some(size match {
         case 8 => 2
         case 16 => 4
       })
 
-      case Bcc(num, size) => new VisitInt(size match {
+      case Bcc(num, size) => Some(size match {
         case 8 => 2
         case 16 => 4
       })
 
-      case Bcs(num, size) => new VisitInt(size match {
+      case Bcs(num, size) => Some(size match {
         case 8 => 2
         case 16 => 4
       })
 
-      case Bne(num, size) => new VisitInt(size match {
+      case Bne(num, size) => Some(size match {
         case 8 => 2
         case 16 => 4
       })
 
-      case Beq(num, size) => new VisitInt(size match {
+      case Beq(num, size) => Some(size match {
         case 8 => 2
         case 16 => 4
       })
 
-      case Bvc(num, size) => new VisitInt(size match {
+      case Bvc(num, size) => Some(size match {
         case 8 => 2
         case 16 => 4
       })
 
-      case Bvs(num, size) => new VisitInt(size match {
+      case Bvs(num, size) => Some(size match {
         case 8 => 2
         case 16 => 4
       })
 
-      case Bpl(num, size) => new VisitInt(size match {
+      case Bpl(num, size) => Some(size match {
         case 8 => 2
         case 16 => 4
       })
 
-      case Bmi(num, size) => new VisitInt(size match {
+      case Bmi(num, size) => Some(size match {
         case 8 => 2
         case 16 => 4
       })
 
-      case Bge(num, size) => new VisitInt(size match {
+      case Bge(num, size) => Some(size match {
         case 8 => 2
         case 16 => 4
       })
 
-      case Blt(num, size) => new VisitInt(size match {
+      case Blt(num, size) => Some(size match {
         case 8 => 2
         case 16 => 4
       })
 
-      case Bgt(num, size) => new VisitInt(size match {
+      case Bgt(num, size) => Some(size match {
         case 8 => 2
         case 16 => 4
       })
 
-      case Ble(num, size) => new VisitInt(size match {
+      case Ble(num, size) => Some(size match {
         case 8 => 2
         case 16 => 4
       })
 
       case Bclr(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => new VisitInt(2)
-        case (_: RegByte, _: RegByte) => new VisitInt(2)
-        case _ => new VisitInt(4)
+        case (_: Imm, _: RegByte) => Some(2)
+        case (_: RegByte, _: RegByte) => Some(2)
+        case _ => Some(4)
       }
 
       case Biand(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => new VisitInt(2)
-        case _ => new VisitInt(4)
+        case (_: Imm, _: RegByte) => Some(2)
+        case _ => Some(4)
       }
 
       case Bild(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => new VisitInt(2)
-        case _ => new VisitInt(4)
+        case (_: Imm, _: RegByte) => Some(2)
+        case _ => Some(4)
       }
 
       case Bior(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => new VisitInt(2)
-        case _ => new VisitInt(4)
+        case (_: Imm, _: RegByte) => Some(2)
+        case _ => Some(4)
       }
 
       case Bist(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => new VisitInt(2)
-        case _ => new VisitInt(4)
+        case (_: Imm, _: RegByte) => Some(2)
+        case _ => Some(4)
       }
 
       case Bixor(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => new VisitInt(2)
-        case _ => new VisitInt(4)
+        case (_: Imm, _: RegByte) => Some(2)
+        case _ => Some(4)
       }
 
       case Bld(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => new VisitInt(2)
-        case _ => new VisitInt(4)
+        case (_: Imm, _: RegByte) => Some(2)
+        case _ => Some(4)
       }
 
       case Bnot(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => new VisitInt(2)
-        case _ => new VisitInt(4)
+        case (_: Imm, _: RegByte) => Some(2)
+        case _ => Some(4)
       }
 
       case Bor(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => new VisitInt(2)
-        case _ => new VisitInt(4)
+        case (_: Imm, _: RegByte) => Some(2)
+        case _ => Some(4)
       }
 
       case Bset(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => new VisitInt(2)
-        case (_: RegByte, _: RegByte) => new VisitInt(2)
-        case _ => new VisitInt(4)
+        case (_: Imm, _: RegByte) => Some(2)
+        case (_: RegByte, _: RegByte) => Some(2)
+        case _ => Some(4)
       }
 
-      case Bsr(disp, size) => new VisitInt(size match {
+      case Bsr(disp, size) => Some(size match {
         case 8 => 2
         case 16 => 4
       })
 
       case Bst(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => new VisitInt(2)
-        case _ => new VisitInt(4)
+        case (_: Imm, _: RegByte) => Some(2)
+        case _ => Some(4)
       }
 
       case Btst(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => new VisitInt(2)
-        case (_: RegByte, _: RegByte) => new VisitInt(2)
-        case _ => new VisitInt(4)
+        case (_: Imm, _: RegByte) => Some(2)
+        case (_: RegByte, _: RegByte) => Some(2)
+        case _ => Some(4)
       }
 
       case Bxor(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => new VisitInt(2)
-        case _ => new VisitInt(4)
+        case (_: Imm, _: RegByte) => Some(2)
+        case _ => Some(4)
       }
 
       case Cmp(left, right) => (left, right) match {
-        case (_: Imm, _: RegWord) => new VisitInt(4)
-        case (_: Imm, _: RegLong) => new VisitInt(6)
-        case _ => new VisitInt(2)
+        case (_: Imm, _: RegWord) => Some(4)
+        case (_: Imm, _: RegLong) => Some(6)
+        case _ => Some(2)
       }
 
-      case Daa(reg) => new VisitInt(2)
+      case Daa(reg) => Some(2)
 
-      case Das(reg) => new VisitInt(2)
+      case Das(reg) => Some(2)
 
-      case Dec(left, right) => new VisitInt(2)
+      case Dec(left, right) => Some(2)
 
-      case Divxs(left, right) => new VisitInt(4)
+      case Divxs(left, right) => Some(4)
 
-      case Divxu(left, right) => new VisitInt(2)
+      case Divxu(left, right) => Some(2)
 
-      case Eepmov(size) => new VisitInt(4)
+      case Eepmov(size) => Some(4)
 
-      case Exts(reg) => new VisitInt(2)
+      case Exts(reg) => Some(2)
 
-      case Extu(reg) => new VisitInt(2)
+      case Extu(reg) => Some(2)
 
-      case Inc(left, right) => new VisitInt(2)
+      case Inc(left, right) => Some(2)
 
       case Jmp(add) => add match {
-        case a: AbsAddress => new VisitInt(4)
-        case _ => new VisitInt(2)
+        case _: AbsAddress => Some(4)
+        case _ => Some(2)
       }
 
       case Jsr(add) => add match {
-        case a: AbsAddress => new VisitInt(4)
-        case _ => new VisitInt(2)
+        case _: AbsAddress => Some(4)
+        case _ => Some(2)
       }
 
       case Ldc(reg) => reg match {
-        case _: IndirReg => new VisitInt(4)
-        case r: Disp => new VisitInt(search(r) match {
-          case s: VisitInt => s.item match {
+        case _: IndirReg => Some(4)
+        case r: Disp => Some(search(r) match {
+          case Some(s: Int) => s match {
             case 16 => 6
             case 24 => 10
           }
         })
-        case _: Pos => new VisitInt(4)
-        case r: AbsAddress => new VisitInt(search(r) match {
-          case s: VisitInt => s.item match {
+        case _: Pos => Some(4)
+        case r: AbsAddress => Some(search(r) match {
+          case Some(s: Int) => s match {
             case 8 => 2
             case 16 => 6
             case 24 => 10
           }
         })
-        case _ => new VisitInt(2)
+        case _ => Some(2)
       }
 
       case Mov(left, right) => (left, right) match {
-        case (l: Disp, _: RegByte) => new VisitInt(search(l) match {
-          case s: VisitInt => s.item match {
+        case (l: Disp, _: RegByte) => Some(search(l) match {
+          case Some(s: Int) => s match {
             case 16 => 4
             case 24 => 8
           }
         })
-        case (l: AbsAddress, _: RegByte) => new VisitInt(search(l) match {
-          case s: VisitInt => s.item match {
+        case (l: AbsAddress, _: RegByte) => Some(search(l) match {
+          case Some(s: Int) => s match {
             case 8 => 2
             case 16 => 4
             case 24 => 6
           }
         })
-        case (_: Imm, _: RegWord) => new VisitInt(4)
-        case (l: Disp, _: RegWord) => new VisitInt(search(l) match {
-          case s: VisitInt => s.item match {
+        case (_: Imm, _: RegWord) => Some(4)
+        case (l: Disp, _: RegWord) => Some(search(l) match {
+          case Some(s: Int) => s match {
             case 16 => 4
             case 24 => 8
           }
         })
-        case (l: AbsAddress, _: RegWord) => new VisitInt(search(l) match {
-          case s: VisitInt => s.item match {
+        case (l: AbsAddress, _: RegWord) => Some(search(l) match {
+          case Some(s: Int) => s match {
             case 16 => 4
             case 24 => 8
           }
         })
-        case (_: Imm, _: RegLong) => new VisitInt(6)
-        case (_: IndirReg, _: RegLong) => new VisitInt(4)
-        case (l: Disp, _: RegLong) => new VisitInt(search(l) match {
-          case s: VisitInt => s.item match {
+        case (_: Imm, _: RegLong) => Some(6)
+        case (_: IndirReg, _: RegLong) => Some(4)
+        case (l: Disp, _: RegLong) => Some(search(l) match {
+          case Some(s: Int) => s match {
             case 16 => 6
             case 24 => 10
           }
         })
-        case (_: Pos, _: RegLong) => new VisitInt(4)
-        case (l: AbsAddress, _: RegLong) => new VisitInt(search(l) match {
-          case s: VisitInt => s.item match {
+        case (_: Pos, _: RegLong) => Some(4)
+        case (l: AbsAddress, _: RegLong) => Some(search(l) match {
+          case Some(s: Int) => s match {
             case 16 => 6
             case 24 => 8
           }
         })
-        case (_: RegByte, r: Disp) => new VisitInt(search(r) match {
-          case s: VisitInt => s.item match {
+        case (_: RegByte, r: Disp) => Some(search(r) match {
+          case Some(s: Int) => s match {
             case 16 => 4
             case 24 => 8
           }
         })
-        case (_: RegByte, r: AbsAddress) => new VisitInt(search(r) match {
-          case s: VisitInt => s.item match {
+        case (_: RegByte, r: AbsAddress) => Some(search(r) match {
+          case Some(s: Int) => s match {
             case 8 => 2
             case 16 => 4
             case 24 => 6
           }
         })
-        case (_: RegWord, r: Disp) => new VisitInt(search(r) match {
-          case s: VisitInt => s.item match {
+        case (_: RegWord, r: Disp) => Some(search(r) match {
+          case Some(s: Int) => s match {
             case 16 => 4
             case 24 => 8
           }
         })
-        case (_: RegWord, r: AbsAddress) => new VisitInt(search(r) match {
-          case s: VisitInt => s.item match {
+        case (_: RegWord, r: AbsAddress) => Some(search(r) match {
+          case Some(s: Int) => s match {
             case 16 => 4
             case 24 => 6
           }
         })
-        case (_: RegLong, _: IndirReg) => new VisitInt(4)
-        case (_: RegLong, r: Disp) => new VisitInt(search(r) match {
-          case s: VisitInt => s.item match {
+        case (_: RegLong, _: IndirReg) => Some(4)
+        case (_: RegLong, r: Disp) => Some(search(r) match {
+          case Some(s: Int) => s match {
             case 16 => 6
             case 24 => 10
           }
         })
-        case (_: RegLong, _: Pre) => new VisitInt(4)
-        case (_: RegLong, r: AbsAddress) => new VisitInt(search(r) match {
-          case s: VisitInt => s.item match {
+        case (_: RegLong, _: Pre) => Some(4)
+        case (_: RegLong, r: AbsAddress) => Some(search(r) match {
+          case Some(s: Int) => s match {
             case 16 => 4
             case 24 => 6
           }
         })
-        case _ => new VisitInt(2)
+        case _ => Some(2)
       }
 
-      case Movfpe(lefr, right) => new VisitInt(4)
+      case Movfpe(lefr, right) => Some(4)
 
-      case Movtpe(left, right) => new VisitInt(4)
+      case Movtpe(left, right) => Some(4)
 
-      case Mulxs(left, right) => new VisitInt(4)
+      case Mulxs(left, right) => Some(4)
 
-      case Mulxu(left, right) => new VisitInt(2)
+      case Mulxu(left, right) => Some(2)
 
-      case Neg(reg) => new VisitInt(2)
+      case Neg(reg) => Some(2)
 
-      case Nop() => new VisitInt(2)
+      case Nop() => Some(2)
 
-      case Not(item) => new VisitInt(2)
+      case Not(item) => Some(2)
 
       case Or(left, right) => (left, right) match {
-        case (_: Imm, _: RegWord) => new VisitInt(4)
-        case (_: Imm, _: RegLong) => new VisitInt(6)
-        case (_: RegLong, _: RegLong) => new VisitInt(4)
-        case _ => new VisitInt(2)
+        case (_: Imm, _: RegWord) => Some(4)
+        case (_: Imm, _: RegLong) => Some(6)
+        case (_: RegLong, _: RegLong) => Some(4)
+        case _ => Some(2)
       }
 
-      case Orc(item) => new VisitInt(2)
+      case Orc(item) => Some(2)
 
       case Pop(reg) => reg match {
-        case (_: RegWord) => new VisitInt(2)
-        case (_: RegLong) => new VisitInt(4)
+        case (_: RegWord) => Some(2)
+        case (_: RegLong) => Some(4)
       }
 
       case Push(reg) => reg match {
-        case (_: RegWord) => new VisitInt(2)
-        case (_: RegLong) => new VisitInt(4)
+        case (_: RegWord) => Some(2)
+        case (_: RegLong) => Some(4)
       }
 
-      case Rotl(reg) => new VisitInt(2)
+      case Rotl(reg) => Some(2)
 
-      case Rotr(reg) => new VisitInt(2)
+      case Rotr(reg) => Some(2)
 
-      case Rotxl(reg) => new VisitInt(2)
+      case Rotxl(reg) => Some(2)
 
-      case Rotxr(reg) => new VisitInt(2)
+      case Rotxr(reg) => Some(2)
 
-      case Rte() => new VisitInt(2)
+      case Rte() => Some(2)
 
-      case Rts() => new VisitInt(2)
+      case Rts() => Some(2)
 
-      case Shal(reg) => new VisitInt(2)
+      case Shal(reg) => Some(2)
 
-      case Shar(reg) => new VisitInt(2)
+      case Shar(reg) => Some(2)
 
-      case Shll(reg) => new VisitInt(2)
+      case Shll(reg) => Some(2)
 
-      case Shlr(reg) => new VisitInt(2)
+      case Shlr(reg) => Some(2)
 
-      case Sleep() => new VisitInt(2)
+      case Sleep() => Some(2)
 
       case Stc(reg) => reg match {
-        case _: RegByte => new VisitInt(2)
-        case r: Disp => new VisitInt(search(r) match {
-          case s: VisitInt => s.item match {
+        case _: RegByte => Some(2)
+        case r: Disp => Some(search(r) match {
+          case Some(s: Int) => s match {
             case 16 => 6
             case 24 => 10
           }
         })
-        case r: AbsAddress => new VisitInt(search(r) match {
-          case s: VisitInt => s.item match {
+        case r: AbsAddress => Some(search(r) match {
+          case Some(s: Int) => s match {
             case 8 => 2
             case 16 => 6
             case 24 => 8
           }
         })
-        case _ => new VisitInt(4)
+        case _ => Some(4)
       }
 
       case Sub(left, right) => (left, right) match {
-        case (_: Imm, _: RegWord) => new VisitInt(4)
-        case (_: Imm, _: RegLong) => new VisitInt(6)
-        case _ => new VisitInt(2)
+        case (_: Imm, _: RegWord) => Some(4)
+        case (_: Imm, _: RegLong) => Some(6)
+        case _ => Some(2)
       }
 
-      case Subs(left, right) => new VisitInt(2)
+      case Subs(left, right) => Some(2)
 
-      case Subx(left, right) => new VisitInt(2)
+      case Subx(left, right) => Some(2)
 
-      case Trapa(imm) => new VisitInt(2)
+      case Trapa(imm) => Some(2)
 
       case Xor(left, right) => (left, right) match {
-        case (_: Imm, _: RegWord) => new VisitInt(4)
-        case (_: Imm, _: RegLong) => new VisitInt(6)
-        case (_: RegLong, _: RegLong) => new VisitInt(4)
-        case _ => new VisitInt(2)
+        case (_: Imm, _: RegWord) => Some(4)
+        case (_: Imm, _: RegLong) => Some(6)
+        case (_: RegLong, _: RegLong) => Some(4)
+        case _ => Some(2)
       }
 
-      case Xorc(imm) => new VisitInt(2)
+      case Xorc(imm) => Some(2)
 
       case Data(num, size) => size match {
-        case 8 => new VisitInt(1)
-        case 16 => new VisitInt(2)
-        case 32 => new VisitInt(4)
+        case 8 => Some(1)
+        case 16 => Some(2)
+        case 32 => Some(4)
       }
 
-      case DataBlock(block, data, size) => size match {
-        case 8 => new VisitInt(1 * (search(block) match {
-          case i: VisitInt => i.item
-        }))
-        case 16 => new VisitInt(2 * (search(block) match {
-          case i: VisitInt => i.item
-        }))
-        case 32 => new VisitInt(4 * (search(block) match {
-          case i: VisitInt => i.item
-        }))
-      }
+      case DataBlock(block, data, size) =>
+        Some(search(block) match {
+          case Some(s: Int) => s * (size match {
+            case 8 => 1
+            case 16 => 2
+            case 32 => 4
+          })
+        })
 
-      case AbsAddress(num, size) => new VisitInt(size)
+      case AbsAddress(num, size) => Some(size)
 
-      case Disp(disp, reg, size) => new VisitInt(size)
+      case Disp(disp, reg, size) => Some(size)
 
-      case LabelName(str) => new VisitString(str)
+      case LabelName(str) => Some(str)
 
-      case Number(num) => new VisitInt(num)
+      case Number(num) => Some(num)
 
       case MakeLabel(name) => label += (search(name) match {
-        case s: VisitString => s.item -> count(section)
+        case Some(s: String) => s -> count(section)
       })
-        new VisitString("") //ダミー
+        None
 
       case Section(sec) =>
         section = sec
-        new VisitString("") //ダミー
+        None
     }
   }
 
   //メモリに命令やデータを配置
-  def visit(ast: AST): Visit = {
+  def visit(ast: AST): Option[Any] = {
     ast match {
       case Add(left, right) => (left, right) match {
         case (l: Imm, r: RegByte) => new VisitArray(0x80 | visit(r).asInstanceOf[VisitInt].item, visit(l).asInstanceOf[VisitInt].item)
@@ -1107,190 +1105,213 @@ class ASTVisitor {
       }
 
       case Sub(left, right) => (left, right) match {
-        case (l: RegByte, r: RegByte) => new VisitArray(0x18, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
-        case (l: Imm, r: RegWord) =>
-          val imm = visit(l).asInstanceOf[VisitInt].item
-          new VisitArray(0x79, 0x30 | visit(r).asInstanceOf[VisitInt].item, imm >> 8, imm)
-        case (l: RegWord, r: RegWord) => new VisitArray(0x19, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
-        case (l: Imm, r: RegLong) =>
-          val imm = visit(l).asInstanceOf[VisitInt].item
-          new VisitArray(0x7A, 0x30 | visit(r).asInstanceOf[VisitInt].item, imm >> 24, imm >> 16, imm >> 8, imm)
-        case (l: RegLong, r: RegLong) => new VisitArray(0x1A, 0x80 | (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
+        case (lr: RegByte, rr: RegByte) => (visit(lr), visit(rr)) match {
+          case (Some(l: Int), Some(r: Int)) => Some(Array(0x18, (l << 4) | r))
+        }
+        case (i: Imm, rr: RegWord) => (visit(i), visit(rr)) match {
+          case (Some(l: Int), Some(r: Int)) => Some(Array(0x79, 0x30 | r, l >> 8, l))
+        }
+        case (lr: RegWord, rr: RegWord) => (visit(lr), visit(rr)) match {
+          case (Some(l: Int), Some(r: Int)) => Some(Array(0x19, (l << 4) | r))
+        }
+        case (i: Imm, rr: RegLong) => (visit(i), visit(rr)) match {
+          case (Some(l: Int), Some(r: Int)) => Some(Array(0x7A, 0x30 | r, l >> 24, l >> 16, l >> 8, l))
+        }
+        case (lr: RegLong, rr: RegLong) => (visit(lr), visit(rr)) match {
+          case (Some(l: Int), Some(r: Int)) => Some(Array(0x1A, 0x80 | (l << 4) | r))
+        }
       }
 
       case Subs(left, right) => (left, right) match {
-        case (l: Imm, r: RegLong) => new VisitArray(0x1B, visit(r).asInstanceOf[VisitInt].item | (visit(l).asInstanceOf[VisitInt].item match {
-          case 1 => 0x00
-          case 2 => 0x80
-          case 4 => 0x90
-        }))
+        case (i: Imm, rr: RegLong) => (visit(i), visit(rr)) match {
+          case (Some(l: Int), Some(r: Int)) => Some(0x1B, r | (l match {
+            case 1 => 0x00
+            case 2 => 0x80
+            case 4 => 0x90
+          }))
+        }
       }
 
       case Subx(left, right) => (left, right) match {
-        case (l: Imm, r: RegByte) => new VisitArray(0xB0 | visit(r).asInstanceOf[VisitInt].item, visit(l).asInstanceOf[VisitInt].item)
-        case (l: RegByte, r: RegByte) => new VisitArray(0x1E, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
+        case (i: Imm, rr: RegByte) => (visit(i), visit(rr)) match {
+          case (Some(l: Int), Some(r: Int)) => Some(0xB0 | r, l)
+        }
+        case (lr: RegByte, rr: RegByte) => (visit(lr), visit(rr)) match {
+          case (Some(l: Int), Some(r: Int)) => Some(0x1E, (l << 4) | r)
+        }
       }
 
       case Trapa(imm) => imm match {
-        case i: Imm => new VisitArray(0x57, visit(i).asInstanceOf[VisitInt].item << 4)
+        case i: Imm => visit(i) match {
+          case Some(n: Int) => Some(Array(0x57, n << 4))
+        }
       }
 
       case Xor(left, right) => (left, right) match {
-        case (l: Imm, r: RegByte) => new VisitArray(0xD0 | visit(r).asInstanceOf[VisitInt].item, visit(l).asInstanceOf[VisitInt].item)
-        case (l: RegByte, r: RegByte) => new VisitArray(0x15, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
-        case (l: Imm, r: RegWord) =>
-          val imm = visit(l).asInstanceOf[VisitInt].item
-          new VisitArray(0x79, 0x50 | visit(r).asInstanceOf[VisitInt].item, imm >> 8, imm)
-        case (l: RegWord, r: RegWord) => new VisitArray(0x65, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
-        case (l: Imm, r: RegLong) =>
-          val imm = visit(l).asInstanceOf[VisitInt].item
-          new VisitArray(0x7A, 0x50 | visit(r).asInstanceOf[VisitInt].item, imm >> 24, imm >> 16, imm >> 8, imm)
-        case (l: RegLong, r: RegLong) => new VisitArray(0x01, 0xF0, 0x65, (visit(l).asInstanceOf[VisitInt].item << 4) | visit(r).asInstanceOf[VisitInt].item)
+        case (i: Imm, rr: RegByte) => (visit(i), visit(rr)) match {
+          case (Some(l: Int), Some(r: Int)) => Some(Array(0xD0 | r, l))
+        }
+        case (lr: RegByte, rr: RegByte) => (visit(lr), visit(rr)) match {
+          case (Some(l: Int), Some(r: Int)) => Some(Array(0x15, (l << 4) | r))
+        }
+        case (i: Imm, rr: RegWord) => (visit(i), visit(rr)) match {
+          case (Some(l: Int), Some(r: Int)) => Some(Array(0x79, 0x50 | r, l >> 8, l))
+        }
+        case (lr: RegWord, rr: RegWord) => (visit(lr), visit(rr)) match {
+          case (Some(l: Int), Some(r: Int)) => Some(Array(0x65, (l << 4) | r))
+        }
+        case (i: Imm, rr: RegLong) => (visit(i), visit(rr)) match {
+          case (Some(l: Int), Some(r: Int)) => Some(Array(0x7A, 0x50 | r, l >> 24, l >> 16, l >> 8, l))
+        }
+        case (lr: RegLong, rr: RegLong) => (visit(lr), visit(rr)) match {
+          case (Some(l: Int), Some(r: Int)) => Some(Array(0x01, 0xF0, 0x65, (l << 4) | r))
+        }
       }
 
       case Xorc(imm) => imm match {
-        case i: Imm => new VisitArray(0x05, visit(imm).asInstanceOf[VisitInt].item)
+        case i: Imm => visit(i) match {
+          case Some(n: Int) => Some(Array(0x05, n))
+        }
       }
 
-      case Data(num, size) => size match {
-        case 8 => new VisitArray(visit(num).asInstanceOf[VisitInt].item)
-        case 16 =>
-          val data = visit(num).asInstanceOf[VisitInt].item
-          new VisitArray(data >> 8, data)
-        case 32 =>
-          val data = visit(num).asInstanceOf[VisitInt].item
-          new VisitArray(data >> 24, data >> 16, data >> 8, data)
+      case Data(num, size) => visit(num) match {
+        case Some(n: Int) => size match {
+          case 8 => Some(Array(n))
+          case 16 => Some(Array(n >> 8, n))
+          case 32 => Some(Array(n >> 24, n >> 16, n >> 8, n))
+        }
       }
 
-      case DataBlock(block, data, size) => size match {
-        case 8 => new VisitArray(Array.fill(visit(block).asInstanceOf[VisitInt].item)(visit(data).asInstanceOf[VisitInt].item))
-        case 16 =>
-          val d = visit(data).asInstanceOf[VisitInt].item
-          val array = new Array[Int](2 * visit(block).asInstanceOf[VisitInt].item)
-          for (i <- 0 until array.length / 2) {
-            array(i * 2) = (d >> 8)
-            array(i * 2 + 1) = d
-          }
-          new VisitArray(array)
-        case 32 =>
-          val d = visit(data).asInstanceOf[VisitInt].item
-          val array = new Array[Int](4 * visit(block).asInstanceOf[VisitInt].item)
-          for (i <- 0 until array.length / 4) {
-            array(i * 4) = d >> 24
-            array(i * 4 + 1) = d >> 16
-            array(i * 4 + 2) = d >> 8
-            array(i * 4 + 3) = d
-          }
-          new VisitArray(array)
+      case DataBlock(block, data, size) => (visit(block), visit(data)) match {
+        case (Some(b: Int), Some(d: Int)) => size match {
+          case 8 => Some(Array.fill(b)(d))
+          case 16 =>
+            val array = new Array[Int](2 * b)
+            for (i <- 0 until array.length)
+              array(i) =
+                if (i % 2 == 0) d >> 8
+                else d
+            Some(array)
+          case 32 =>
+            val array = new Array[Int](4 * b)
+            for (i <- 0 until array.length)
+              array(i) =
+                if (i % 4 == 0) d >> 24
+                else if (i % 4 == 1) d >> 16
+                else if (i % 4 == 2) d >> 8
+                else d
+            Some(array)
+        }
       }
 
-      case LabelName(num) => new VisitInt(label(num))
+      case LabelName(num) => Some(label(num))
 
-      case MakeLabel(num) => new VisitInt(0)
+      case MakeLabel(num) => None
 
       case Imm(num) => visit(num)
 
-      case AbsAddress(num, size) => new VisitArray(visit(num).asInstanceOf[VisitInt].item, size)
+      case AbsAddress(num, size) => visit(num) match {
+        case Some(n: Int) => Some(Array(n, size))
+      }
 
-      case IndirReg(reg) => visit(reg)
+      case IndirReg(reg) => visit(reg) match {
+        case Some(r: Int) => Some(r)
+      }
 
-      case IndirAdd(add) => visit(add)
+      case IndirAdd(add) => visit(add) match {
+        case Some(a: Int) => Some(a)
+      }
 
-      case Disp(disp, reg, size) => new VisitArray(visit(disp).asInstanceOf[VisitInt].item, visit(reg).asInstanceOf[VisitInt].item, size)
+      case Disp(disp, reg, size) => (visit(disp), visit(reg)) match {
+        case (Some(d: Int), Some(r: Int)) => Some(Array(disp, reg, size))
+      }
 
-      case Pos(item) => visit(item)
+      case Pos(reg) => visit(reg) match {
+        case Some(r: Int) => Some(r)
+      }
 
-      case Pre(item) => visit(item)
+      case Pre(reg) => visit(reg) match {
+        case Some(r: Int) => Some(r)
+      }
 
       case Section(sec) =>
         section = sec
-        new VisitInt(0) // ダミー
+        None // ダミー
 
-      case RegByte(num) => new VisitInt(num)
+      case RegByte(num) => Some(num)
 
-      case RegWord(num) => new VisitInt(num)
+      case RegWord(num) => Some(num)
 
-      case RegLong(num) => new VisitInt(num)
+      case RegLong(num) => Some(num)
 
-      case Number(num) => new VisitInt(num)
+      case Number(num) => Some(num)
 
-      case Minus(num) => new VisitInt(-visit(num).asInstanceOf[VisitInt].item)
+      case Minus(num) => visit(num) match {
+        case Some(n: Int) => Some(-n)
+      }
 
-      case Rev(num) => new VisitInt(~visit(num).asInstanceOf[VisitInt].item)
+      case Rev(num) => visit(num) match {
+        case Some(n: Int) => Some(~n)
+      }
 
-      case High(num) => new VisitInt((visit(num).asInstanceOf[VisitInt].item >> 8) & 0xFF)
+      case High(num) => visit(num) match {
+        case Some(n: Int) => Some((n >> 8) & 0xFF)
+      }
 
-      case Low(num) => new VisitInt(visit(num).asInstanceOf[VisitInt].item & 0xFF)
+      case Low(num) => visit(num) match {
+        case Some(n: Int) => Some(n & 0xFF)
+      }
 
-      case HWord(num) => new VisitInt((visit(num).asInstanceOf[VisitInt].item >> 8) & 0xFFFF)
+      case HWord(num) => visit(num) match {
+        case Some(n: Int) => Some(n & 0xFFFF)
+      }
 
-      case LWord(num) => new VisitInt(visit(num).asInstanceOf[VisitInt].item & 0xFFFF)
+      case LWord(num) => visit(num) match {
+        case Some(n: Int) => Some(n & 0xFFFF)
+      }
 
-      case StartOf(sec) => new VisitInt(Parameter.start(sec))
+      case StartOf(sec) => Some(Parameter.start(sec))
 
-      case SizeOf(sec) => new VisitInt(count(sec))
+      case SizeOf(sec) => Some(count(sec))
 
-      case Expr(op, left, right) => op match {
-        case "+" => new VisitInt(visit(left).asInstanceOf[VisitInt].item + visit(right).asInstanceOf[VisitInt].item)
-        case "-" => new VisitInt(visit(left).asInstanceOf[VisitInt].item - visit(right).asInstanceOf[VisitInt].item)
-        case "*" => new VisitInt(visit(left).asInstanceOf[VisitInt].item * visit(right).asInstanceOf[VisitInt].item)
-        case "/" => new VisitInt(visit(left).asInstanceOf[VisitInt].item / visit(right).asInstanceOf[VisitInt].item)
-        case "&" => new VisitInt(visit(left).asInstanceOf[VisitInt].item & visit(right).asInstanceOf[VisitInt].item)
-        case "|" => new VisitInt(visit(left).asInstanceOf[VisitInt].item | visit(right).asInstanceOf[VisitInt].item)
-        case "~" => new VisitInt(visit(left).asInstanceOf[VisitInt].item ^ visit(right).asInstanceOf[VisitInt].item)
-        case ">>" => new VisitInt(visit(left).asInstanceOf[VisitInt].item >> visit(right).asInstanceOf[VisitInt].item)
-        case "<<" => new VisitInt(visit(left).asInstanceOf[VisitInt].item << visit(right).asInstanceOf[VisitInt].item)
+      case Expr(op, left, right) => (visit(left), visit(right)) match {
+        case (Some(l: Int), Some(r: Int)) => op match {
+          case "+" => Some(l + r)
+          case "-" => Some(l - r)
+          case "*" => Some(l * r)
+          case "/" => Some(l / r)
+          case "&" => Some(l & r)
+          case "|" => Some(l | r)
+          case "~" => Some(l ^ r)
+          case ">>" => Some(l >> r)
+          case "<<" => Some(l << r)
+        }
       }
     }
   }
 
-}
+  class MyHashMap extends mutable.HashMap[String, Int] {
 
-trait Visit {
-  type T
-  val item: T
-}
-
-class VisitInt(num: Int) extends Visit {
-  type T = Int
-  val item = num
-}
-
-class VisitArray(num: Array[Int]) extends Visit {
-  type T = Array[Int]
-  val item = num
-
-  def this(num: Int*) = this(num.toArray)
-}
-
-class VisitString(num: String) extends Visit {
-  type T = String
-  val item = num
-}
-
-class MyHashMap extends mutable.HashMap[String, Int] {
-
-  override def put(key: String, value: Int): Option[Int] = {
-    key match {
-      case "V" =>
-        super.put("V", countup("V", value))
-      case "P" =>
-        super.put("P", countup("P", value))
-        super.put("C", countup("C", value))
-        super.put("D", countup("D", value))
-      case "C" =>
-        super.put("C", countup("C", value))
-        super.put("D", countup("D", value))
-      case "D" =>
-        super.put("D", countup("D", value))
-      case "B" =>
-        super.put("B", countup("B", value))
-        super.put("R", countup("R", value))
-      case "R" =>
-        super.put("R", countup("R", value))
+    override def put(key: String, value: Int): Option[Int] = {
+      key match {
+        case "V" =>
+          super.put("V", countup("V", value))
+        case "P" =>
+          super.put("P", countup("P", value))
+          super.put("C", countup("C", value))
+          super.put("D", countup("D", value))
+        case "C" =>
+          super.put("C", countup("C", value))
+          super.put("D", countup("D", value))
+        case "D" =>
+          super.put("D", countup("D", value))
+        case "B" =>
+          super.put("B", countup("B", value))
+          super.put("R", countup("R", value))
+        case "R" =>
+          super.put("R", countup("R", value))
+      }
     }
+
+    def countup(key: String, value: Int): Int = super.get(key).get + value
   }
-
-  def countup(key: String, value: Int): Int = super.get(key).get + value
-}
-
