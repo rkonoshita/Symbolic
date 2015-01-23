@@ -124,6 +124,12 @@ class CtxSymbol(ast: Z3AST) {
 
   def >=(s: Int): CtxSymbol = >=(ctx.mkInt(s, symbol.getSort))
 
+  def >(s: CtxSymbol): CtxSymbol = >(s.symbol)
+
+  def >(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSgt(symbol, s))
+
+  def >(s: Int): CtxSymbol = >(ctx.mkInt(s, symbol.getSort))
+
   def <(s: CtxSymbol): CtxSymbol = <(s.symbol)
 
   def <(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSlt(symbol, s))
@@ -149,6 +155,14 @@ class CtxSymbol(ast: Z3AST) {
   def bitset(s: Z3AST): CtxSymbol = |(new CtxSymbol(1, s.getSort) << s)
 
   def bitset(s: Int): CtxSymbol = |(1 << s)
+
+  def store(index: CtxSymbol, store: CtxSymbol): CtxSymbol = this.store(index.symbol, store.symbol)
+
+  def store(index: Z3AST, store: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkStore(symbol, index, store))
+
+  def select(index: CtxSymbol): CtxSymbol = this.select(index.symbol)
+
+  def select(index: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkSelect(symbol, index))
 
   override def toString(): String = symbol.toString
 

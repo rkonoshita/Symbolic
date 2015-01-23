@@ -1,6 +1,7 @@
 package main
 
 import data.DataSet
+import z3.scala.Z3Model
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -17,7 +18,6 @@ class State(num: Int, data: DataSet, pr: State) {
   val pc = data.pc
   val ccr = data.ccr
   val path = data.path
-  val counter = data.counter
   val pathCheck =
     if (path.path == null) true
     else {
@@ -26,13 +26,28 @@ class State(num: Int, data: DataSet, pr: State) {
       Main.sol.reset
       ans
     }
+
+  def error(): (Boolean, Option[Z3Model]) = {
+    val sp = reg.getLong(7)
+    val tsp = sp > 0xFFFFFF80
+    val bsp = sp < 0xFFFFFB80
+    Main.sol.assertCnstr(Main.ctx.mkOr(tsp.symbol, bsp.symbol))
+    val ans = Main.sol.check.get
+    val model =
+      if (ans) Some(Main.sol.getModel())
+      else None
+    Main.sol.reset
+    (ans, model)
+  }
+
   val stop = data.pc.pc == (Main.rom.getWord(0) + 14) | !pathCheck
 
-  override def toString(): String =
-    if (path.path == null) number + ", " + true
-    else number + ", " + path.path.toString()
+  //  override def toString(): String =
+  //    if (path.path == null) number + ", " + true
+  //    else number + ", " + path.path.toString()
 
 
-  //    override def toString(): String = ccr.ccr.toString
+  //      override def toString(): String = ccr.ccr.toString
 
+  override def toString(): String = number.toString
 }

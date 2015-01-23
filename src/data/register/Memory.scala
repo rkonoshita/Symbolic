@@ -1,50 +1,66 @@
 package data.register
 
-import data.SymbolCounter
 import main.Main
 import symbol.CtxSymbol
-
-import scala.collection.mutable
 
 /**
  * Created by rkonoshita on 14/11/17.
  */
-class Memory(m: mutable.HashMap[Int, CtxSymbol], s: SymbolCounter) {
+class Memory(m: CtxSymbol) {
 
-  val mem = m
-  val counter = s
-  private val ctx = Main.ctx
-  private val limit = 0xFFFF // ノーマルモード
+  var mem = m
+  //  private val limit = 0xFFFF // ノーマルモード
 
-  private def check(num: Int*) = num.foreach(n => if (!mem.contains(n & limit)) mem += (n & limit) -> counter.makeSymbol(n & limit, "m"))
+  private def trans(num: Int): CtxSymbol = new CtxSymbol(num, 16)
 
-  def getByte(num: Int): CtxSymbol = {
-    check(num)
-    Main.simple(mem(num & limit))
+  def getByte(num: Int): CtxSymbol = getByte(trans(num))
+
+  def getByte(num: CtxSymbol): CtxSymbol = Main.simple(mem.select(num.extract(15, 0)))
+
+  def getWord(num: Int): CtxSymbol = getWord(trans(num))
+
+  def getWord(num: CtxSymbol) = {
+    val number = num.extract(15, 0)
+    Main.simple(mem.select(number) concat mem.select(number + 1))
   }
 
-  def getWord(num: Int): CtxSymbol = {
-    check(num, num + 1)
-    Main.simple(mem(num) concat mem(num + 1))
+  def getLong(num: Int): CtxSymbol = getLong(trans(num))
+
+  def getLong(num: CtxSymbol): CtxSymbol = {
+    val number = num.extract(15, 0)
+    Main.simple(mem.select(number) concat mem.select(number + 1)
+      concat mem.select(number + 2) concat mem.select(number + 3))
   }
 
-  def getLong(num: Int): CtxSymbol = {
-    check(num, num + 1, num + 2, num + 3)
-    Main.simple(mem(num) concat mem(num + 1) concat mem(num + 2) concat mem(num + 3))
+  def setByte(data: CtxSymbol, num: Int): Unit = setByte(data, trans(num))
+
+  def setByte(data: CtxSymbol, num: CtxSymbol) = mem = mem.store(num.extract(15, 0), data)
+
+  def setByte(data: Int, num: CtxSymbol): Unit = setByte(new CtxSymbol(data, 8), num)
+
+  def setByte(data: Int, num: Int): Unit = setByte(new CtxSymbol(data, 8), trans(num))
+
+  def setWord(data: CtxSymbol, num: Int): Unit = setWord(data, trans(num))
+
+  def setWord(data: CtxSymbol, num: CtxSymbol) = {
+    val number = num.extract(15, 0)
+    mem = mem.store(number, data.extract(15, 8)).store(number + 1, data.extract(7, 0))
   }
 
-  def setByte(data: CtxSymbol, num: Int) = mem(num & limit) = Main.simple(data)
+  def setWord(data: Int, num: CtxSymbol): Unit = setWord(new CtxSymbol(data, 16), num)
 
-  def setWord(data: CtxSymbol, num: Int): Unit = {
-    mem(num & limit) = Main.simple(data.extract(15, 8))
-    mem((num + 1) & limit) = Main.simple(data.extract(7, 0))
+  def setWord(data: Int, num: Int): Unit = setWord(new CtxSymbol(data, 16), trans(num))
+
+  def setLong(data: CtxSymbol, num: Int): Unit = setLong(data, trans(num))
+
+  def setLong(data: CtxSymbol, num: CtxSymbol) = {
+    val number = num.extract(15, 0)
+    mem = mem.store(number, data.extract(31, 24)).store(number + 1, data.extract(23, 16))
+      .store(number + 2, data.extract(15, 8)).store(number + 3, data.extract(7, 0))
   }
 
-  def setLong(data: CtxSymbol, num: Int): Unit = {
-    mem(num & limit) = Main.simple(data.extract(31, 24))
-    mem((num + 1) & limit) = Main.simple(data.extract(23, 16))
-    mem((num + 2) & limit) = Main.simple(data.extract(15, 8))
-    mem((num + 3) & limit) = Main.simple(data.extract(7, 0))
-  }
+  def setLong(data: Int, num: CtxSymbol): Unit = setLong(new CtxSymbol(data, 32), num)
+
+  def setLong(data: Int, num: Int): Unit = setLong(new CtxSymbol(data, 32), trans(num))
 
 }
