@@ -2612,7 +2612,7 @@ class Decoder {
   }
 
   def check3(num1: CtxSymbol, num2: CtxSymbol, result: CtxSymbol, size: Int, base: DataSet): ArrayBuffer[DataSet] = {
-    var buf = checkV(num1, num2, result, base, size)
+    val buf = checkV(num1, num2, result, base, size)
     check2(result, size, buf)
   }
 
@@ -2710,12 +2710,6 @@ class Decoder {
   }
 
   private def tapleToArray(data: (DataSet, DataSet)): ArrayBuffer[DataSet] = ArrayBuffer(data._1, data._2)
-
-  //  private def pathClone(path: CtxSymbol, data: DataSet): DataSet = {
-  //    val clone = data.clone
-  //    clone.path.set(path.symbol)
-  //    clone
-  //  }
 
   private def twoPathClone(path: CtxSymbol, data: DataSet): (DataSet, DataSet) = {
     val clone1 = data.clone
