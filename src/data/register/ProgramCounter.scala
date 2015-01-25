@@ -17,7 +17,7 @@ class ProgramCounter(p: Int) {
 
   def setPc(p:CtxSymbol): Unit = {
     (0x0100 to Parameter.size("P")).foreach { q =>
-      Main.sol.assertCnstr(p.eq(q).symbol)
+      Main.sol.assertCnstr(p.equal(q).symbol)
       if(Main.sol.check.get) {
         Main.sol.reset
         pc = q

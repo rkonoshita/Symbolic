@@ -92,11 +92,11 @@ class CtxSymbol(ast: Z3AST) {
 
   def <<(s: Int): CtxSymbol = <<(ctx.mkInt(s, symbol.getSort))
 
-  def eq(s: CtxSymbol): CtxSymbol = eq(s.symbol)
+  def equal(s: CtxSymbol): CtxSymbol = equal(s.symbol)
 
-  def eq(s: Int): CtxSymbol = eq(ctx.mkInt(s, symbol.getSort))
+  def equal(s: Int): CtxSymbol = equal(ctx.mkInt(s, symbol.getSort))
 
-  def eq(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkEq(symbol, s))
+  def equal(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkEq(symbol, s))
 
   def not: CtxSymbol = new CtxSymbol(ctx.mkNot(symbol))
 
@@ -164,6 +164,6 @@ class CtxSymbol(ast: Z3AST) {
 
   def select(index: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkSelect(symbol, index))
 
-  override def toString(): String = symbol.toString
+  override def toString(): String = symbol.toString()
 
 }

@@ -39,6 +39,7 @@ object Main {
       val current = stack.pop
       //      val current = queue.dequeue
       val data = new DataSet(current)
+      //ここらへんにセンサ関係書きたい
       val dataArray = new Decoder().analyze(data)
       dataArray.foreach { d =>
         val s = new State(state.size, d, current)
