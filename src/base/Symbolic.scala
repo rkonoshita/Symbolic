@@ -25,18 +25,6 @@ object Symbolic {
 
   def main(args: Array[String]): Unit = {
 
-    val s = ctx.mkInt(0x80000000, ctx.mkBVSort(32))
-    val c1 = ctx.mkExtract(30, 0, s)
-    val c2 = ctx.mkExtract(31, 31, s)
-    val c = ctx.mkConcat(c1, c2)
-    val e = ctx.mkEq(c, ctx.mkInt(1, ctx.mkBVSort(32)))
-    println(ctx.simplifyAst(c1),ctx.simplifyAst(c2))
-    println(c)
-    println(ctx.simplifyAst(c))
-    sol.assertCnstr(e)
-    println(sol.check)
-    return
-
     val file = new File("test_code") -> new File("asm")
     new ConvertToInputForm(file._1, file._2).convert()
     rom = new ASTVisitor().makeProgram(ctx, file._2)
