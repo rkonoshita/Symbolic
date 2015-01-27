@@ -46,7 +46,7 @@ object Symbolic {
         dataArray.foreach { d =>
           val s = new State(state.size, d, current)
           current.next += s
-          println(s)
+          println(s + " stateNum:" + state.size + " rest:" + stack.size)
           println
           state += s
           if (s.reach) {
@@ -59,7 +59,7 @@ object Symbolic {
             }
           }
         }
-        if (state.length >= 40000) stack.clear
+        //        if (state.length >= 40000) stack.clear
         //if (state.length >= 500) queue.clear
       }
     }

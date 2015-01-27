@@ -34,7 +34,7 @@ class Memory(m: CtxSymbol) {
 
   def setByte(data: CtxSymbol, num: Int): Unit = setByte(data, trans(num))
 
-  def setByte(data: CtxSymbol, num: CtxSymbol) = mem = mem.store(num.extract(15, 0), data)
+  def setByte(data: CtxSymbol, num: CtxSymbol) = mem = Symbolic.simple(mem.store(num.extract(15, 0), data))
 
   def setByte(data: Int, num: CtxSymbol): Unit = setByte(new CtxSymbol(data, 8), num)
 
@@ -44,7 +44,7 @@ class Memory(m: CtxSymbol) {
 
   def setWord(data: CtxSymbol, num: CtxSymbol) = {
     val number = num.extract(15, 0)
-    mem = mem.store(number, data.extract(15, 8)).store(number + 1, data.extract(7, 0))
+    mem = Symbolic.simple(mem.store(number, data.extract(15, 8)).store(number + 1, data.extract(7, 0)))
   }
 
   def setWord(data: Int, num: CtxSymbol): Unit = setWord(new CtxSymbol(data, 16), num)
@@ -55,8 +55,8 @@ class Memory(m: CtxSymbol) {
 
   def setLong(data: CtxSymbol, num: CtxSymbol) = {
     val number = num.extract(15, 0)
-    mem = mem.store(number, data.extract(31, 24)).store(number + 1, data.extract(23, 16))
-      .store(number + 2, data.extract(15, 8)).store(number + 3, data.extract(7, 0))
+    mem = Symbolic.simple(mem.store(number, data.extract(31, 24)).store(number + 1, data.extract(23, 16))
+      .store(number + 2, data.extract(15, 8)).store(number + 3, data.extract(7, 0)))
   }
 
   def setLong(data: Int, num: CtxSymbol): Unit = setLong(new CtxSymbol(data, 32), num)

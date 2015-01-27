@@ -17,7 +17,7 @@ _loop:                                  ; function: loop
           EXTU.W      R0
           MOV.W       R0,@(-6:16,ER6)
           .LINE       13
-          CMP.W       #1000,R5
+          CMP.W       #5,R5
           BLT         L106:8
           .LINE       13
           BRA         L107:8

@@ -15,7 +15,7 @@ class ProgramCounter(p: Int) {
 
   def setPc(p: Int) = pc = p & limit
 
-  def setPc(p:CtxSymbol): Int = {
+  def setPc(p:CtxSymbol): Int = { //むちゃくちゃ
     (0x0100 to Parameter.size("P")).foreach { q =>
       Symbolic.sol.assertCnstr(p.equal(q).symbol)
       if(Symbolic.sol.check.get) {

@@ -37,12 +37,12 @@ class Register(r: CtxSymbol) {
   private def setByteHigh(data: CtxSymbol, num: Int): Unit = {
     val n = trans(num) & 0x07
     val base = reg.select(n)
-    reg = reg.store(n, Symbolic.simple(base.extract(31, 16) concat data concat base.extract(7, 0)))
+    reg = Symbolic.simple(reg.store(n, Symbolic.simple(base.extract(31, 16) concat data concat base.extract(7, 0))))
   }
 
   private def setByteLow(data: CtxSymbol, num: Int): Unit = {
     val n = trans(num) & 0x07
-    reg = reg.store(n, Symbolic.simple(reg.select(n).extract(31, 16) concat data))
+    reg = Symbolic.simple(reg.store(n, Symbolic.simple(reg.select(n).extract(31, 16) concat data)))
   }
 
   def setWord(data: CtxSymbol, num: Int): Unit =
@@ -52,12 +52,12 @@ class Register(r: CtxSymbol) {
 
   private def setWordHigh(data: CtxSymbol, num: Int) = {
     val n = trans(num) & 0x07
-    reg = reg.store(n, Symbolic.simple(data concat reg.select(n).extract(15, 0)))
+    reg = Symbolic.simple(reg.store(n, Symbolic.simple(data concat reg.select(n).extract(15, 0))))
   }
 
   private def setWordLow(data: CtxSymbol, num: Int) = {
     val n = trans(num) & 0x07
-    reg = reg.store(n, Symbolic.simple(reg.select(n).extract(31, 16) concat data))
+    reg = Symbolic.simple(reg.store(n, Symbolic.simple(reg.select(n).extract(31, 16) concat data)))
   }
 
   def setLong(data: CtxSymbol, num: Int): Unit = reg = Symbolic.simple(reg.store(trans(num) & 0x07, data))
