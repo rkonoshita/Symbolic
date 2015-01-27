@@ -3,7 +3,7 @@ package parser
 import java.io.File
 
 import data.register.ROM
-import main.Parameter
+import base.Parameter
 import z3.scala.Z3Context
 
 import scala.collection.mutable
@@ -44,7 +44,7 @@ class ASTVisitor {
     parseResult.foreach { p =>
       println(p)
       visit(p) match {
-        case Some(array:Array[Int]) =>
+        case Some(array: Array[Int]) =>
           (0 until array.length).foreach { op =>
             print("%x".format(array(op).toByte) + ":")
             rom += (tmppc(section) + op) -> array(op).toByte
@@ -62,29 +62,29 @@ class ASTVisitor {
   //文法的な正しさは度外視
   def search(ast: AST): Option[Any] = {
     ast match {
-      case Add(left, right) => (left, right) match {
-        case (_: Imm, _: RegWord) => Some(4)
-        case (_: Imm, _: RegLong) => Some(4)
-        case _ => Some(2)
-      }
+      case Add(left, right) => Some((left, right) match {
+        case (_: Imm, _: RegWord) => 4
+        case (_: Imm, _: RegLong) => 4
+        case _ => 2
+      })
 
       case AddSign(left, right) => Some(2)
 
       case AddExtends(left, right) => Some(2)
 
-      case And(left, right) => (left, right) match {
-        case (_: Imm, _: RegWord) => Some(4)
-        case (_: Imm, _: RegLong) => Some(6)
-        case (_: RegLong, _: RegLong) => Some(4)
-        case _ => Some(2)
-      }
+      case And(left, right) => Some((left, right) match {
+        case (_: Imm, _: RegWord) => 4
+        case (_: Imm, _: RegLong) => 6
+        case (_: RegLong, _: RegLong) => 4
+        case _ => 2
+      })
 
       case Andc(item) => Some(2)
 
-      case Band(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => Some(2)
-        case _ => Some(4)
-      }
+      case Band(left, right) => Some((left, right) match {
+        case (_: Imm, _: RegByte) => 2
+        case _ => 4
+      })
 
       case Bra(num, size) => Some(size match {
         case 8 => 2
@@ -166,84 +166,84 @@ class ASTVisitor {
         case 16 => 4
       })
 
-      case Bclr(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => Some(2)
-        case (_: RegByte, _: RegByte) => Some(2)
-        case _ => Some(4)
-      }
+      case Bclr(left, right) => Some((left, right) match {
+        case (_: Imm, _: RegByte) => 2
+        case (_: RegByte, _: RegByte) => 2
+        case _ => 4
+      })
 
-      case Biand(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => Some(2)
-        case _ => Some(4)
-      }
+      case Biand(left, right) => Some((left, right) match {
+        case (_: Imm, _: RegByte) => 2
+        case _ => 4
+      })
 
-      case Bild(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => Some(2)
-        case _ => Some(4)
-      }
+      case Bild(left, right) => Some((left, right) match {
+        case (_: Imm, _: RegByte) => 2
+        case _ => 4
+      })
 
-      case Bior(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => Some(2)
-        case _ => Some(4)
-      }
+      case Bior(left, right) => Some((left, right) match {
+        case (_: Imm, _: RegByte) => 2
+        case _ => 4
+      })
 
-      case Bist(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => Some(2)
-        case _ => Some(4)
-      }
+      case Bist(left, right) => Some((left, right) match {
+        case (_: Imm, _: RegByte) => 2
+        case _ => 4
+      })
 
-      case Bixor(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => Some(2)
-        case _ => Some(4)
-      }
+      case Bixor(left, right) => Some((left, right) match {
+        case (_: Imm, _: RegByte) => 2
+        case _ => 4
+      })
 
-      case Bld(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => Some(2)
-        case _ => Some(4)
-      }
+      case Bld(left, right) => Some((left, right) match {
+        case (_: Imm, _: RegByte) => 2
+        case _ => 4
+      })
 
-      case Bnot(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => Some(2)
-        case _ => Some(4)
-      }
+      case Bnot(left, right) => Some((left, right) match {
+        case (_: Imm, _: RegByte) => 2
+        case _ => 4
+      })
 
-      case Bor(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => Some(2)
-        case _ => Some(4)
-      }
+      case Bor(left, right) => Some((left, right) match {
+        case (_: Imm, _: RegByte) => 2
+        case _ => 4
+      })
 
-      case Bset(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => Some(2)
-        case (_: RegByte, _: RegByte) => Some(2)
-        case _ => Some(4)
-      }
+      case Bset(left, right) => Some((left, right) match {
+        case (_: Imm, _: RegByte) => 2
+        case (_: RegByte, _: RegByte) => 2
+        case _ => 4
+      })
 
       case Bsr(disp, size) => Some(size match {
         case 8 => 2
         case 16 => 4
       })
 
-      case Bst(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => Some(2)
-        case _ => Some(4)
-      }
+      case Bst(left, right) => Some((left, right) match {
+        case (_: Imm, _: RegByte) => 2
+        case _ => 4
+      })
 
-      case Btst(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => Some(2)
-        case (_: RegByte, _: RegByte) => Some(2)
-        case _ => Some(4)
-      }
+      case Btst(left, right) => Some((left, right) match {
+        case (_: Imm, _: RegByte) => 2
+        case (_: RegByte, _: RegByte) => 2
+        case _ => 4
+      })
 
-      case Bxor(left, right) => (left, right) match {
-        case (_: Imm, _: RegByte) => Some(2)
-        case _ => Some(4)
-      }
+      case Bxor(left, right) => Some((left, right) match {
+        case (_: Imm, _: RegByte) => 2
+        case _ => 4
+      })
 
-      case Cmp(left, right) => (left, right) match {
-        case (_: Imm, _: RegWord) => Some(4)
-        case (_: Imm, _: RegLong) => Some(6)
-        case _ => Some(2)
-      }
+      case Cmp(left, right) => Some((left, right) match {
+        case (_: Imm, _: RegWord) => 4
+        case (_: Imm, _: RegLong) => 6
+        case _ => 2
+      })
 
       case Daa(reg) => Some(2)
 
@@ -263,118 +263,118 @@ class ASTVisitor {
 
       case Inc(left, right) => Some(2)
 
-      case Jmp(add) => add match {
-        case _: AbsAddress => Some(4)
-        case _ => Some(2)
-      }
+      case Jmp(add) => Some(add match {
+        case _: AbsAddress => 4
+        case _ => 2
+      })
 
-      case Jsr(add) => add match {
-        case _: AbsAddress => Some(4)
-        case _ => Some(2)
-      }
+      case Jsr(add) => Some(add match {
+        case _: AbsAddress => 4
+        case _ => 2
+      })
 
-      case Ldc(reg) => reg match {
-        case _: IndirReg => Some(4)
-        case r: Disp => Some(search(r) match {
+      case Ldc(item) => Some(item match {
+        case _: IndirReg => 4
+        case disp: Disp => search(disp) match {
           case Some(s: Int) => s match {
             case 16 => 6
             case 24 => 10
           }
-        })
-        case _: Pos => Some(4)
-        case r: AbsAddress => Some(search(r) match {
+        }
+        case _: Pos => 4
+        case abs: AbsAddress => search(abs) match {
           case Some(s: Int) => s match {
             case 8 => 2
             case 16 => 6
             case 24 => 10
           }
-        })
-        case _ => Some(2)
-      }
+        }
+        case _ => 2
+      })
 
-      case Mov(left, right) => (left, right) match {
-        case (l: Disp, _: RegByte) => Some(search(l) match {
+      case Mov(left, right) => Some((left, right) match {
+        case (l: Disp, _: RegByte) => search(l) match {
           case Some(s: Int) => s match {
             case 16 => 4
             case 24 => 8
           }
-        })
-        case (l: AbsAddress, _: RegByte) => Some(search(l) match {
+        }
+        case (l: AbsAddress, _: RegByte) => search(l) match {
           case Some(s: Int) => s match {
             case 8 => 2
             case 16 => 4
             case 24 => 6
           }
-        })
-        case (_: Imm, _: RegWord) => Some(4)
-        case (l: Disp, _: RegWord) => Some(search(l) match {
+        }
+        case (_: Imm, _: RegWord) => 4
+        case (l: Disp, _: RegWord) => search(l) match {
           case Some(s: Int) => s match {
             case 16 => 4
             case 24 => 8
           }
-        })
-        case (l: AbsAddress, _: RegWord) => Some(search(l) match {
+        }
+        case (l: AbsAddress, _: RegWord) => search(l) match {
           case Some(s: Int) => s match {
             case 16 => 4
             case 24 => 8
           }
-        })
-        case (_: Imm, _: RegLong) => Some(6)
-        case (_: IndirReg, _: RegLong) => Some(4)
-        case (l: Disp, _: RegLong) => Some(search(l) match {
+        }
+        case (_: Imm, _: RegLong) => 6
+        case (_: IndirReg, _: RegLong) => 4
+        case (l: Disp, _: RegLong) => search(l) match {
           case Some(s: Int) => s match {
             case 16 => 6
             case 24 => 10
           }
-        })
-        case (_: Pos, _: RegLong) => Some(4)
-        case (l: AbsAddress, _: RegLong) => Some(search(l) match {
+        }
+        case (_: Pos, _: RegLong) => 4
+        case (l: AbsAddress, _: RegLong) => search(l) match {
           case Some(s: Int) => s match {
             case 16 => 6
             case 24 => 8
           }
-        })
-        case (_: RegByte, r: Disp) => Some(search(r) match {
+        }
+        case (_: RegByte, r: Disp) => search(r) match {
           case Some(s: Int) => s match {
             case 16 => 4
             case 24 => 8
           }
-        })
-        case (_: RegByte, r: AbsAddress) => Some(search(r) match {
+        }
+        case (_: RegByte, r: AbsAddress) => search(r) match {
           case Some(s: Int) => s match {
             case 8 => 2
             case 16 => 4
             case 24 => 6
           }
-        })
-        case (_: RegWord, r: Disp) => Some(search(r) match {
+        }
+        case (_: RegWord, r: Disp) => search(r) match {
           case Some(s: Int) => s match {
             case 16 => 4
             case 24 => 8
           }
-        })
-        case (_: RegWord, r: AbsAddress) => Some(search(r) match {
+        }
+        case (_: RegWord, r: AbsAddress) => search(r) match {
           case Some(s: Int) => s match {
             case 16 => 4
             case 24 => 6
           }
-        })
-        case (_: RegLong, _: IndirReg) => Some(4)
-        case (_: RegLong, r: Disp) => Some(search(r) match {
+        }
+        case (_: RegLong, _: IndirReg) => 4
+        case (_: RegLong, r: Disp) => search(r) match {
           case Some(s: Int) => s match {
             case 16 => 6
             case 24 => 10
           }
-        })
-        case (_: RegLong, _: Pre) => Some(4)
-        case (_: RegLong, r: AbsAddress) => Some(search(r) match {
+        }
+        case (_: RegLong, _: Pre) => 4
+        case (_: RegLong, r: AbsAddress) => search(r) match {
           case Some(s: Int) => s match {
             case 16 => 4
             case 24 => 6
           }
-        })
-        case _ => Some(2)
-      }
+        }
+        case _ => 2
+      })
 
       case Movfpe(lefr, right) => Some(4)
 
@@ -390,24 +390,24 @@ class ASTVisitor {
 
       case Not(item) => Some(2)
 
-      case Or(left, right) => (left, right) match {
-        case (_: Imm, _: RegWord) => Some(4)
-        case (_: Imm, _: RegLong) => Some(6)
-        case (_: RegLong, _: RegLong) => Some(4)
-        case _ => Some(2)
-      }
+      case Or(left, right) => Some((left, right) match {
+        case (_: Imm, _: RegWord) => 4
+        case (_: Imm, _: RegLong) => 6
+        case (_: RegLong, _: RegLong) => 4
+        case _ => 2
+      })
 
       case Orc(item) => Some(2)
 
-      case Pop(reg) => reg match {
-        case (_: RegWord) => Some(2)
-        case (_: RegLong) => Some(4)
-      }
+      case Pop(reg) => Some(reg match {
+        case (_: RegWord) => 2
+        case (_: RegLong) => 4
+      })
 
-      case Push(reg) => reg match {
-        case (_: RegWord) => Some(2)
-        case (_: RegLong) => Some(4)
-      }
+      case Push(reg) => Some(reg match {
+        case (_: RegWord) => 2
+        case (_: RegLong) => 4
+      })
 
       case Rotl(reg) => Some(2)
 
@@ -431,29 +431,29 @@ class ASTVisitor {
 
       case Sleep() => Some(2)
 
-      case Stc(reg) => reg match {
-        case _: RegByte => Some(2)
-        case r: Disp => Some(search(r) match {
+      case Stc(reg) => Some(reg match {
+        case _: RegByte => 2
+        case r: Disp => search(r) match {
           case Some(s: Int) => s match {
             case 16 => 6
             case 24 => 10
           }
-        })
-        case r: AbsAddress => Some(search(r) match {
+        }
+        case r: AbsAddress => search(r) match {
           case Some(s: Int) => s match {
             case 8 => 2
             case 16 => 6
             case 24 => 8
           }
-        })
-        case _ => Some(4)
-      }
+        }
+        case _ => 4
+      })
 
-      case Sub(left, right) => (left, right) match {
-        case (_: Imm, _: RegWord) => Some(4)
-        case (_: Imm, _: RegLong) => Some(6)
-        case _ => Some(2)
-      }
+      case Sub(left, right) => Some((left, right) match {
+        case (_: Imm, _: RegWord) => 4
+        case (_: Imm, _: RegLong) => 6
+        case _ => 2
+      })
 
       case Subs(left, right) => Some(2)
 
@@ -461,20 +461,20 @@ class ASTVisitor {
 
       case Trapa(imm) => Some(2)
 
-      case Xor(left, right) => (left, right) match {
-        case (_: Imm, _: RegWord) => Some(4)
-        case (_: Imm, _: RegLong) => Some(6)
-        case (_: RegLong, _: RegLong) => Some(4)
-        case _ => Some(2)
-      }
+      case Xor(left, right) => Some((left, right) match {
+        case (_: Imm, _: RegWord) => 4
+        case (_: Imm, _: RegLong) => 6
+        case (_: RegLong, _: RegLong) => 4
+        case _ => 2
+      })
 
       case Xorc(imm) => Some(2)
 
-      case Data(num, size) => size match {
-        case 8 => Some(1)
-        case 16 => Some(2)
-        case 32 => Some(4)
-      }
+      case Data(num, size) => Some(size match {
+        case 8 => 1
+        case 16 => 2
+        case 32 => 4
+      })
 
       case DataBlock(block, data, size) =>
         Some(search(block) match {
@@ -582,7 +582,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x7C, r << 4, 0x76, l << 4)
         }
         case (imm: Imm, abs: AbsAddress) => (visit(imm), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, _: Int)) => Array(0x7E, a, 0x76, l << 4)
+          case (Some(l: Int), Some((a: Int, _: Int))) => Array(0x7E, a, 0x76, l << 4)
         }
       })
 
@@ -738,7 +738,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x7D, r << 4, 0x72, l << 4)
         }
         case (imm: Imm, abs: AbsAddress) => (visit(imm), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, _: Int)) => Array(0x7F, a, 0x72, l << 4)
+          case (Some(l: Int), Some((a: Int, _: Int))) => Array(0x7F, a, 0x72, l << 4)
         }
         case (lreg: RegByte, rreg: RegByte) => (visit(lreg), visit(rreg)) match {
           case (Some(l: Int), Some(r: Int)) => Array(0x62, (l << 4) | r)
@@ -747,7 +747,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x7D, r << 4, 0x62, l << 4)
         }
         case (reg: RegByte, abs: AbsAddress) => (visit(reg), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, _: Int)) => Array(0x7F, a, 0x62, l << 4)
+          case (Some(l: Int), Some((a: Int, _: Int))) => Array(0x7F, a, 0x62, l << 4)
         }
       })
 
@@ -759,7 +759,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x7C, r << 4, 0x76, 0x80 | (l << 4))
         }
         case (imm: Imm, abs: AbsAddress) => (visit(imm), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, _: Int)) => Array(0x7E, a, 0x76, 0x80 | (l << 4))
+          case (Some(l: Int), Some((a: Int, _: Int))) => Array(0x7E, a, 0x76, 0x80 | (l << 4))
         }
       })
 
@@ -771,7 +771,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x7C, r << 4, 0x77, 0x80 | (l << 4))
         }
         case (imm: Imm, abs: AbsAddress) => (visit(imm), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, _: Int)) => Array(0x7E, a, 0x77, 0x80 | (l << 4))
+          case (Some(l: Int), Some((a: Int, _: Int))) => Array(0x7E, a, 0x77, 0x80 | (l << 4))
         }
       })
 
@@ -783,7 +783,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x7C, r << 4, 0x74, 0x80 | (l << 4))
         }
         case (imm: Imm, abs: AbsAddress) => (visit(imm), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, _: Int)) => Array(0x7E, a, 0x74, 0x80 | (l << 4))
+          case (Some(l: Int), Some((a: Int, _: Int))) => Array(0x7E, a, 0x74, 0x80 | (l << 4))
         }
       })
 
@@ -795,7 +795,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x7D, r << 4, 0x67, 0x80 | (l << 4))
         }
         case (imm: Imm, abs: AbsAddress) => (visit(imm), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, _: Int)) => Array(0x7F, a, 0x67, 0x80 | (l << 4))
+          case (Some(l: Int), Some((a: Int, _: Int))) => Array(0x7F, a, 0x67, 0x80 | (l << 4))
         }
       })
 
@@ -807,7 +807,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x7C, r << 4, 0x75, 0x80 | (l << 4))
         }
         case (imm: Imm, abs: AbsAddress) => (visit(imm), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, _: Int)) => Array(0x7E, a, 0x75, 0x80 | (l << 4))
+          case (Some(l: Int), Some((a: Int, _: Int))) => Array(0x7E, a, 0x75, 0x80 | (l << 4))
         }
       })
 
@@ -819,7 +819,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x7C, r << 4, 0x77, l << 4)
         }
         case (imm: Imm, abs: AbsAddress) => (visit(imm), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, _: Int)) => Array(0x7E, a, 0x77, l << 4)
+          case (Some(l: Int), Some((a: Int, _: Int))) => Array(0x7E, a, 0x77, l << 4)
         }
       })
 
@@ -831,7 +831,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x7D, r << 4, 0x71, l << 4)
         }
         case (imm: Imm, abs: AbsAddress) => (visit(imm), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, _: Int)) => Array(0x7F, a, 0x71, l << 4)
+          case (Some(l: Int), Some((a: Int, _: Int))) => Array(0x7F, a, 0x71, l << 4)
         }
         case (lreg: RegByte, rreg: RegByte) => (visit(lreg), visit(rreg)) match {
           case (Some(l: Int), Some(r: Int)) => Array(0x61, (l << 4) | r)
@@ -840,7 +840,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x7D, r << 4, 0x61, l << 4)
         }
         case (reg: RegByte, abs: AbsAddress) => (visit(reg), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, _: Int)) => Array(0x7F, a, 0x61, l << 4)
+          case (Some(l: Int), Some((a: Int, _: Int))) => Array(0x7F, a, 0x61, l << 4)
         }
       })
 
@@ -852,7 +852,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x7C, r << 4, 0x74, l << 4)
         }
         case (imm: Imm, abs: AbsAddress) => (visit(imm), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, _: Int)) => Array(0x7E, a, 0x74, l << 4)
+          case (Some(l: Int), Some((a: Int, _: Int))) => Array(0x7E, a, 0x74, l << 4)
         }
       })
 
@@ -864,7 +864,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x7D, r << 4, 0x70, l << 4)
         }
         case (imm: Imm, abs: AbsAddress) => (visit(imm), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, _: Int)) => Array(0x7F, a, 0x70, l << 4)
+          case (Some(l: Int), Some((a: Int, _: Int))) => Array(0x7F, a, 0x70, l << 4)
         }
         case (lreg: RegByte, rreg: RegByte) => (visit(lreg), visit(rreg)) match {
           case (Some(l: Int), Some(r: Int)) => Array(0x60, (l << 4) | r)
@@ -873,7 +873,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x7D, r << 4, 0x60, l << 4)
         }
         case (reg: RegByte, abs: AbsAddress) => (visit(reg), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, _: Int)) => Array(0x7F, a, 0x60, l << 4)
+          case (Some(l: Int), Some((a: Int, _: Int))) => Array(0x7F, a, 0x60, l << 4)
         }
       })
 
@@ -894,7 +894,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x7D, r << 4, 0x67, l << 4)
         }
         case (imm: Imm, abs: AbsAddress) => (visit(imm), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, _: Int)) => Array(0x7F, a, 0x67, l << 4)
+          case (Some(l: Int), Some((a: Int, _: Int))) => Array(0x7F, a, 0x67, l << 4)
         }
       })
 
@@ -906,7 +906,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x7C, r << 4, 0x73, l << 4)
         }
         case (imm: Imm, abs: AbsAddress) => (visit(imm), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, _: Int)) => Array(0x7E, a, 0x73, l << 4)
+          case (Some(l: Int), Some((a: Int, _: Int))) => Array(0x7E, a, 0x73, l << 4)
         }
         case (lreg: RegByte, rreg: RegByte) => (visit(lreg), visit(rreg)) match {
           case (Some(l: Int), Some(r: Int)) => Array(0x63, (l << 4) | r)
@@ -915,11 +915,11 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x7C, r << 4, 0x63, l << 4)
         }
         case (reg: RegByte, abs: AbsAddress) => (visit(reg), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, _: Int)) => Array(0x7E, a, 0x63, l << 4)
+          case (Some(l: Int), Some((a: Int, _: Int))) => Array(0x7E, a, 0x63, l << 4)
         }
       })
 
-      case Bst(left, right) => Some((left, right) match {
+      case Bxor(left, right) => Some((left, right) match {
         case (imm: Imm, reg: RegByte) => (visit(imm), visit(reg)) match {
           case (Some(l: Int), Some(r: Int)) => Array(0x75, (l << 4) | r)
         }
@@ -927,7 +927,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x7C, r << 4, 0x75, l << 4)
         }
         case (imm: Imm, abs: AbsAddress) => (visit(imm), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, _: Int)) => Array(0x7E, a, 0x75, l << 4)
+          case (Some(l: Int), Some((a: Int, _: Int))) => Array(0x7E, a, 0x75, l << 4)
         }
       })
 
@@ -1038,7 +1038,7 @@ class ASTVisitor {
           case Some(r: Int) => Array(0x59, r << 4)
         }
         case (abs: AbsAddress) => visit(abs) match {
-          case Some(a: Int, _: Int) => Array(0x5A, a >> 16, a >> 8, a)
+          case Some((a: Int, _: Int)) => Array(0x5A, a >> 16, a >> 8, a)
         }
         case (abs: IndirAdd) => visit(abs) match {
           case Some(a: Int) => Array(0x5B, a)
@@ -1050,7 +1050,7 @@ class ASTVisitor {
           case Some(r: Int) => Array(0x5D, r << 4)
         }
         case (abs: AbsAddress) => visit(abs) match {
-          case Some(a: Int, _: Int) => Array(0x5E, a >> 16, a >> 8, a)
+          case Some((a: Int, _: Int)) => Array(0x5E, a >> 16, a >> 8, a)
         }
         case (abs: IndirAdd) => visit(abs) match {
           case Some(a: Int) => Array(0x5F, a)
@@ -1068,7 +1068,7 @@ class ASTVisitor {
           case Some(r: Int) => Array(0x01, 0x40, 0x69, r << 4)
         }
         case disp: Disp => visit(disp) match {
-          case Some(d: Int, r: Int, s: Int) => s match {
+          case Some((d: Int, r: Int, s: Int)) => s match {
             case 16 => Array(0x01, 0x40, 0x6F, r << 4, d >> 8, d)
             case 24 => Array(0x01, 0x40, 0x78, r << 4, 0x6B, 0x20, 0x00, d >> 16, d >> 8, d)
           }
@@ -1077,7 +1077,7 @@ class ASTVisitor {
           case Some(r: Int) => Array(0x01, 0x40, 0x6D, r << 4)
         }
         case abs: AbsAddress => visit(abs) match {
-          case Some(a: Int, s: Int) => s match {
+          case Some((a: Int, s: Int)) => s match {
             case 16 => Array(0x01, 0x40, 0x6B, 0x00, a >> 8, a)
             case 24 => Array(0x01, 0x40, 0x6B, 0x20, 0x00, a >> 16, a >> 8, a)
           }
@@ -1101,7 +1101,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x68, (l << 4) | r)
         }
         case (disp: Disp, reg: RegByte) => (visit(disp), visit(reg)) match {
-          case (Some(d: Int, l: Int, s: Int), Some(r: Int)) => s match {
+          case (Some((d: Int, l: Int, s: Int)), Some(r: Int)) => s match {
             case 16 => Array(0x6E, (l << 4) | r, d >> 8, d)
             case 24 => Array(0x78, l << 4, 0x6A, 0x20 | r, 0x00, d >> 16, d >> 8, d)
           }
@@ -1110,7 +1110,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x6C, (l << 4) | r)
         }
         case (abs: AbsAddress, reg: RegByte) => (visit(abs), visit(reg)) match {
-          case (Some(a: Int, s: Int), Some(r: Int)) => s match {
+          case (Some((a: Int, s: Int)), Some(r: Int)) => s match {
             case 8 => Array(0x20 | r, a)
             case 16 => Array(0x6A, r, a >> 8, a)
             case 24 => Array(0x6A, 0x20 | r, 0x00, a >> 16, a >> 8, a)
@@ -1123,7 +1123,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x69, (l << 4) | r)
         }
         case (disp: Disp, reg: RegWord) => (visit(disp), visit(reg)) match {
-          case (Some(d: Int, l: Int, s: Int), Some(r: Int)) => s match {
+          case (Some((d: Int, l: Int, s: Int)), Some(r: Int)) => s match {
             case 16 => Array(0x6F, (l << 4) | r, d >> 8, d)
             case 24 => Array(0x78, l << 4, 0x6B, 0x20 | r, 0x00, d >> 16, d >> 8, d)
           }
@@ -1132,7 +1132,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x6D, (l << 4) | r)
         }
         case (abs: AbsAddress, reg: RegWord) => (visit(abs), visit(reg)) match {
-          case (Some(a: Int, s: Int), Some(r: Int)) => s match {
+          case (Some((a: Int, s: Int)), Some(r: Int)) => s match {
             case 16 => Array(0x6B, r, a >> 8, a)
             case 24 => Array(0x6B, 0x20 | r, 0x00, a >> 16, a >> 8, a)
           }
@@ -1144,7 +1144,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x01, 0x00, 0x69, (l << 4) | r)
         }
         case (disp: Disp, reg: RegLong) => (visit(disp), visit(reg)) match {
-          case (Some(d: Int, l: Int, s: Int), Some(r: Int)) => s match {
+          case (Some((d: Int, l: Int, s: Int)), Some(r: Int)) => s match {
             case 16 => Array(0x01, 0x00, 0x6F, (l << 4) | r, d >> 8, d)
             case 24 => Array(0x01, 0x00, 0x78, l << 4, 0x6B, 0x20 | r, 0x00, d >> 16, d >> 8, d)
           }
@@ -1153,7 +1153,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x01, 0x00, 0x6D, (l << 4) | r)
         }
         case (abs: AbsAddress, reg: RegLong) => (visit(abs), visit(reg)) match {
-          case (Some(a: Int, s: Int), Some(r: Int)) => s match {
+          case (Some((a: Int, s: Int)), Some(r: Int)) => s match {
             case 16 => Array(0x01, 0x00, 0x6B, r, a >> 8, a)
             case 24 => Array(0x01, 0x00, 0x6B, 0x20 | r, 0x00, a >> 16, a >> 8, a)
           }
@@ -1162,7 +1162,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x68, 0x80 | (r << 4) | l)
         }
         case (reg: RegByte, disp: Disp) => (visit(reg), visit(disp)) match {
-          case (Some(l: Int), Some(d: Int, r: Int, s: Int)) => s match {
+          case (Some(l: Int), Some((d: Int, r: Int, s: Int))) => s match {
             case 16 => Array(0x6E, 0x80 | (r << 4) | l, d >> 8, d)
             case 24 => Array(0x78, r << 4, 0x6A, 0xA0 | l, 0x00, d >> 16, d >> 8, d)
           }
@@ -1171,7 +1171,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x6C, 0x80 | (r << 4) | l)
         }
         case (reg: RegByte, abs: AbsAddress) => (visit(reg), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, s: Int)) => s match {
+          case (Some(l: Int), Some((a: Int, s: Int))) => s match {
             case 8 => Array(0x30 | l, a)
             case 16 => Array(0x6A, 0x80 | l, a >> 8, a)
             case 24 => Array(0x6A, 0xA0 | l, 0x00, a >> 16, a >> 8, a)
@@ -1180,17 +1180,19 @@ class ASTVisitor {
         case (lreg: RegWord, rreg: IndirReg) => (visit(lreg), visit(rreg)) match {
           case (Some(l: Int), Some(r: Int)) => Array(0x69, 0x80 | (r << 4) | l)
         }
-        case (reg: RegWord, disp: Disp) => (visit(reg), visit(disp)) match {
-          case (Some(l: Int), Some(d: Int, r: Int, s: Int)) => s match {
-            case 16 => Array(0x6F, 0x80 | (r << 4) | l, d >> 8, d)
-            case 24 => Array(0x78, r << 4, 0x6B, 0xA0 | l, 0x00, d >> 16, d >> 8, d)
+        case (reg: RegWord, disp: Disp) =>
+          val x = (visit(reg), visit(disp))
+          x match {
+            case (Some(l: Int), Some((d: Int, r: Int, s: Int))) => s match {
+              case 16 => Array(0x6F, 0x80 | (r << 4) | l, d >> 8, d)
+              case 24 => Array(0x78, r << 4, 0x6B, 0xA0 | l, 0x00, d >> 16, d >> 8, d)
+            }
           }
-        }
         case (reg: RegWord, pre: Pre) => (visit(reg), visit(pre)) match {
           case (Some(l: Int), Some(r: Int)) => Array(0x6D, 0x80 | (r << 4) | l)
         }
         case (reg: RegWord, abs: AbsAddress) => (visit(reg), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, s: Int)) => s match {
+          case (Some(l: Int), Some((a: Int, s: Int))) => s match {
             case 16 => Array(0x6B, 0x80 | l, a >> 8, a)
             case 24 => Array(0x6B, 0xA0 | l, 0x00, a >> 16, a >> 8, a)
           }
@@ -1199,7 +1201,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x01, 0x00, 0x69, 0x80 | (r << 4) | l)
         }
         case (reg: RegLong, disp: Disp) => (visit(reg), visit(disp)) match {
-          case (Some(l: Int), Some(d: Int, r: Int, s: Int)) => s match {
+          case (Some(l: Int), Some((d: Int, r: Int, s: Int))) => s match {
             case 16 => Array(0x01, 0x00, 0x6F, 0x80 | (r << 4) | l, d >> 8, d)
             case 24 => Array(0x01, 0x00, 0x78, r << 4, 0x6B, 0xA0 | l, 0x00, d >> 16, d >> 8, d)
           }
@@ -1208,7 +1210,7 @@ class ASTVisitor {
           case (Some(l: Int), Some(r: Int)) => Array(0x01, 0x00, 0x6D, 0x80 | (r << 4) | l)
         }
         case (reg: RegLong, abs: AbsAddress) => (visit(reg), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, s: Int)) => s match {
+          case (Some(l: Int), Some((a: Int, s: Int))) => s match {
             case 16 => Array(0x01, 0x00, 0x6B, 0x80 | l, a >> 8, a)
             case 24 => Array(0x01, 0x00, 0x6B, 0xA0 | l, 0x00, a >> 16, a >> 8, a)
           }
@@ -1217,13 +1219,13 @@ class ASTVisitor {
 
       case Movtpe(left, right) => Some((left, right) match {
         case (reg: RegWord, abs: AbsAddress) => (visit(reg), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, _: Int)) => Array(0x6A, 0x40 | l, a >> 8, a)
+          case (Some(l: Int), Some((a: Int, _: Int))) => Array(0x6A, 0x40 | l, a >> 8, a)
         }
       })
 
-      case Movtpe(left, right) => Some((left, right) match {
+      case Movfpe(left, right) => Some((left, right) match {
         case (reg: RegWord, abs: AbsAddress) => (visit(reg), visit(abs)) match {
-          case (Some(l: Int), Some(a: Int, _: Int)) => Array(0x6A, 0xC0 | l, a >> 8, a)
+          case (Some(l: Int), Some((a: Int, _: Int))) => Array(0x6A, 0xC0 | l, a >> 8, a)
         }
       })
 
@@ -1376,13 +1378,13 @@ class ASTVisitor {
 
       case Stc(item) => Some(item match {
         case reg: RegByte => visit(reg) match {
-          case (r: Int) => Array(0x02, r)
+          case Some(r: Int) => Array(0x02, r)
         }
         case reg: IndirReg => visit(reg) match {
           case Some(r: Int) => Array(0x01, 0x40, 0x69, 0x80 | (r << 4))
         }
         case disp: Disp => visit(disp) match {
-          case Some(d: Int, r: Int, s: Int) => s match {
+          case Some((d: Int, r: Int, s: Int)) => s match {
             case 16 => Array(0x01, 0x40, 0x6F, 0x80 | (r << 4), d >> 8, d)
             case 32 => Array(0x01, 0x40, 0x78, r << 4, 0x6B, 0xA0, 0x00, d >> 16, d >> 8, d)
           }
@@ -1391,7 +1393,7 @@ class ASTVisitor {
           case Some(r: Int) => Array(0x01, 0x40, 0x6D, 0x80 | (r << 4))
         }
         case abs: AbsAddress => visit(abs) match {
-          case Some(a: Int, s: Int) => s match {
+          case Some((a: Int, s: Int)) => s match {
             case 16 => Array(0x01, 0x40, 0x6B, 0x80, a >> 8, a)
             case 32 => Array(0x01, 0x40, 0x6B, 0xA0, 0x00, a >> 16, a >> 8, a)
           }
@@ -1503,7 +1505,7 @@ class ASTVisitor {
       case MakeLabel(num) => None
 
       case Imm(num) => Some(visit(num) match {
-        case (n: Int) => n
+        case Some(n: Int) => n
       })
 
       case AbsAddress(num, size) => Some(visit(num) match {
@@ -1519,7 +1521,7 @@ class ASTVisitor {
       })
 
       case Disp(disp, reg, size) => Some((visit(disp), visit(reg)) match {
-        case (Some(d: Int), Some(r: Int)) => (disp, reg, size)
+        case (Some(d: Int), Some(r: Int)) => (d, r, size)
       })
 
       case Pos(reg) => Some(visit(reg) match {

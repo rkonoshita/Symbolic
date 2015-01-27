@@ -1,4 +1,4 @@
-package main
+package base
 
 import data.DataSet
 import z3.scala.Z3Model
@@ -18,36 +18,34 @@ class State(num: Int, data: DataSet, pr: State) {
   val pc = data.pc
   val ccr = data.ccr
   val path = data.path
-  val pathCheck =
+  val reach =
     if (path.path == null) true
     else {
-      Main.sol.assertCnstr(path.path)
-      val ans = Main.sol.check.get
-      Main.sol.reset
+      Symbolic.sol.assertCnstr(path.path)
+      val ans = Symbolic.sol.check.get
+      Symbolic.sol.reset
       ans
     }
+  val stop = data.stop
+  var error: (Boolean, Option[Z3Model]) = (false, None)
 
-  def error(): (Boolean, Option[Z3Model]) = {
+  def stackError(): (Boolean, Option[Z3Model]) = {
     val sp = reg.getLong(7)
     val tsp = sp > 0xFFFFFF80
     val bsp = sp < 0xFFFFFB80
-    Main.sol.assertCnstr(Main.ctx.mkOr(tsp.symbol, bsp.symbol))
-    val ans = Main.sol.check.get
+    Symbolic.sol.assertCnstr(Symbolic.ctx.mkOr(tsp.symbol, bsp.symbol))
+    val ans = Symbolic.sol.check.get
     val model =
-      if (ans) Some(Main.sol.getModel())
+      if (ans) Some(Symbolic.sol.getModel)
       else None
-    Main.sol.reset
-    (ans, model)
+    Symbolic.sol.reset
+    error = (ans, model)
+    error
   }
 
-  val stop = data.pc.pc == (Main.rom.getWord(0) + 14) | !pathCheck
-
-  //  override def toString(): String =
-  //    if (path.path == null) number + ", " + true
-  //    else number + ", " + path.path.toString()
-
-
-  //      override def toString(): String = ccr.ccr.toString
+  //    override def toString(): String =
+  //      if (path.path == null) number + ", " + true
+  //      else number + ", " + path.path.toString()
 
   override def toString(): String = number.toString
 }

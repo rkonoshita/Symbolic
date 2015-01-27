@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Symbolic:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Symbolic_jar</output-path>
+    <root id="archive" name="Symbolic.jar">
+      <element id="module-output" name="Symbolic" />
+      <element id="extracted-dir" path="$USER_HOME$/.ivy2/cache/org.scala-lang/scala-reflect/jars/scala-reflect-2.10.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.10.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/scalaz3_2.10-2.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

@@ -1,6 +1,6 @@
 package data.register
 
-import main.{Main, Parameter}
+import base.{Symbolic, Parameter}
 import symbol.CtxSymbol
 
 /**
@@ -15,15 +15,16 @@ class ProgramCounter(p: Int) {
 
   def setPc(p: Int) = pc = p & limit
 
-  def setPc(p:CtxSymbol): Unit = {
+  def setPc(p:CtxSymbol): Int = {
     (0x0100 to Parameter.size("P")).foreach { q =>
-      Main.sol.assertCnstr(p.equal(q).symbol)
-      if(Main.sol.check.get) {
-        Main.sol.reset
+      Symbolic.sol.assertCnstr(p.equal(q).symbol)
+      if(Symbolic.sol.check.get) {
+        Symbolic.sol.reset
         pc = q
-        return
-      } else Main.sol.reset
+        return pc
+      } else Symbolic.sol.reset
     }
+    return -1
   }
 
   override def toString(): String = pc.toString

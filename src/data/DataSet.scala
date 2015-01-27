@@ -1,7 +1,7 @@
 package data
 
 import data.register._
-import main.State
+import base.State
 
 /**
  * Created by rkonoshita on 14/11/12.
@@ -13,6 +13,7 @@ class DataSet(r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, p
   val pc = p
   val ccr = c
   val path = pt
+  var stop = false
 
   override def clone(): DataSet = {
     new DataSet(

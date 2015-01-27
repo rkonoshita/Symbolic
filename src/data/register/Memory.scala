@@ -1,6 +1,6 @@
 package data.register
 
-import main.Main
+import base.Symbolic
 import symbol.CtxSymbol
 
 /**
@@ -15,20 +15,20 @@ class Memory(m: CtxSymbol) {
 
   def getByte(num: Int): CtxSymbol = getByte(trans(num))
 
-  def getByte(num: CtxSymbol): CtxSymbol = Main.simple(mem.select(num.extract(15, 0)))
+  def getByte(num: CtxSymbol): CtxSymbol = Symbolic.simple(mem.select(num.extract(15, 0)))
 
   def getWord(num: Int): CtxSymbol = getWord(trans(num))
 
   def getWord(num: CtxSymbol) = {
     val number = num.extract(15, 0)
-    Main.simple(mem.select(number) concat mem.select(number + 1))
+    Symbolic.simple(mem.select(number) concat mem.select(number + 1))
   }
 
   def getLong(num: Int): CtxSymbol = getLong(trans(num))
 
   def getLong(num: CtxSymbol): CtxSymbol = {
     val number = num.extract(15, 0)
-    Main.simple(mem.select(number) concat mem.select(number + 1)
+    Symbolic.simple(mem.select(number) concat mem.select(number + 1)
       concat mem.select(number + 2) concat mem.select(number + 3))
   }
 

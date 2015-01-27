@@ -1,4 +1,4 @@
-package main
+package base
 
 import data.DataSet
 import symbol.CtxSymbol
@@ -11,8 +11,8 @@ import scala.collection.mutable.ArrayBuffer
  */
 class Decoder {
 
-  private val ctx = Main.ctx
-  private val rom = Main.rom
+  private val ctx = Symbolic.ctx
+  private val rom = Symbolic.rom
 
   def analyze(data: DataSet): ArrayBuffer[DataSet] = analyze(data.clone, data.pc.pc)
 
@@ -419,7 +419,6 @@ class Decoder {
         data.ccr.setCcr(data.mem.getByte(abs))
 
       case 0x80 =>
-        val mov = data.reg.getLong(op3)
         val abs = op3 & 0xF0 match {
           case 0x80 =>
             //STC.W CCR,Abs [01][40][6B][80][abs][abs]
@@ -662,7 +661,7 @@ class Decoder {
         //OR.B RegA,RegB [14][regAregB]
         val regA = data.reg.getByte(op1 >> 4)
         val regB = data.reg.getByte(op1)
-        val and = regB & regA
+        val and = regB | regA
         data.reg.setByte(and, op1)
         data.pc.setPc(pc + 2)
         data.ccr.clearV
@@ -672,7 +671,7 @@ class Decoder {
         //XOR.B RegA,RegB [15][regAregB]
         val regA = data.reg.getByte(op1 >> 4)
         val regB = data.reg.getByte(op1)
-        val and = regB & regA
+        val and = regB ^ regA
         data.reg.setByte(and, op1)
         data.pc.setPc(pc + 2)
         data.ccr.clearV
@@ -757,7 +756,7 @@ class Decoder {
         val reg = data.reg.getByte(op1)
         val shift = reg << 1
         data.reg.setByte(shift, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(7, 6))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(7, 7))
         check2(shift, 8, data)
 
       case 0x01 =>
@@ -765,7 +764,7 @@ class Decoder {
         val reg = data.reg.getWord(op1)
         val shift = reg << 1
         data.reg.setWord(shift, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(15, 14))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(15, 15))
         check2(shift, 16, data)
 
       case 0x03 =>
@@ -773,7 +772,7 @@ class Decoder {
         val reg = data.reg.getLong(op1)
         val shift = reg << 1
         data.reg.setLong(shift, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(31, 30))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(31, 31))
         check2(shift, 32, data)
 
       case 0x80 =>
@@ -781,7 +780,7 @@ class Decoder {
         val reg = data.reg.getByte(op1)
         val shift = reg << 1
         data.reg.setByte(shift, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(7, 6))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(7, 7))
         check3(reg, reg, shift, 8, data)
 
       case 0x90 =>
@@ -789,7 +788,7 @@ class Decoder {
         val reg = data.reg.getWord(op1)
         val shift = reg << 1
         data.reg.setWord(shift, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(15, 14))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(15, 15))
         check3(reg, reg, shift, 16, data)
 
       case 0xB0 =>
@@ -797,7 +796,7 @@ class Decoder {
         val reg = data.reg.getLong(op1)
         val shift = reg << 1
         data.reg.setLong(shift, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(31, 30))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(31, 31))
         check3(reg, reg, shift, 32, data)
     }
   }
@@ -813,7 +812,7 @@ class Decoder {
         val reg = data.reg.getByte(op1)
         val shift = new CtxSymbol(ctx.mkBVLshr(reg.symbol, ctx.mkInt(1, reg.symbol.getSort)))
         data.reg.setByte(shift, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(1, 0))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(0, 0))
         data.ccr.clearN
         checkZ(shift, ArrayBuffer(data), 8)
 
@@ -822,7 +821,7 @@ class Decoder {
         val reg = data.reg.getWord(op1)
         val shift = new CtxSymbol(ctx.mkBVLshr(reg.symbol, ctx.mkInt(1, reg.symbol.getSort)))
         data.reg.setWord(shift, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(1, 0))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(0, 0))
         data.ccr.clearN
         checkZ(shift, ArrayBuffer(data), 16)
 
@@ -831,7 +830,7 @@ class Decoder {
         val reg = data.reg.getLong(op1)
         val shift = new CtxSymbol(ctx.mkBVLshr(reg.symbol, ctx.mkInt(1, reg.symbol.getSort)))
         data.reg.setLong(shift, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(1, 0))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(0, 0))
         data.ccr.clearN
         checkZ(shift, ArrayBuffer(data), 32)
 
@@ -840,7 +839,7 @@ class Decoder {
         val reg = data.reg.getByte(op1)
         val shift = reg >> 1
         data.reg.setByte(shift, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(1, 0))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(0, 0))
         check2(shift, 8, ArrayBuffer(data))
 
       case 0x90 =>
@@ -848,7 +847,7 @@ class Decoder {
         val reg = data.reg.getWord(op1)
         val shift = reg >> 1
         data.reg.setWord(shift, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(1, 0))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(0, 0))
         check2(shift, 16, ArrayBuffer(data))
 
       case 0xB0 =>
@@ -856,7 +855,7 @@ class Decoder {
         val reg = data.reg.getLong(op1)
         val shift = reg >> 1
         data.reg.setLong(shift, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(1, 0))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(0, 0))
         check2(shift, 32, ArrayBuffer(data))
     }
   }
@@ -869,49 +868,49 @@ class Decoder {
       case 0x00 =>
         //ROTXL.B Reg [12][0reg]
         val reg = data.reg.getByte(op1)
-        val rotate = reg.extract(6, 0) concat ccr.extract(1, 0)
+        val rotate = reg.extract(6, 0) concat ccr.extract(0, 0)
         data.reg.setByte(rotate, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(7, 6))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(7, 7))
         check2(rotate, 8, data)
 
       case 0x10 =>
         //ROTXL.W Reg [12][1reg]
         val reg = data.reg.getWord(op1)
-        val rotate = reg.extract(14, 0) concat ccr.extract(1, 0)
+        val rotate = reg.extract(14, 0) concat ccr.extract(0, 0)
         data.reg.setWord(rotate, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(15, 14))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(15, 15))
         check2(rotate, 16, data)
 
       case 0x30 =>
         //ROTXL.L Reg [12][3reg]
         val reg = data.reg.getLong(op1)
-        val rotate = reg.extract(30, 0) concat ccr.extract(1, 0)
+        val rotate = reg.extract(30, 0) concat ccr.extract(0, 0)
         data.reg.setLong(rotate, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(31, 30))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(31, 31))
         check2(rotate, 32, data)
 
       case 0x80 =>
         //ROTL.B Reg [12][8reg]
         val reg = data.reg.getByte(op1)
-        val rotate = reg.extract(6, 0) concat reg.extract(7, 6)
+        val rotate = reg.extract(6, 0) concat reg.extract(7, 7)
         data.reg.setByte(rotate, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(7, 6))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(7, 7))
         check2(rotate, 8, data)
 
       case 0x90 =>
         //ROTL.W Reg [12][9reg]
         val reg = data.reg.getWord(op1)
-        val rotate = reg.extract(14, 0) concat reg.extract(15, 14)
+        val rotate = reg.extract(14, 0) concat reg.extract(15, 15)
         data.reg.setWord(rotate, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(15, 14))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(15, 15))
         check2(rotate, 16, data)
 
       case 0xB0 =>
         //ROTL.L Reg [12][Breg]
         val reg = data.reg.getLong(op1)
-        val rotate = reg.extract(30, 0) concat reg.extract(31, 30)
+        val rotate = reg.extract(30, 0) concat reg.extract(31, 31)
         data.reg.setLong(rotate, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(31, 30))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(31, 31))
         check2(rotate, 32, data)
     }
   }
@@ -925,49 +924,49 @@ class Decoder {
       case 0x00 =>
         //ROTXR.B Reg [13][0reg]
         val reg = data.reg.getByte(op1)
-        val rotate = ccr.extract(1, 0) concat reg.extract(7, 1)
+        val rotate = ccr.extract(0, 0) concat reg.extract(7, 1)
         data.reg.setByte(rotate, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(1, 0))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(0, 0))
         check2(rotate, 8, data)
 
       case 0x10 =>
         //ROTXR.W Reg [13][1reg]
         val reg = data.reg.getWord(op1)
-        val rotate = ccr.extract(1, 0) concat reg.extract(15, 1)
+        val rotate = ccr.extract(0, 0) concat reg.extract(15, 1)
         data.reg.setWord(rotate, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(1, 0))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(0, 0))
         check2(rotate, 16, data)
 
       case 0x30 =>
         //ROTXR.L Reg [13][3reg]
         val reg = data.reg.getLong(op1)
-        val rotate = ccr.extract(1, 0) concat reg.extract(31, 1)
+        val rotate = ccr.extract(0, 0) concat reg.extract(31, 1)
         data.reg.setLong(rotate, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(1, 0))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(0, 0))
         check2(rotate, 32, data)
 
       case 0x80 =>
         //ROTR.B Reg [13][8reg]
         val reg = data.reg.getByte(op1)
-        val rotate = reg.extract(1, 0) concat reg.extract(7, 1)
+        val rotate = reg.extract(0, 0) concat reg.extract(7, 1)
         data.reg.setByte(rotate, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(1, 0))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(0, 0))
         check2(rotate, 8, data)
 
       case 0x90 =>
         //ROTR.W Reg [13][9reg]
         val reg = data.reg.getWord(op1)
-        val rotate = reg.extract(1, 0) concat reg.extract(15, 1)
+        val rotate = reg.extract(0, 0) concat reg.extract(15, 1)
         data.reg.setWord(rotate, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(1, 0))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(0, 0))
         check2(rotate, 16, data)
 
       case 0xB0 =>
         //ROTR.L Reg [13][Breg]
         val reg = data.reg.getLong(op1)
-        val rotate = reg.extract(1, 0) concat reg.extract(31, 1)
+        val rotate = reg.extract(0, 0) concat reg.extract(31, 1)
         data.reg.setLong(rotate, op1)
-        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(1, 0))
+        data.ccr.setCcr(ccr.extract(7, 1) concat reg.extract(0, 0))
         check2(rotate, 32, data)
     }
   }
@@ -999,7 +998,7 @@ class Decoder {
 
       case 0x50 =>
         //EXTU.W Reg [17][5reg]
-        val extu = data.reg.getWord(op1) & 0xFF
+        val extu = data.reg.getWord(op1) & 0x00FF
         data.reg.setWord(extu, op1)
         data.ccr.clearN
         data.ccr.clearV
@@ -1007,7 +1006,7 @@ class Decoder {
 
       case 0x70 =>
         //EXTU.L Reg [17][7reg]
-        val extu = data.reg.getLong(op1) & 0xFFFF
+        val extu = data.reg.getLong(op1) & 0x0000FFFF
         data.reg.setLong(extu, op1)
         data.ccr.clearN
         data.ccr.clearV
@@ -1163,8 +1162,8 @@ class Decoder {
 
       case 0x42 =>
         //BHI C|V = 0
-        val c = (ccr & 0x01).equal(0x01)
-        val z = (ccr & 0x04).equal(0x04)
+        val c = ccr.extract(0, 0).equal(1)
+        val z = ccr.extract(2, 2).equal(1)
         val clone = twoPathClone(c || z, data)
         clone._2.pc.setPc(pc + disp)
         clone._1.pc.setPc(pc + 2)
@@ -1172,8 +1171,8 @@ class Decoder {
 
       case 0x43 =>
         //BLS C|V = 1
-        val c = (ccr & 0x01).equal(0x01)
-        val z = (ccr & 0x04).equal(0x04)
+        val c = ccr.extract(0, 0).equal(1)
+        val z = ccr.extract(2, 2).equal(1)
         val clone = twoPathClone(c || z, data)
         clone._1.pc.setPc(pc + disp)
         clone._2.pc.setPc(pc + 2)
@@ -1181,64 +1180,64 @@ class Decoder {
 
       case 0x44 =>
         //BHS C = 0
-        val clone = twoPathClone((ccr & 0x01).equal(0x01), data)
+        val clone = twoPathClone(ccr.extract(0, 0).equal(1), data)
         clone._2.pc.setPc(pc + disp)
         clone._1.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x45 =>
         //BLO C = 1
-        val clone = twoPathClone((ccr & 0x01).equal(0x01), data)
+        val clone = twoPathClone(ccr.extract(0, 0).equal(1), data)
         clone._1.pc.setPc(pc + disp)
         clone._2.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x46 =>
         //BNE Z = 0
-        val clone = twoPathClone((ccr & 0x04).equal(0x04), data)
+        val clone = twoPathClone(ccr.extract(2, 2).equal(1), data)
         clone._2.pc.setPc(pc + disp)
         clone._1.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x47 =>
         //BEQ Z = 1
-        val clone = twoPathClone((ccr & 0x04).equal(0x04), data)
+        val clone = twoPathClone(ccr.extract(2, 2).equal(1), data)
         clone._1.pc.setPc(pc + disp)
         clone._2.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x48 =>
         //BVC V = 0
-        val clone = twoPathClone((ccr & 0x02).equal(0x02), data)
+        val clone = twoPathClone(ccr.extract(1, 1).equal(1), data)
         clone._2.pc.setPc(pc + disp)
         clone._1.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x49 =>
         //BVC V = 1
-        val clone = twoPathClone((ccr & 0x02).equal(0x02), data)
+        val clone = twoPathClone(ccr.extract(1, 1).equal(1), data)
         clone._1.pc.setPc(pc + disp)
         clone._2.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x4A =>
         //BPL N = 0
-        val clone = twoPathClone((ccr & 0x08).equal(0x08), data)
+        val clone = twoPathClone(ccr.extract(3, 3).equal(1), data)
         clone._2.pc.setPc(pc + disp)
         clone._1.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x4B =>
         //BMI N = 0
-        val clone = twoPathClone((ccr & 0x08).equal(0x08), data)
+        val clone = twoPathClone(ccr.extract(3, 3).equal(1), data)
         clone._1.pc.setPc(pc + disp)
         clone._2.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x4C =>
         //BLT N 排他的論理和 V = 0
-        val n = (ccr & 0x08).equal(0x08)
-        val v = (ccr & 0x02).equal(0x02)
+        val n = ccr.extract(3, 3).equal(1)
+        val v = ccr.extract(1, 1).equal(1)
         val clone = twoPathClone(n ^^ v, data)
         clone._2.pc.setPc(pc + disp)
         clone._1.pc.setPc(pc + 2)
@@ -1246,8 +1245,8 @@ class Decoder {
 
       case 0x4D =>
         //BLT N 排他的論理和 V = 1
-        val n = (ccr & 0x08).equal(0x08)
-        val v = (ccr & 0x02).equal(0x02)
+        val n = ccr.extract(3, 3).equal(1)
+        val v = ccr.extract(1, 1).equal(1)
         val clone = twoPathClone(n ^^ v, data)
         clone._1.pc.setPc(pc + disp)
         clone._2.pc.setPc(pc + 2)
@@ -1255,20 +1254,20 @@ class Decoder {
 
       case 0x4E =>
         //BGT Z | (N 排他的論理和 V) = 0
-        val n = (ccr & 0x08).equal(0x08)
-        val z = (ccr & 0x40).equal(0x40)
-        val v = (ccr & 0x02).equal(0x02)
-        val clone = twoPathClone(z | (n ^^ v), data)
+        val n = ccr.extract(3, 3).equal(1)
+        val z = ccr.extract(2, 2).equal(1)
+        val v = ccr.extract(1, 1).equal(1)
+        val clone = twoPathClone(z || (n ^^ v), data)
         clone._2.pc.setPc(pc + disp)
         clone._1.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x4F =>
         //BLE Z | (N 排他的論理和 V) = 1
-        val n = (ccr & 0x08).equal(0x08)
-        val z = (ccr & 0x40).equal(0x40)
-        val v = (ccr & 0x02).equal(0x02)
-        val clone = twoPathClone(z | (n ^^ v), data)
+        val n = ccr.extract(3, 3).equal(1)
+        val z = ccr.extract(2, 2).equal(1)
+        val v = ccr.extract(1, 1).equal(1)
+        val clone = twoPathClone(z ||(n ^^ v), data)
         clone._1.pc.setPc(pc + disp)
         clone._2.pc.setPc(pc + 2)
         tapleToArray(clone)
@@ -1320,7 +1319,8 @@ class Decoder {
         val sp = data.reg.getLong(7)
         data.reg.setLong(sp + 2, 7)
         val mem = data.mem.getWord(sp)
-        data.pc.setPc(mem)
+        val rts = data.pc.setPc(mem)
+        if (rts == rom.getWord(0) + 14) data.stop = true
         ArrayBuffer(data)
 
       case 0x55 =>
@@ -1393,7 +1393,6 @@ class Decoder {
         //JSR IndReg [5F][abs]
         val sp = data.reg.getLong(7) - 2
         data.reg.setLong(sp, 7)
-        val buf = new ArrayBuffer[DataSet]
         data.mem.setWord(new CtxSymbol(pc + 2, 16), sp)
         val ind = data.mem.getWord(rom.getByte(pc + 1))
         data.pc.setPc(ind)
@@ -1418,8 +1417,8 @@ class Decoder {
 
       case 0x20 =>
         //BHI C|V = 0
-        val c = (ccr & 0x01).equal(0x01)
-        val z = (ccr & 0x04).equal(0x04)
+        val c = ccr.extract(0, 0).equal(1)
+        val z = ccr.extract(2, 2).equal(1)
         val clone = twoPathClone(c || z, data)
         clone._2.pc.setPc(pc + disp)
         clone._1.pc.setPc(pc + 2)
@@ -1427,8 +1426,8 @@ class Decoder {
 
       case 0x30 =>
         //BLS C|V = 1
-        val c = (ccr & 0x01).equal(0x01)
-        val z = (ccr & 0x04).equal(0x04)
+        val c = ccr.extract(0, 0).equal(1)
+        val z = ccr.extract(2, 2).equal(1)
         val clone = twoPathClone(c || z, data)
         clone._1.pc.setPc(pc + disp)
         clone._2.pc.setPc(pc + 2)
@@ -1436,64 +1435,64 @@ class Decoder {
 
       case 0x40 =>
         //BHS C = 0
-        val clone = twoPathClone((ccr & 0x01).equal(0x01), data)
+        val clone = twoPathClone(ccr.extract(0, 0).equal(1), data)
         clone._2.pc.setPc(pc + disp)
         clone._1.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x50 =>
         //BLO C = 1
-        val clone = twoPathClone((ccr & 0x01).equal(0x01), data)
+        val clone = twoPathClone(ccr.extract(0, 0).equal(1), data)
         clone._1.pc.setPc(pc + disp)
         clone._2.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x60 =>
         //BNE Z = 0
-        val clone = twoPathClone((ccr & 0x04).equal(0x04), data)
+        val clone = twoPathClone(ccr.extract(2, 2).equal(1), data)
         clone._2.pc.setPc(pc + disp)
         clone._1.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x70 =>
         //BEQ Z = 1
-        val clone = twoPathClone((ccr & 0x04).equal(0x04), data)
+        val clone = twoPathClone(ccr.extract(2, 2).equal(1), data)
         clone._1.pc.setPc(pc + disp)
         clone._2.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x80 =>
         //BVC V = 0
-        val clone = twoPathClone((ccr & 0x02).equal(0x02), data)
+        val clone = twoPathClone(ccr.extract(1, 1).equal(1), data)
         clone._2.pc.setPc(pc + disp)
         clone._1.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x90 =>
         //BVC V = 1
-        val clone = twoPathClone((ccr & 0x02).equal(0x02), data)
+        val clone = twoPathClone(ccr.extract(1, 1).equal(1), data)
         clone._1.pc.setPc(pc + disp)
         clone._2.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0xA0 =>
         //BPL N = 0
-        val clone = twoPathClone((ccr & 0x08).equal(0x08), data)
+        val clone = twoPathClone(ccr.extract(3, 3).equal(1), data)
         clone._2.pc.setPc(pc + disp)
         clone._1.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0xB0 =>
         //BMI N = 0
-        val clone = twoPathClone((ccr & 0x08).equal(0x08), data)
+        val clone = twoPathClone(ccr.extract(3, 3).equal(1), data)
         clone._1.pc.setPc(pc + disp)
         clone._2.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0xC0 =>
         //BLT N 排他的論理和 V = 0
-        val n = (ccr & 0x08).equal(0x08)
-        val v = (ccr & 0x02).equal(0x02)
+        val n = ccr.extract(3, 3).equal(1)
+        val v = ccr.extract(1, 1).equal(1)
         val clone = twoPathClone(n ^^ v, data)
         clone._2.pc.setPc(pc + disp)
         clone._1.pc.setPc(pc + 2)
@@ -1501,8 +1500,8 @@ class Decoder {
 
       case 0xD0 =>
         //BLT N 排他的論理和 V = 1
-        val n = (ccr & 0x08).equal(0x08)
-        val v = (ccr & 0x02).equal(0x02)
+        val n = ccr.extract(3, 3).equal(1)
+        val v = ccr.extract(1, 1).equal(1)
         val clone = twoPathClone(n ^^ v, data)
         clone._1.pc.setPc(pc + disp)
         clone._2.pc.setPc(pc + 2)
@@ -1510,20 +1509,20 @@ class Decoder {
 
       case 0xE0 =>
         //BGT Z | (N 排他的論理和 V) = 0
-        val n = (ccr & 0x08).equal(0x08)
-        val z = (ccr & 0x40).equal(0x40)
-        val v = (ccr & 0x02).equal(0x02)
-        val clone = twoPathClone(z | (n ^^ v), data)
+        val n = ccr.extract(3, 3).equal(1)
+        val z = ccr.extract(2, 2).equal(1)
+        val v = ccr.extract(1, 1).equal(1)
+        val clone = twoPathClone(z || (n ^^ v), data)
         clone._2.pc.setPc(pc + disp)
         clone._1.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0xF0 =>
         //BLE Z | (N 排他的論理和 V) = 1
-        val n = (ccr & 0x08).equal(0x08)
-        val z = (ccr & 0x40).equal(0x40)
-        val v = (ccr & 0x02).equal(0x02)
-        val clone = twoPathClone(z | (n ^^ v), data)
+        val n = ccr.extract(3, 3).equal(1)
+        val z = ccr.extract(2, 2).equal(1)
+        val v = ccr.extract(1, 1).equal(1)
+        val clone = twoPathClone(z || (n ^^ v), data)
         clone._1.pc.setPc(pc + disp)
         clone._2.pc.setPc(pc + 2)
         tapleToArray(clone)
@@ -1546,7 +1545,7 @@ class Decoder {
         val imm = data.reg.getByte(op1 >> 4) & 0x07
         data.pc.setPc(pc + 2)
         val reg = data.reg.getByte(op1) >> imm
-        val clone = twoPathClone((reg & 0x01).equal(0x01), data)
+        val clone = twoPathClone(reg.extract(0, 0).equal(1), data)
         clone._1.reg.setByte(reg.bitclr(imm), op1)
         clone._2.reg.setByte(reg.bitset(imm), op1)
         tapleToArray(clone)
@@ -1564,7 +1563,7 @@ class Decoder {
         val imm = data.reg.getByte(op1 >> 4) & 0x07
         val reg = data.reg.getByte(op1) >> imm
         data.pc.setPc(pc + 2)
-        val clone = twoPathClone((reg & 0x01).equal(0x01), data)
+        val clone = twoPathClone(reg.extract(0, 0).equal(1), data)
         clone._1.ccr.clearV
         clone._2.ccr.setV
         tapleToArray(clone)
@@ -1616,14 +1615,15 @@ class Decoder {
     val imm = (op1 >> 4) & 0x07
     val reg = data.reg.getByte(op1)
     data.pc.setPc(pc + 2)
+    val c = data.ccr.getCcr.extract(0, 0)
     val clone = op1 & 0x80 match {
       case 0x00 =>
         //BST.B Imm,Reg [67][imm reg]
-        twoPathClone((data.ccr.getCcr & 0x01).equal(0x01), data)
+        twoPathClone(c.equal(1), data)
 
       case 0x80 =>
         //BIST.B Imm,Reg [67][1imm reg]
-        twoPathClone((data.ccr.getCcr & 0x01).equal(0x00), data)
+        twoPathClone(c.equal(0), data)
     }
     clone._1.reg.setByte(reg.bitset(imm), op1)
     clone._2.reg.setByte(reg.bitclr(imm), op1)
@@ -1798,37 +1798,33 @@ class Decoder {
 
   private def analyze7(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val op1 = rom.getByte(pc + 1)
+    val imm = op1 >> 4
+    val reg = data.reg.getByte(op1)
     rom.getByte(pc) match {
       case 0x70 =>
         //BSET.B Imm,Reg [70][immreg]
-        val imm = op1 >> 4
-        val bset = data.reg.getByte(op1).bitset(imm)
+        data.reg.setByte(reg.bitset(imm), op1)
         data.pc.setPc(pc + 2)
         ArrayBuffer(data)
 
       case 0x71 =>
         //BNOT.B Imm,Reg [71][immreg]
-        val imm = op1 >> 4
         data.pc.setPc(pc + 2)
-        val reg = data.reg.getByte(op1) >> imm
-        val clone = twoPathClone((reg & 0x01).equal(0x01), data)
+        val clone = twoPathClone(reg.extract(imm, imm).equal(1), data)
         clone._1.reg.setByte(reg.bitclr(imm), op1)
         clone._2.reg.setByte(reg.bitset(imm), op1)
         tapleToArray(clone)
 
       case 0x72 =>
         //BCLR.B Imm,Reg [72][immreg]
-        val bclr = data.reg.getByte(op1).bitclr(op1 >> 4)
-        data.reg.setByte(bclr, op1)
+        data.reg.setByte(reg.bitclr(imm), op1)
         data.pc.setPc(pc + 2)
         ArrayBuffer(data)
 
       case 0x73 =>
         //BTST.B Imm,Reg [73][immreg]
-        val imm = op1 >> 4
         data.pc.setPc(pc + 2)
-        val reg = data.reg.getByte(op1) >> imm
-        val clone = twoPathClone((reg & 0x01).equal(0x01), data)
+        val clone = twoPathClone(reg.extract(imm, imm).equal(1), data)
         clone._1.ccr.clearZ
         clone._2.ccr.setZ
         tapleToArray(clone)
@@ -1850,101 +1846,84 @@ class Decoder {
 
   private def analyze74(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val op1 = rom.getByte(pc + 1)
-    val imm = ((op1 >> 4) & 0x07)
-    val reg = data.reg.getByte(op1) >> imm
-    op1 & 0x80 match {
+    val imm = (op1 >> 4) & 0x07
+    val reg = data.reg.getByte(op1).extract(imm, imm)
+    val bool1 = data.ccr.getCcr.extract(0, 0).equal(1)
+    data.pc.setPc(pc + 2)
+    val bool2 = op1 & 0x80 match {
       case 0x00 =>
         //BOR.B Imm,Reg [74][imm reg]
-        val bool1 = (data.ccr.getCcr & 0x01).equal(0x01)
-        val bool2 = (reg & 0x01).equal(0x01)
-        val clone = twoPathClone(bool1 || bool2, data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        reg.equal(1)
 
       case 0x80 =>
         //BIOR.B Imm,Reg [74][1imm reg]
-        val bool1 = (data.ccr.getCcr & 0x01).equal(0x01)
-        val bool2 = (reg & 0x01).equal(0x00)
-        val clone = twoPathClone(bool1 || bool2, data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        reg.equal(0)
     }
+    val clone = twoPathClone(bool1 || bool2, data)
+    clone._1.ccr.setC
+    clone._2.ccr.clearC
+    tapleToArray(clone)
   }
 
   private def analyze75(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val op1 = rom.getByte(pc + 1)
-    val imm = ((op1 >> 4) & 0x07)
-    val reg = data.reg.getByte(op1) >> imm
+    val imm = (op1 >> 4) & 0x07
+    val reg = data.reg.getByte(op1).extract(imm, imm)
+    val bool1 = data.ccr.getCcr.extract(0, 0).equal(1)
     data.pc.setPc(pc + 2)
-    op1 & 0x80 match {
+    val bool2 = op1 & 0x80 match {
       case 0x00 =>
         //BXOR.B Imm,Reg [75][0imm reg]
-        val bool1 = (data.ccr.getCcr & 0x01).equal(0x01)
-        val bool2 = (reg & 0x01).equal(0x01)
-        val clone = twoPathClone(bool1 ^^ bool2, data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        reg.equal(1)
 
       case 0x80 =>
         //BIXOR.B Imm,Reg [75][1imm reg]
-        val bool1 = (data.ccr.getCcr & 0x01).equal(0x01)
-        val bool2 = (reg & 0x01).equal(0x00)
-        val clone = twoPathClone(bool1 ^^ bool2, data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        reg.equal(0)
     }
+    val clone = twoPathClone(bool1 ^^ bool2, data)
+    clone._1.ccr.setC
+    clone._2.ccr.clearC
+    tapleToArray(clone)
   }
 
   private def analyze76(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val op1 = rom.getByte(pc + 1)
-    val imm = ((op1 >> 4) & 0x07)
-    val reg = data.reg.getByte(op1) >> imm
+    val imm = (op1 >> 4) & 0x07
+    val reg = data.reg.getByte(op1).extract(imm, imm)
+    val bool1 = data.ccr.getCcr.extract(0, 0).equal(1)
     data.pc.setPc(pc + 2)
-    op1 & 0x80 match {
+    val bool2 = op1 & 0x80 match {
       case 0x00 =>
         //BAND.B Imm,Reg [76][0imm reg]
-        val bool1 = (data.ccr.getCcr & 0x01).equal(0x01)
-        val bool2 = (reg & 0x01).equal(0x01)
-        val clone = twoPathClone(bool1 && bool2, data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        reg.equal(1)
 
       case 0x80 =>
         //BIAND.B Imm,Reg [76][1imm reg]
-        val bool1 = (data.ccr.getCcr & 0x01).equal(0x01)
-        val bool2 = (reg & 0x01).equal(0x00)
-        val clone = twoPathClone(bool1 && bool2, data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        reg.equal(0)
     }
+    val clone = twoPathClone(bool1 && bool2, data)
+    clone._1.ccr.setC
+    clone._2.ccr.clearC
+    tapleToArray(clone)
   }
 
   private def analyze77(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val op1 = rom.getByte(pc + 1)
     val imm = (op1 >> 4) & 0x07
-    val reg = data.reg.getByte(op1) >> imm
+    val reg = data.reg.getByte(op1).extract(imm, imm)
     data.pc.setPc(pc + 2)
-    op1 & 0x80 match {
+    val clone = op1 & 0x80 match {
       case 0x00 =>
         //BLD.B Imm,Reg [77][immreg]
-        val clone = twoPathClone((reg & 0x01).equal(0x01), data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        twoPathClone(reg.equal(1), data)
 
       case 0x80 =>
         //BILD.B Imm,Reg [77][1immreg]
-        val clone = twoPathClone((reg & 0x01).equal(0x00), data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        twoPathClone(reg.equal(0), data)
     }
+    clone._1.ccr.setC
+    clone._2.ccr.clearC
+    tapleToArray(clone)
   }
 
   private def analyze78(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
@@ -2107,7 +2086,7 @@ class Decoder {
         val ind = data.reg.getLong(rom.getByte(pc + 1) >> 4)
         data.pc.setPc(pc + 4)
         val mem = data.mem.getByte(ind) >> imm
-        val clone = twoPathClone((mem & 0x01).equal(0x00), data)
+        val clone = twoPathClone(mem.extract(0, 0).equal(0), data)
         clone._1.ccr.setZ
         clone._2.ccr.clearZ
         tapleToArray(clone)
@@ -2123,8 +2102,8 @@ class Decoder {
         val imm = rom.getByte(pc + 3) >> 4
         val ind = data.reg.getLong(rom.getByte(pc + 1) >> 4)
         data.pc.setPc(pc + 4)
-        val mem = data.mem.getByte(ind) >> imm
-        val clone = twoPathClone((mem & 0x01).equal(0x00), data)
+        val mem = data.mem.getByte(ind)
+        val clone = twoPathClone(mem.extract(imm, imm).equal(0), data)
         clone._1.ccr.setZ
         clone._2.ccr.clearZ
         tapleToArray(clone)
@@ -2140,109 +2119,86 @@ class Decoder {
     val op3 = rom.getByte(pc + 3)
     val imm = (op3 >> 4) & 0x07
     val ind = data.reg.getLong(rom.getByte(pc + 1) >> 4)
+    val mem = data.mem.getByte(ind).extract(imm, imm)
+    val bool1 = data.ccr.getCcr.extract(0, 0).equal(1)
     data.pc.setPc(pc + 4)
-    op3 & 0x80 match {
+    val bool2 = op3 & 0x80 match {
       case 0x00 =>
         //BOR.B Imm,IndReg [7C][indreg0][74][imm0]
-        val mem = data.mem.getByte(ind) >> imm
-        val bool1 = (data.ccr.getCcr & 0x01).equal(0x01)
-        val bool2 = (mem & 0x01).equal(0x01)
-        val clone = twoPathClone(bool1 || bool2, data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        mem.equal(1)
 
       case 0x80 =>
         //BIOR.B Imm,IndReg [7C][indreg0][74][1imm0]
-        val mem = data.mem.getByte(ind) >> imm
-        val bool1 = (data.ccr.getCcr & 0x01).equal(0x01)
-        val bool2 = (mem & 0x01).equal(0x00)
-        val clone = twoPathClone(bool1 || bool2, data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        mem.equal(0)
     }
+    val clone = twoPathClone(bool1 || bool2, data)
+    clone._1.ccr.setC
+    clone._2.ccr.clearC
+    tapleToArray(clone)
   }
 
   private def analyze7C75(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val op3 = rom.getByte(pc + 3)
     val imm = (op3 >> 4) & 0x07
     val ind = data.reg.getLong(rom.getByte(pc + 1) >> 4)
+    val mem = data.mem.getByte(ind).extract(imm, imm)
+    val bool1 = data.ccr.getCcr.extract(0, 0).equal(1)
     data.pc.setPc(pc + 4)
-    op3 & 0x80 match {
+    val bool2 = op3 & 0x80 match {
       case 0x00 =>
         //BXOR.B Imm,IndReg [7C][indreg0][75][imm0]
-        val mem = data.mem.getByte(ind) >> imm
-        val bool1 = (data.ccr.getCcr & 0x01).equal(0x01)
-        val bool2 = (mem & 0x01).equal(0x01)
-        val clone = twoPathClone(bool1 ^^ bool2, data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        mem.equal(1)
 
       case 0x80 =>
         //BIXOR.B Imm,IndReg [7C][indreg0][75][1imm0]
-        val mem = data.mem.getByte(ind) >> imm
-        val bool1 = (data.ccr.getCcr & 0x01).equal(0x01)
-        val bool2 = (mem & 0x01).equal(0x00)
-        val clone2 = twoPathClone(bool1 ^^ bool2, data)
-        clone2._1.ccr.setC
-        clone2._2.ccr.clearC
-        tapleToArray(clone2)
+        mem.equal(0)
     }
+    val clone = twoPathClone(bool1 ^^ bool2, data)
+    clone._1.ccr.setC
+    clone._2.ccr.clearC
+    tapleToArray(clone)
   }
 
   private def analyze7C76(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val op3 = rom.getByte(pc + 3)
     val imm = (op3 >> 4) & 0x07
     val ind = data.reg.getLong(rom.getByte(pc + 1) >> 4)
+    val mem = data.mem.getByte(ind).extract(imm, imm)
+    val bool1 = data.ccr.getCcr.extract(0, 0).equal(1)
     data.pc.setPc(pc + 4)
-    op3 & 0x80 match {
+    val bool2 = op3 & 0x80 match {
       case 0x00 =>
         //BAND.B Imm,IndReg [7C][indreg0][76][imm0]
-        val mem = data.mem.getByte(ind) >> imm
-        val bool1 = (data.ccr.getCcr & 0x01).equal(0x01)
-        val bool2 = (mem & 0x01).equal(0x01)
-        val clone = twoPathClone(bool1 && bool2, data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        mem.equal(1)
 
       case 0x80 =>
         //BIAND.B Imm,IndReg [7C][indreg0][76][1imm0]
-        val mem = data.mem.getByte(ind) >> imm
-        val bool1 = (data.ccr.getCcr & 0x01).equal(0x01)
-        val bool2 = (mem & 0x01).equal(0x00)
-        val clone = twoPathClone(bool1 && bool2, data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        mem.equal(0)
     }
+    val clone = twoPathClone(bool1 && bool2, data)
+    clone._1.ccr.setC
+    clone._2.ccr.clearC
+    tapleToArray(clone)
   }
 
   private def analyze7C77(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val op3 = rom.getByte(pc + 3)
     val imm = (op3 >> 4) & 0x07
     val ind = data.reg.getLong(rom.getByte(pc + 1) >> 4)
+    val mem = data.mem.getByte(ind).extract(imm, imm)
     data.pc.setPc(pc + 4)
-    op3 & 0x80 match {
+    val clone = op3 & 0x80 match {
       case 0x00 =>
         //BLD.B Imm,IndReg [7C][indreg0][77][imm0]
-        val mem = data.mem.getByte(ind) >> imm
-        val clone = twoPathClone((mem & 0x01).equal(0x01), data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
-
+        twoPathClone(mem.equal(1), data)
 
       case 0x80 =>
         //BILD.B Imm,IndReg [7C][indreg0][77][1imm0]
-        val mem = data.mem.getByte(ind) >> imm
-        val clone = twoPathClone((mem & 0x01).equal(0x00), data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        twoPathClone(mem.equal(0), data)
     }
+    clone._1.ccr.setC
+    clone._2.ccr.clearC
+    tapleToArray(clone)
   }
 
   private def analyze7D(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
@@ -2267,7 +2223,7 @@ class Decoder {
         //BNOT.B Imm,IndReg [7D][indreg0][61][reg0]
         data.pc.setPc(pc + 4)
         val mem = data.mem.getByte(ind) >> imm
-        val clone = twoPathClone((mem & 0x01).equal(0x01), data)
+        val clone = twoPathClone(mem.extract(0, 0).equal(1), data)
         clone._1.mem.setByte(mem.bitclr(imm), ind)
         clone._2.mem.setByte(mem.bitset(imm), ind)
         tapleToArray(clone)
@@ -2287,50 +2243,44 @@ class Decoder {
     val op3 = rom.getByte(pc + 3)
     val imm = (op3 >> 4) & 0x07
     val ind = data.reg.getLong(rom.getByte(pc + 1) >> 4)
+    val mem = data.mem.getByte(ind)
+    val c = data.ccr.getCcr.extract(0, 0)
     data.pc.setPc(pc + 4)
-    op3 & 0x80 match {
+    val clone = op3 & 0x80 match {
       case 0x00 =>
         //BST.B Imm,Indreg [7D][reg0][67][imm0]
-        val mem = data.mem.getByte(ind)
-        val clone = twoPathClone((data.ccr.getCcr & 0x01).equal(0x01), data)
-        clone._1.mem.setByte(mem.bitset(imm), ind)
-        clone._2.mem.setByte(mem.bitclr(imm), ind)
-        tapleToArray(clone)
+        twoPathClone(c.equal(0x01), data)
 
       case 0x80 =>
         //BIST.B Imm,Indreg [7D][reg0][67][1imm0]]
-        val buf = new ArrayBuffer[DataSet]
-        val mem = data.mem.getByte(ind)
-        val clone = twoPathClone((data.ccr.getCcr & 0x01).equal(0x00), data)
-        clone._1.mem.setByte(mem.bitset(imm), ind)
-        clone._2.mem.setByte(mem.bitclr(imm), ind)
-        tapleToArray(clone)
+        twoPathClone(c.equal(0x00), data)
     }
+    clone._1.mem.setByte(mem.bitset(imm), ind)
+    clone._2.mem.setByte(mem.bitclr(imm), ind)
+    tapleToArray(clone)
   }
 
   private def analyze7D7(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val imm = rom.getByte(pc + 3) >> 4
     val ind = data.reg.getLong(rom.getByte(pc + 1) >> 4)
+    val mem = data.mem.getByte(ind)
     data.pc.setPc(pc + 4)
     rom.getByte(pc + 2) match {
       case 0x70 =>
         //BSET.B Imm,IndReg [7D][indreg0][70][imm0]
-        val bset = data.mem.getByte(ind).bitset(imm)
-        data.mem.setByte(bset, ind)
+        data.mem.setByte(mem.bitset(imm), ind)
         ArrayBuffer(data)
 
       case 0x71 =>
         //BNOT.B Imm,IndReg [7D][indreg0][71][imm0]
-        val mem = data.mem.getByte(ind) >> imm
-        val clone = twoPathClone((mem & 0x01).equal(0x01), data)
+        val clone = twoPathClone(mem.extract(imm, imm).equal(1), data)
         clone._1.mem.setByte(mem.bitclr(imm), ind)
         clone._2.mem.setByte(mem.bitset(imm), ind)
         tapleToArray(clone)
 
       case 0x72 =>
         //BCLR.B Imm,Indreg [7D][indreg0][72][imm0]
-        val bclr = data.mem.getByte(ind).bitclr(imm)
-        data.mem.setByte(bclr, ind)
+        data.mem.setByte(mem.bitclr(imm), ind)
         ArrayBuffer(data)
     }
   }
@@ -2343,7 +2293,7 @@ class Decoder {
         val abs = rom.getByte(pc + 1) | 0xFFFFFF00
         val mem = data.mem.getByte(abs) >> imm
         data.pc.setPc(pc + 4)
-        val clone = twoPathClone((mem & 0x01).equal(0x00), data)
+        val clone = twoPathClone(mem.extract(0, 0).equal(0), data)
         clone._1.ccr.setZ
         clone._2.ccr.clearZ
         tapleToArray(clone)
@@ -2358,9 +2308,9 @@ class Decoder {
         //BTST.B Imm,Abs [7E][abs][73][imm0]
         val imm = rom.getByte(pc + 3) >> 4
         val abs = rom.getByte(pc + 1) | 0xFFFFFF00
-        val mem = data.mem.getByte(abs) >> imm
+        val mem = data.mem.getByte(abs)
         data.pc.setPc(pc + 4)
-        val clone = twoPathClone((mem & 0x01).equal(0x00), data)
+        val clone = twoPathClone(mem.extract(imm, imm).equal(0), data)
         clone._1.ccr.setZ
         clone._2.ccr.clearZ
         tapleToArray(clone)
@@ -2375,174 +2325,116 @@ class Decoder {
   private def analyze7E74(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val op3 = rom.getByte(pc + 3)
     val imm = (op3 >> 4) & 0x07
-    val mem = data.mem.getByte(rom.getByte(pc + 1)) >> imm
+    val mem = data.mem.getByte(rom.getByte(pc + 1)).extract(imm, imm)
+    val bool1 = data.ccr.getCcr.extract(0, 0).equal(1)
     data.pc.setPc(pc + 4)
-    op3 & 0x80 match {
+    val bool2 = op3 & 0x80 match {
       case 0x00 =>
         //BOR.B Imm,Abs [7E][abs][74][imm0]
-        val bool1 = (data.ccr.getCcr & 0x01).equal(0x01)
-        val bool2 = (mem & 0x01).equal(0x01)
-        val clone = twoPathClone((bool1 || bool2), data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        mem.equal(1)
 
       case 0x80 =>
         //BIOR.B Imm,Abs [7E][abs][74][1imm0]
-        val bool1 = (data.ccr.getCcr & 0x01).equal(0x01)
-        val bool2 = (mem & 0x01).equal(0x00)
-        val clone = twoPathClone((bool1 || bool2), data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        mem.equal(0)
     }
+    val clone = twoPathClone(bool1 || bool2, data)
+    clone._1.ccr.setC
+    clone._2.ccr.clearC
+    tapleToArray(clone)
   }
 
   private def analyze7E75(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val op3 = rom.getByte(pc + 3)
     val imm = (op3 >> 4) & 0x07
-    val mem = data.mem.getByte(rom.getByte(pc + 1)) >> imm
+    val mem = data.mem.getByte(rom.getByte(pc + 1)).extract(imm, imm)
+    val bool1 = data.ccr.getCcr.extract(0, 0).equal(1)
     data.pc.setPc(pc + 4)
-    op3 & 0x80 match {
+    val bool2 = op3 & 0x80 match {
       case 0x00 =>
         //BXOR.B Imm,Abs [7E][abs][75][imm0]
-        val bool1 = (data.ccr.getCcr & 0x01).equal(0x01)
-        val bool2 = (mem & 0x01).equal(0x01)
-        val clone = twoPathClone((bool1 ^^ bool2), data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        mem.equal(1)
 
       case 0x80 =>
         //BIXOR.B Imm,Abs [7E][abs][75][1imm0]
-        val bool1 = (data.ccr.getCcr & 0x01).equal(0x01)
-        val bool2 = (mem & 0x01).equal(0x00)
-        val clone = twoPathClone((bool1 ^^ bool2), data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        mem.equal(0)
     }
+    val clone = twoPathClone(bool1 ^^ bool2, data)
+    clone._1.ccr.setC
+    clone._2.ccr.clearC
+    tapleToArray(clone)
+
   }
 
   private def analyze7E76(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val op3 = rom.getByte(pc + 3)
     val imm = (op3 >> 4) & 0x07
-    val mem = data.mem.getByte(rom.getByte(pc + 1)) >> imm
+    val mem = data.mem.getByte(rom.getByte(pc + 1)).extract(imm, imm)
+    val bool1 = data.ccr.getCcr.extract(0, 0).equal(1)
     data.pc.setPc(pc + 4)
-    op3 & 0x80 match {
+    val bool2 = op3 & 0x80 match {
       case 0x00 =>
         //BAND.B Imm,Abs [7E][abs][76][imm0]
-        val bool1 = (data.ccr.getCcr & 0x01).equal(0x01)
-        val bool2 = (mem & 0x01).equal(0x01)
-        val clone = twoPathClone((bool1 && bool2), data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        mem.equal(1)
 
       case 0x80 =>
         //BIAND.B Imm,Abs [7E][abs][76][1imm0]
-        val bool1 = (data.ccr.getCcr & 0x01).equal(0x01)
-        val bool2 = (mem & 0x01).equal(0x00)
-        val clone = twoPathClone((bool1 && bool2), data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        mem.equal(0)
     }
+    val clone = twoPathClone(bool1 && bool2, data)
+    clone._1.ccr.setC
+    clone._2.ccr.clearC
+    tapleToArray(clone)
   }
 
   private def analyze7E77(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val op3 = rom.getByte(pc + 3)
     val imm = (op3 >> 4) & 0x07
-    val mem = data.mem.getByte(rom.getByte(pc + 1)) >> imm
+    val mem = data.mem.getByte(rom.getByte(pc + 1)).extract(imm, imm)
     data.pc.setPc(pc + 4)
-    op3 & 0x80 match {
+    val clone = op3 & 0x80 match {
       case 0x00 =>
         //BLD.B Imm,Abs [7E][abs][77][imm0]
-        val clone = twoPathClone((mem & 0x01).equal(0x01), data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        twoPathClone(mem.equal(1), data)
 
       case 0x80 =>
         //BILD.B Imm,Abs [7E][abs][77][1imm0]
-        val clone = twoPathClone((mem & 0x01).equal(0x00), data)
-        clone._1.ccr.setC
-        clone._2.ccr.clearC
-        tapleToArray(clone)
+        twoPathClone(mem.equal(0), data)
     }
+    clone._1.ccr.setC
+    clone._2.ccr.clearC
+    tapleToArray(clone)
   }
 
   private def analyze7F(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
-    val abs = rom.getByte(pc + 1) | 0xFFFF00
-    val op3 = rom.getByte(pc + 3)
     data.pc.setPc(pc + 4)
-    rom.getByte(pc + 2) match {
-      case 0x62 =>
-        //BCLR.B Reg,Abs [7F][abs][62][reg0]
-        val reg = data.reg.getByte(op3 >> 4) & 0x07
-        val bclr = data.mem.getByte(abs).bitclr(reg)
-        data.mem.setByte(bclr, abs)
-        ArrayBuffer(data)
-
-      case 0x67 =>
-        val imm = (op3 >> 4) & 0x07
-        val mem = data.mem.getByte(abs)
-        op3 & 0x80 match {
-          case 0x00 =>
-            //BST.B Imm,Abs [7F][abs][67][Imm0]
-            val clone = twoPathClone((data.ccr.getCcr & 0x01).equal(0x01), data)
-            clone._1.mem.setByte(mem.bitset(imm), abs)
-            clone._2.mem.setByte(mem.bitclr(imm), abs)
-            tapleToArray(clone)
-
-          case 0x80 =>
-            //BIST.B Imm,Abs [7F][abs][67][1Imm0]
-            val clone = twoPathClone((data.ccr.getCcr & 0x01).equal(0x00), data)
-            clone._1.mem.setByte(mem.bitset(imm), abs)
-            clone._2.mem.setByte(mem.bitclr(imm), abs)
-            tapleToArray(clone)
-        }
-
-      case 0x70 =>
-        //BSET.B Imm,Abs [7F][abs][70][Imm0]
-        val imm = op3 >> 4
-        val bset = data.mem.getByte(abs).bitset(imm)
-        data.mem.setByte(bset, abs)
-        ArrayBuffer(data)
-
-      case 0x72 =>
-        //BCLR.B Imm,Abs [7F][abs][72][Imm0]
-        val imm = op3 >> 4
-        val bclr = data.mem.getByte(abs).bitclr(imm)
-        data.mem.setByte(bclr, abs)
-        ArrayBuffer(data)
+    rom.getByte(pc + 2) & 0xF0 match {
+      case 0x60 => analyze7F6(data, pc)
+      case 0x70 => analyze7F7(data, pc)
     }
   }
 
   private def analyze7F6(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val abs = rom.getByte(pc + 1)
-    val reg = data.reg.getByte(rom.getByte(pc + 3) >> 4) & 0x07
+    val imm = data.reg.getByte(rom.getByte(pc + 3) >> 4) & 0x07
+    val mem = data.mem.getByte(abs)
     rom.getByte(pc + 2) match {
       case 0x60 =>
         //BSET.B Reg,Abs [7F][abs][60][reg0]
-        val bset = data.mem.getByte(abs).bitset(reg)
-        data.mem.setByte(bset, abs)
+        data.mem.setByte(mem.bitset(imm), abs)
         data.pc.setPc(pc + 4)
         ArrayBuffer(data)
 
       case 0x61 =>
         //BNOT.B Reg,Abs [7F][abs][61][reg0]
-        val mem = data.mem.getByte(abs) >> reg
         data.pc.setPc(pc + 4)
-        val clone = twoPathClone((mem & 0x01).equal(0x01), data)
-        clone._1.mem.setByte(mem.bitclr(reg), abs)
-        clone._2.mem.setByte(mem.bitset(reg), abs)
+        val clone = twoPathClone((mem >> imm).extract(0, 0).equal(1), data)
+        clone._1.mem.setByte(mem.bitclr(imm), abs)
+        clone._2.mem.setByte(mem.bitset(imm), abs)
         tapleToArray(clone)
 
       case 0x62 =>
         //BCLR.B Reg,Abs [7F][abs][62][reg0]
-        val bclr = data.mem.getByte(abs).bitclr(reg)
-        data.mem.setByte(bclr, abs)
+        data.mem.setByte(mem.bitclr(imm), abs)
         data.pc.setPc(pc + 4)
         ArrayBuffer(data)
 
@@ -2554,48 +2446,44 @@ class Decoder {
     val abs = rom.getByte(pc + 1) | 0xFFFFFF00
     val mem = data.mem.getByte(abs)
     val imm = (rom.getByte(pc + 3) >> 4) & 0x07
+    val c = data.ccr.getCcr.extract(0, 0)
     data.pc.setPc(pc + 4)
-    rom.getByte(pc + 3) match {
+    val clone = rom.getByte(pc + 3) match {
       case 0x00 =>
         //BST.B Imm,Abs [7F][abs][67][imm0]
-        val clone = twoPathClone((data.ccr.getCcr & 0x01).equal(0x01), data)
-        clone._1.mem.setByte(mem.bitset(imm), abs)
-        clone._2.mem.setByte(mem.bitclr(imm), abs)
-        tapleToArray(clone)
+        twoPathClone(c.equal(1), data)
 
       case 0x80 =>
         //BIST.B Imm,Abs [7F][abs][67][1imm0]
-        val clone = twoPathClone((data.ccr.getCcr & 0x01).equal(0x00), data)
-        clone._1.mem.setByte(mem.bitset(imm), abs)
-        clone._2.mem.setByte(mem.bitclr(imm), abs)
-        tapleToArray(clone)
+        twoPathClone(c.equal(0), data)
     }
+    clone._1.mem.setByte(mem.bitset(imm), abs)
+    clone._2.mem.setByte(mem.bitclr(imm), abs)
+    tapleToArray(clone)
   }
 
   private def analyze7F7(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val abs = rom.getByte(pc + 1)
     val op3 = rom.getByte(pc + 3)
     val imm = op3 >> 4
+    val mem = data.mem.getByte(abs)
     data.pc.setPc(pc + 4)
     rom.getByte(pc + 2) match {
       case 0x70 =>
-        //BSET.B Reg,Abs [7F][abs][70][reg0]
-        val bset = data.mem.getByte(abs).bitset(imm)
-        data.mem.setByte(bset, abs)
+        //BSET.B Imm,Abs [7F][abs][70][reg0]
+        data.mem.setByte(mem.bitset(imm), abs)
         ArrayBuffer(data)
 
       case 0x71 =>
-        //BNOT.B Reg,Abs [7F][abs][71][reg0]
-        val mem = data.mem.getByte(abs) >> imm
-        val clone = twoPathClone((mem & 0x01).equal(0x01), data)
+        //BNOT.B Imm,Abs [7F][abs][71][reg0]
+        val clone = twoPathClone(mem.extract(imm, imm).equal(0x01), data)
         clone._1.mem.setByte(mem.bitclr(imm), abs)
         clone._2.mem.setByte(mem.bitset(imm), abs)
         tapleToArray(clone)
 
       case 0x72 =>
-        //BCLR.B Reg,Abs [7F][abs][72][reg0]
-        val bclr = data.mem.getByte(abs).bitclr(imm)
-        data.mem.setByte(bclr, abs)
+        //BCLR.B Imm,Abs [7F][abs][72][reg0]
+        data.mem.setByte(mem.bitclr(imm), abs)
         ArrayBuffer(data)
     }
   }
@@ -2635,29 +2523,25 @@ class Decoder {
   }
 
   private def checkC(num1: CtxSymbol, num2: CtxSymbol, res: CtxSymbol, data: DataSet, size: Int): ArrayBuffer[DataSet] = {
-    val and = size match {
-      case 8 => 0x80
-      case 16 => 0x8000
-      case 32 => 0x80000000
-    }
-    val bool1 = (num1 & and).equal(and) && (num2 & and).equal(and)
-    val bool2 = ((num1 & and).equal(and) || (num2 & and).equal(and)) && (res & and).equal(0)
-    val clone = twoPathClone((bool1 || bool2), data)
+    val s = size - 1
+    val bool1 = num1.extract(s, s).equal(1) && num2.extract(s, s).equal(1)
+    val bool2 = (num1.extract(s, s).equal(1) || num2.extract(s, s).equal(1)) && res.extract(s, s).equal(0)
+    val clone = twoPathClone(bool1 || bool2, data)
     clone._1.ccr.setC
     clone._2.ccr.clearC
     tapleToArray(clone)
   }
 
-  private def checkV(num1: CtxSymbol, num2: CtxSymbol, res: CtxSymbol, buf: ArrayBuffer[DataSet], size: Int): ArrayBuffer[DataSet] = {
-    val ans = new ArrayBuffer[DataSet]
-    buf.foreach { b => ans ++= checkV(num1, num2, res, b, size)}
-    ans
-  }
+//  private def checkV(num1: CtxSymbol, num2: CtxSymbol, res: CtxSymbol, buf: ArrayBuffer[DataSet], size: Int): ArrayBuffer[DataSet] = {
+//    val ans = new ArrayBuffer[DataSet]
+//    buf.foreach { b => ans ++= checkV(num1, num2, res, b, size)}
+//    ans
+//  }
 
   private def checkV(num1: CtxSymbol, num2: CtxSymbol, res: CtxSymbol, data: DataSet, size: Int): ArrayBuffer[DataSet] = {
     val bool1 = (num1 >= 0) && (num2 >= 0) && (res < 0)
     val bool2 = (num1 < 0) && (num2 < 0) && (res >= 0)
-    val clone = twoPathClone((bool1 || bool2), data)
+    val clone = twoPathClone(bool1 || bool2, data)
     clone._1.ccr.setV
     clone._2.ccr.clearV
     tapleToArray(clone)
@@ -2696,16 +2580,12 @@ class Decoder {
   }
 
   private def checkH(num1: CtxSymbol, num2: CtxSymbol, res: CtxSymbol, data: DataSet, size: Int): ArrayBuffer[DataSet] = {
-    val and = size match {
-      case 8 => 0x08
-      case 16 => 0x0800
-      case 32 => 0x00800000
-    }
-    val bool1 = (num1 & and).equal(and) && (num2 & and).equal(and)
-    val bool2 = ((num1 & and).equal(and) || (num2 & and).equal(and)) && (res & and).equal(0)
-    val clone = twoPathClone((bool1 || bool2), data)
-    clone._1.ccr.setH
-    clone._2.ccr.clearH
+    val s = size - 5
+    val bool1 = num1.extract(s, s).equal(1) && num2.extract(s, s).equal(1)
+    val bool2 = (num1.extract(s, s).equal(1) || num2.extract(s, s).equal(1)) && res.extract(s, s).equal(0)
+    val clone = twoPathClone(bool1 || bool2, data)
+    clone._1.ccr.setC
+    clone._2.ccr.clearC
     tapleToArray(clone)
   }
 

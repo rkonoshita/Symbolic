@@ -1,4 +1,4 @@
-package main
+package base
 
 import java.io.File
 
@@ -10,12 +10,11 @@ import z3.scala.Z3Context
 
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
-import scala.io.Source
 
 /**
  * Created by rkonoshita on 14/11/12.
  */
-object Main {
+object Symbolic {
 
   val ctx = new Z3Context
   val sol = ctx.mkSolver
@@ -26,6 +25,18 @@ object Main {
 
   def main(args: Array[String]): Unit = {
 
+    val s = ctx.mkInt(0x80000000, ctx.mkBVSort(32))
+    val c1 = ctx.mkExtract(30, 0, s)
+    val c2 = ctx.mkExtract(31, 31, s)
+    val c = ctx.mkConcat(c1, c2)
+    val e = ctx.mkEq(c, ctx.mkInt(1, ctx.mkBVSort(32)))
+    println(ctx.simplifyAst(c1),ctx.simplifyAst(c2))
+    println(c)
+    println(ctx.simplifyAst(c))
+    sol.assertCnstr(e)
+    println(sol.check)
+    return
+
     val file = new File("test_code") -> new File("asm")
     new ConvertToInputForm(file._1, file._2).convert()
     rom = new ASTVisitor().makeProgram(ctx, file._2)
@@ -35,30 +46,36 @@ object Main {
     stack.push(initState)
     //    queue += initState
 
-    while (!stack.isEmpty) {
-      val current = stack.pop
-      //      val current = queue.dequeue
-      val data = new DataSet(current)
-      //ここらへんにセンサ関係書きたい
-      val dataArray = new Decoder().analyze(data)
-      dataArray.foreach { d =>
-        val s = new State(state.size, d, current)
-        current.next += s
-        println(s)
-        println
-        state += s
-        if (!s.stop) stack.push(s)
-        val error = s.error
-        if(error._1) {
-          stack.clear
-          println(error._2)
+    val t = time {
+      while (!stack.isEmpty) {
+        val current = stack.pop
+        //val current = queue.dequeue
+        val data = new DataSet(current)
+        //ここらへんにセンサ関係書きたい
+        input(data)
+
+        val dataArray = new Decoder().analyze(data)
+        dataArray.foreach { d =>
+          val s = new State(state.size, d, current)
+          current.next += s
+          println(s)
+          println
+          state += s
+          if (s.reach) {
+            if (!s.stop) stack.push(s)
+            //queue += s
+            val error = s.stackError
+            if (error._1) {
+              stack.clear
+              println(error._2.get)
+            }
+          }
         }
-        //        if (!s.stop) queue += s
+        if (state.length >= 40000) stack.clear
+        //if (state.length >= 500) queue.clear
       }
-      if (state.length >= 40000) stack.clear
-      //      if (state.length >= 500) queue.clear
     }
-    new ResultWritter().write(new File("result.txt"))
+    new ResultWritter().write(new File("result.txt"), t)
   }
 
   def first: DataSet = {
@@ -75,6 +92,22 @@ object Main {
     val c = new CtxSymbol(ctx.simplifyAst(symbol.symbol))
     if (c.toString() == symbol.toString()) symbol
     else c
+  }
+
+  var input = 0
+
+  def input(data: DataSet): Unit = {
+    val pcr3 = data.mem.getByte(0xFFE6)
+    val pdr3 = data.mem.getByte(0xFFD6)
+    val data3 = pdr3 & pcr3 | ctx.mkConst("m" + 0xFFDB + "_" + input, ctx.mkBVSort(8))
+    data.mem.setByte(data3, 0xFFD6)
+    input += 1
+  }
+
+  def time(proc: => Unit): Long = {
+    val longtime = System.currentTimeMillis
+    proc
+    System.currentTimeMillis - longtime
   }
 
 }
@@ -100,7 +133,7 @@ object Parameter {
   }
 
   def ioInit(): Memory = {
-    val ctx = Main.ctx
+    val ctx = Symbolic.ctx
     val mem = new Memory(new CtxSymbol(ctx.mkConst("mem", ctx.mkArraySort(ctx.mkBVSort(16), ctx.mkBVSort(8)))))
     mem.setByte(0x00, 0xF700) //TCR_0
     mem.setByte(0x88, 0xF701) //TIORA_0

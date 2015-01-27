@@ -1,6 +1,6 @@
 package data.register
 
-import main.Main
+import base.Symbolic
 import symbol.CtxSymbol
 
 /**
@@ -10,32 +10,33 @@ class ConditionRegister(c: CtxSymbol) {
 
   private var ccr = c
 
-  def getCcr: CtxSymbol = Main.simple(ccr)
+  def getCcr: CtxSymbol = Symbolic.simple(ccr)
 
-  def setCcr(c: CtxSymbol) = ccr = Main.simple(c)
+  def setCcr(c: CtxSymbol) = ccr = Symbolic.simple(c)
 
-  def clearC = ccr = Main.simple(ccr & 0xFE)
+  def clearC = ccr = Symbolic.simple(ccr & 0xFE)
 
-  def clearV = ccr = Main.simple(ccr & 0xFD)
+  def clearV = ccr = Symbolic.simple(ccr & 0xFD)
 
-  def clearZ = ccr = Main.simple(ccr & 0xFB)
+  def clearZ = ccr = Symbolic.simple(ccr & 0xFB)
 
-  def clearN = ccr = Main.simple(ccr & 0xF7)
+  def clearN = ccr = Symbolic.simple(ccr & 0xF7)
 
-  def clearH = ccr = Main.simple(ccr & 0xDF)
+  def clearH = ccr = Symbolic.simple(ccr & 0xDF)
 
-  def clearI = ccr = Main.simple(ccr & 0x7F)
+  def clearI = ccr = Symbolic.simple(ccr & 0x7F)
 
-  def setC = ccr = Main.simple(ccr | 0x01)
+  def setC = ccr = Symbolic.simple(ccr | 0x01)
 
-  def setV = ccr = Main.simple(ccr | 0x02)
+  def setV = ccr = Symbolic.simple(ccr | 0x02)
 
-  def setZ = ccr = Main.simple(ccr | 0x04)
+  def setZ = ccr = Symbolic.simple(ccr | 0x04)
 
-  def setN = ccr = Main.simple(ccr | 0x08)
+  def setN = ccr = Symbolic.simple(ccr | 0x08)
 
-  def setH = ccr = Main.simple(ccr | 0x20)
+  def setH = ccr = Symbolic.simple(ccr | 0x20)
 
-  def setI = ccr = Main.simple(ccr | 0x80)
+  def setI = ccr = Symbolic.simple(ccr | 0x80)
 
+  override def toString(): String = ccr.toString()
 }
