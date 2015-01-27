@@ -63,4 +63,6 @@ class Memory(m: CtxSymbol) {
 
   def setLong(data: Int, num: Int): Unit = setLong(new CtxSymbol(data, 32), trans(num))
 
+  override def toString():String = mem.toString()
+
 }

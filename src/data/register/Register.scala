@@ -62,4 +62,5 @@ class Register(r: CtxSymbol) {
 
   def setLong(data: CtxSymbol, num: Int): Unit = reg = Symbolic.simple(reg.store(trans(num) & 0x07, data))
 
+  override def toString():String = reg.toString()
 }

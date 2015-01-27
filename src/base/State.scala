@@ -11,7 +11,7 @@ import scala.collection.mutable.ArrayBuffer
 class State(num: Int, data: DataSet, pr: State) {
 
   val number = num
-  val pre = if (pr == null) null else ArrayBuffer[State](pr)
+  val pre = ArrayBuffer[State](pr)
   val next = new ArrayBuffer[State]
   val reg = data.reg
   val mem = data.mem

@@ -45,9 +45,9 @@ object Symbolic {
         val dataArray = new Decoder().analyze(data)
         dataArray.foreach { d =>
           val s = new State(state.size, d, current)
-          current.next += s
           println(s + " stateNum:" + state.size + " rest:" + stack.size)
           println
+          current.next += s
           state += s
           if (s.reach) {
             if (!s.stop) stack.push(s)
@@ -97,7 +97,6 @@ object Symbolic {
     proc
     System.currentTimeMillis - longtime
   }
-
 }
 
 object Parameter {
