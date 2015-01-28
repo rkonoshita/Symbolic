@@ -1,15 +1,14 @@
-
         .SECTION    V,DATA,ALIGN=2
         .SECTION    P,CODE,ALIGN=2
         .SECTION    D,DATA,ALIGN=2
         .SECTION    R,DATA,ALIGN=2
         .SECTION    B,DATA,ALIGN=2
         .SECTION    C,DATA,ALIGN=2
-__D_ROM .DATA.W     (STARTOF D)
-__D_BGN .DATA.W     (STARTOF R)
-__D_END .DATA.W     (STARTOF R)+(SIZEOF R)
-__B_BGN .DATA.W     (STARTOF B)
-__B_END .DATA.W     (STARTOF B)+(SIZEOF B)
+__D_ROM .DATA.W     (STARTOF D)             
+__D_BGN .DATA.W     (STARTOF R)             
+__D_END .DATA.W     (STARTOF R)+(SIZEOF R)  
+__B_BGN .DATA.W     (STARTOF B)             
+__B_END .DATA.W     (STARTOF B)+(SIZEOF B)  
         .EXPORT     __D_ROM
         .EXPORT     __D_BGN
         .EXPORT     __D_END

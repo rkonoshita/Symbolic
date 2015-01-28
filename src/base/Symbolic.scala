@@ -45,7 +45,7 @@ object Symbolic {
         val dataArray = new Decoder().analyze(data)
         dataArray.foreach { d =>
           val s = new State(state.size, d, current)
-          println(s + " stateNum:" + state.size + " rest:" + stack.size)
+          println("state:" + state.size + " rest:" + stack.size)
           println
           current.next += s
           state += s
@@ -74,12 +74,6 @@ object Symbolic {
     val ccr = new ConditionRegister(new CtxSymbol(ctx.mkConst("ccr", ctx.mkBVSort(8))))
     ccr.setI
     new DataSet(reg, mem, pc, ccr, path)
-  }
-
-  def simple(symbol: CtxSymbol): CtxSymbol = {
-    val c = new CtxSymbol(ctx.simplifyAst(symbol.symbol))
-    if (c.toString() == symbol.toString()) symbol
-    else c
   }
 
   var input = 0

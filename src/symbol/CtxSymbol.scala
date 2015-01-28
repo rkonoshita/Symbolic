@@ -164,6 +164,12 @@ class CtxSymbol(ast: Z3AST) {
 
   def select(index: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkSelect(symbol, index))
 
+  def simpleify(): CtxSymbol = {
+    val c = new CtxSymbol(ctx.simplifyAst(symbol))
+    if (c.toString() == symbol.toString()) this
+    else c
+  }
+
   override def toString(): String = symbol.toString()
 
 }

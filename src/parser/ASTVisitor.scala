@@ -29,7 +29,9 @@ class ASTVisitor {
   //ここでメモリにオペランドを配置する
   def makeProgram(ctx: Z3Context, file: File): ROM = {
     //構文解析
-    file.listFiles.foreach { f => Source.fromFile(f).getLines.foreach { l => parseResult += new ASTParser().parse(l).get}}
+    file.listFiles.foreach { f => Source.fromFile(f).getLines.foreach { l =>
+//      println(l)
+      parseResult += new ASTParser().parse(l).get}}
 
     //意味解析１回目：ラベルの位置を決める
     parseResult.foreach { p =>

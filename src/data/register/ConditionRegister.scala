@@ -10,33 +10,33 @@ class ConditionRegister(c: CtxSymbol) {
 
   private var ccr = c
 
-  def getCcr: CtxSymbol = Symbolic.simple(ccr)
+  def getCcr: CtxSymbol = ccr.simpleify()
 
-  def setCcr(c: CtxSymbol) = ccr = Symbolic.simple(c)
+  def setCcr(c: CtxSymbol) = ccr = c.simpleify()
 
-  def clearC = ccr = Symbolic.simple(ccr & 0xFE)
+  def clearC = ccr = (ccr & 0xFE).simpleify()
 
-  def clearV = ccr = Symbolic.simple(ccr & 0xFD)
+  def clearV = ccr = (ccr & 0xFD).simpleify()
 
-  def clearZ = ccr = Symbolic.simple(ccr & 0xFB)
+  def clearZ = ccr = (ccr & 0xFB).simpleify()
 
-  def clearN = ccr = Symbolic.simple(ccr & 0xF7)
+  def clearN = ccr = (ccr & 0xF7).simpleify()
 
-  def clearH = ccr = Symbolic.simple(ccr & 0xDF)
+  def clearH = ccr = (ccr & 0xDF).simpleify()
 
-  def clearI = ccr = Symbolic.simple(ccr & 0x7F)
+  def clearI = ccr = (ccr & 0x7F).simpleify()
 
-  def setC = ccr = Symbolic.simple(ccr | 0x01)
+  def setC = ccr = (ccr | 0x01).simpleify()
 
-  def setV = ccr = Symbolic.simple(ccr | 0x02)
+  def setV = ccr = (ccr | 0x02).simpleify()
 
-  def setZ = ccr = Symbolic.simple(ccr | 0x04)
+  def setZ = ccr = (ccr | 0x04).simpleify()
 
-  def setN = ccr = Symbolic.simple(ccr | 0x08)
+  def setN = ccr = (ccr | 0x08).simpleify()
 
-  def setH = ccr = Symbolic.simple(ccr | 0x20)
+  def setH = ccr = (ccr | 0x20).simpleify()
 
-  def setI = ccr = Symbolic.simple(ccr | 0x80)
+  def setI = ccr = (ccr | 0x80).simpleify()
 
   override def toString(): String = ccr.toString()
 }

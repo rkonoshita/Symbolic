@@ -343,7 +343,7 @@ class ASTParser extends RegexParsers {
 
   def regByte: Parser[AST] = "R" ~> "[0-7]".r ~ ("H" | "L") ^^ {
     case num ~ "H" => RegByte(num.toInt)
-    case num ~ "L" => RegByte(num.toInt | 0x80)
+    case num ~ "L" => RegByte(num.toInt | 0x08)
   }
 
   //スタックポインタ(register7)
