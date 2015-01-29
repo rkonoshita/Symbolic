@@ -5,36 +5,46 @@
           .SECTION    P,CODE,ALIGN=2
           .LINE       "C:\Users\ryousuke\Desktop\linetrace\linetrace\control.c",9
 _loop:                                  ; function: loop
-          .STACK      _loop=6
-          PUSH.L      ER6
+          .STACK      _loop=10
+          MOV.W       R7,R6
+          SUBS.L      #4,SP
+          MOV.W       R0,R5
           .LINE       9
-          MOV.W       R0,E6
+          .LINE       13
+          CMP.W       #5,R5
+          BLT         L106:8
+          .LINE       13
+          BRA         L107:8
 L106:                                    
-          .LINE       13
-          CMP.W       #2,E6
-          BGE         L108:8
-          .LINE       13
           .LINE       15
           JSR         @_tsensor_get:16
           EXTU.W      R0
+          MOV.W       R0,@(-4:16,ER6)
           .LINE       17
+          MOV.W       @(-4:16,ER6),R0
           DEC.W       #2,R0
-          BNE         L109:8
+          BNE         L108:8
           .LINE       17
           .LINE       18
-          MOV.W       #32,R6
-          BRA         L110:8
-L109:                                    
+          MOV.W       #32,R0
+          MOV.W       R0,@(-6:16,ER6)
+          BRA         L109:8
+L108:                                    
           .LINE       19
           .LINE       20
-          MOV.W       #0,R6
-L110:                                    
+          MOV.W       #0,R0
+          MOV.W       R0,@(-6:16,ER6)
+L109:                                    
           .LINE       22
-          MOV.W       R6,R0
+          MOV.W       @(-6:16,ER6),R0
           JSR         @_led_set:16
-          BRA         L106:8
+          .LINE       23
+          INC.W       #1,R5
           .LINE       24
-L108:                                    
-          POP.L       ER6
+          MOV.W       R5,R0
+          BSR         _loop:8
+          .LINE       25
+L107:                                    
+          ADDS.L      #4,SP
           RTS
           .END

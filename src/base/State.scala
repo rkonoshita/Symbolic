@@ -35,12 +35,20 @@ class State(num: Int, data: DataSet, pr: State) {
     val bsp = sp < 0xFFFFFB80
     Symbolic.sol.assertCnstr(Symbolic.ctx.mkOr(tsp.symbol, bsp.symbol))
     val ans = Symbolic.sol.check.get
-    val model =
-      if (ans) Some(Symbolic.sol.getModel)
-      else None
     Symbolic.sol.reset
+    val model =
+      if (ans) Some(getModel)
+      else None
     error = (ans, model)
     error
+  }
+
+  def getModel():Z3Model = {
+    Symbolic.sol.assertCnstr(path.path)
+    Symbolic.sol.check()
+    val model = Symbolic.sol.getModel()
+    Symbolic.sol.reset()
+    model
   }
 
   //    override def toString(): String =

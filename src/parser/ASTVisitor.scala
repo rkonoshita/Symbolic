@@ -57,6 +57,11 @@ class ASTVisitor {
       println
     }
     Parameter.sizeset(count)
+
+    label.foreach { l =>
+      println(l._1 + " -> " + l._2)
+    }
+
     new ROM(rom)
   }
 

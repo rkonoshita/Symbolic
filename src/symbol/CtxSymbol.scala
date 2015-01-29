@@ -130,6 +130,12 @@ class CtxSymbol(ast: Z3AST) {
 
   def >(s: Int): CtxSymbol = >(ctx.mkInt(s, symbol.getSort))
 
+  def =<(s: CtxSymbol): CtxSymbol = =<(s.symbol)
+
+  def =<(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSle(symbol, s))
+
+  def =<(s: Int): CtxSymbol = =<(ctx.mkInt(s, symbol.getSort))
+
   def <(s: CtxSymbol): CtxSymbol = <(s.symbol)
 
   def <(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSlt(symbol, s))

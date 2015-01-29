@@ -998,19 +998,19 @@ class Decoder {
 
       case 0x50 =>
         //EXTU.W Reg [17][5reg]
-        val extu = data.reg.getWord(op1) & 0x00FF
+        val extu = data.reg.getWord(op1).extract(7, 0).zextend(8)
         data.reg.setWord(extu, op1)
         data.ccr.clearN
         data.ccr.clearV
-        checkZ(extu, ArrayBuffer(data), 16)
+        checkZ(extu, data, 16)
 
       case 0x70 =>
         //EXTU.L Reg [17][7reg]
-        val extu = data.reg.getLong(op1) & 0x0000FFFF
+        val extu = data.reg.getLong(op1).extract(15, 0).zextend(16)
         data.reg.setLong(extu, op1)
         data.ccr.clearN
         data.ccr.clearV
-        checkZ(extu, ArrayBuffer(data), 32)
+        checkZ(extu, data, 32)
 
       case 0x80 =>
         //NEG.B Reg [17][8reg]
@@ -1162,27 +1162,27 @@ class Decoder {
 
       case 0x42 =>
         //BHI C|V = 0
-        val c = ccr.extract(0, 0).equal(1)
-        val z = ccr.extract(2, 2).equal(1)
-        val clone = twoPathClone(c || z, data)
-        clone._2.pc.setPc(pc + disp)
-        clone._1.pc.setPc(pc + 2)
+        val c = ccr.extract(0, 0)
+        val z = ccr.extract(2, 2)
+        val clone = twoPathClone((c | z).equal(0), data)
+        clone._1.pc.setPc(pc + disp)
+        clone._2.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x43 =>
         //BLS C|V = 1
-        val c = ccr.extract(0, 0).equal(1)
-        val z = ccr.extract(2, 2).equal(1)
-        val clone = twoPathClone(c || z, data)
+        val c = ccr.extract(0, 0)
+        val z = ccr.extract(2, 2)
+        val clone = twoPathClone((c | z).equal(1), data)
         clone._1.pc.setPc(pc + disp)
         clone._2.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x44 =>
         //BHS C = 0
-        val clone = twoPathClone(ccr.extract(0, 0).equal(1), data)
-        clone._2.pc.setPc(pc + disp)
-        clone._1.pc.setPc(pc + 2)
+        val clone = twoPathClone(ccr.extract(0, 0).equal(0), data)
+        clone._1.pc.setPc(pc + disp)
+        clone._2.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x45 =>
@@ -1194,9 +1194,9 @@ class Decoder {
 
       case 0x46 =>
         //BNE Z = 0
-        val clone = twoPathClone(ccr.extract(2, 2).equal(1), data)
-        clone._2.pc.setPc(pc + disp)
-        clone._1.pc.setPc(pc + 2)
+        val clone = twoPathClone(ccr.extract(2, 2).equal(0), data)
+        clone._1.pc.setPc(pc + disp)
+        clone._2.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x47 =>
@@ -1208,9 +1208,9 @@ class Decoder {
 
       case 0x48 =>
         //BVC V = 0
-        val clone = twoPathClone(ccr.extract(1, 1).equal(1), data)
-        clone._2.pc.setPc(pc + disp)
-        clone._1.pc.setPc(pc + 2)
+        val clone = twoPathClone(ccr.extract(1, 1).equal(0), data)
+        clone._1.pc.setPc(pc + disp)
+        clone._2.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x49 =>
@@ -1222,9 +1222,9 @@ class Decoder {
 
       case 0x4A =>
         //BPL N = 0
-        val clone = twoPathClone(ccr.extract(3, 3).equal(1), data)
-        clone._2.pc.setPc(pc + disp)
-        clone._1.pc.setPc(pc + 2)
+        val clone = twoPathClone(ccr.extract(3, 3).equal(0), data)
+        clone._1.pc.setPc(pc + disp)
+        clone._2.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x4B =>
@@ -1235,39 +1235,39 @@ class Decoder {
         tapleToArray(clone)
 
       case 0x4C =>
-        //BLT N 排他的論理和 V = 0
-        val n = ccr.extract(3, 3).equal(1)
-        val v = ccr.extract(1, 1).equal(1)
-        val clone = twoPathClone(n ^^ v, data)
-        clone._2.pc.setPc(pc + disp)
-        clone._1.pc.setPc(pc + 2)
+        //BGE N 排他的論理和 V = 0
+        val n = ccr.extract(3, 3)
+        val v = ccr.extract(1, 1)
+        val clone = twoPathClone((n ^ v).equal(0), data)
+        clone._1.pc.setPc(pc + disp)
+        clone._2.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x4D =>
         //BLT N 排他的論理和 V = 1
-        val n = ccr.extract(3, 3).equal(1)
-        val v = ccr.extract(1, 1).equal(1)
-        val clone = twoPathClone(n ^^ v, data)
+        val n = ccr.extract(3, 3)
+        val v = ccr.extract(1, 1)
+        val clone = twoPathClone((n ^ v).equal(1), data)
         clone._1.pc.setPc(pc + disp)
         clone._2.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x4E =>
         //BGT Z | (N 排他的論理和 V) = 0
-        val n = ccr.extract(3, 3).equal(1)
-        val z = ccr.extract(2, 2).equal(1)
-        val v = ccr.extract(1, 1).equal(1)
-        val clone = twoPathClone(z || (n ^^ v), data)
-        clone._2.pc.setPc(pc + disp)
-        clone._1.pc.setPc(pc + 2)
+        val n = ccr.extract(3, 3)
+        val z = ccr.extract(2, 2)
+        val v = ccr.extract(1, 1)
+        val clone = twoPathClone((z | (n ^ v)).equal(0), data)
+        clone._1.pc.setPc(pc + disp)
+        clone._2.pc.setPc(pc + 2)
         tapleToArray(clone)
 
       case 0x4F =>
         //BLE Z | (N 排他的論理和 V) = 1
-        val n = ccr.extract(3, 3).equal(1)
-        val z = ccr.extract(2, 2).equal(1)
-        val v = ccr.extract(1, 1).equal(1)
-        val clone = twoPathClone(z || (n ^^ v), data)
+        val n = ccr.extract(3, 3)
+        val z = ccr.extract(2, 2)
+        val v = ccr.extract(1, 1)
+        val clone = twoPathClone((z | (n ^ v)).equal(1), data)
         clone._1.pc.setPc(pc + disp)
         clone._2.pc.setPc(pc + 2)
         tapleToArray(clone)
@@ -1369,7 +1369,7 @@ class Decoder {
         val sp = data.reg.getLong(7) - 2
         data.reg.setLong(sp, 7)
         data.pc.setPc(pc + disp)
-        data.mem.setWord(new CtxSymbol(pc + 2, 16), sp)
+        data.mem.setWord(new CtxSymbol(pc + 4, 16), sp)
         ArrayBuffer(data)
 
       case 0x5D =>
@@ -1417,114 +1417,114 @@ class Decoder {
 
       case 0x20 =>
         //BHI C|V = 0
-        val c = ccr.extract(0, 0).equal(1)
-        val z = ccr.extract(2, 2).equal(1)
-        val clone = twoPathClone(c || z, data)
-        clone._2.pc.setPc(pc + disp)
-        clone._1.pc.setPc(pc + 2)
+        val c = ccr.extract(0, 0)
+        val z = ccr.extract(2, 2)
+        val clone = twoPathClone((c | z).equal(0), data)
+        clone._1.pc.setPc(pc + disp)
+        clone._2.pc.setPc(pc + 4)
         tapleToArray(clone)
 
       case 0x30 =>
         //BLS C|V = 1
-        val c = ccr.extract(0, 0).equal(1)
-        val z = ccr.extract(2, 2).equal(1)
-        val clone = twoPathClone(c || z, data)
+        val c = ccr.extract(0, 0)
+        val z = ccr.extract(2, 2)
+        val clone = twoPathClone((c | z).equal(0), data)
         clone._1.pc.setPc(pc + disp)
-        clone._2.pc.setPc(pc + 2)
+        clone._2.pc.setPc(pc + 4)
         tapleToArray(clone)
 
       case 0x40 =>
         //BHS C = 0
-        val clone = twoPathClone(ccr.extract(0, 0).equal(1), data)
-        clone._2.pc.setPc(pc + disp)
-        clone._1.pc.setPc(pc + 2)
+        val clone = twoPathClone(ccr.extract(0, 0).equal(0), data)
+        clone._1.pc.setPc(pc + disp)
+        clone._2.pc.setPc(pc + 4)
         tapleToArray(clone)
 
       case 0x50 =>
         //BLO C = 1
         val clone = twoPathClone(ccr.extract(0, 0).equal(1), data)
         clone._1.pc.setPc(pc + disp)
-        clone._2.pc.setPc(pc + 2)
+        clone._2.pc.setPc(pc + 4)
         tapleToArray(clone)
 
       case 0x60 =>
         //BNE Z = 0
-        val clone = twoPathClone(ccr.extract(2, 2).equal(1), data)
-        clone._2.pc.setPc(pc + disp)
-        clone._1.pc.setPc(pc + 2)
+        val clone = twoPathClone(ccr.extract(2, 2).equal(0), data)
+        clone._1.pc.setPc(pc + disp)
+        clone._2.pc.setPc(pc + 4)
         tapleToArray(clone)
 
       case 0x70 =>
         //BEQ Z = 1
         val clone = twoPathClone(ccr.extract(2, 2).equal(1), data)
         clone._1.pc.setPc(pc + disp)
-        clone._2.pc.setPc(pc + 2)
+        clone._2.pc.setPc(pc + 4)
         tapleToArray(clone)
 
       case 0x80 =>
         //BVC V = 0
-        val clone = twoPathClone(ccr.extract(1, 1).equal(1), data)
-        clone._2.pc.setPc(pc + disp)
-        clone._1.pc.setPc(pc + 2)
+        val clone = twoPathClone(ccr.extract(1, 1).equal(0), data)
+        clone._1.pc.setPc(pc + disp)
+        clone._2.pc.setPc(pc + 4)
         tapleToArray(clone)
 
       case 0x90 =>
         //BVC V = 1
         val clone = twoPathClone(ccr.extract(1, 1).equal(1), data)
         clone._1.pc.setPc(pc + disp)
-        clone._2.pc.setPc(pc + 2)
+        clone._2.pc.setPc(pc + 4)
         tapleToArray(clone)
 
       case 0xA0 =>
         //BPL N = 0
-        val clone = twoPathClone(ccr.extract(3, 3).equal(1), data)
-        clone._2.pc.setPc(pc + disp)
-        clone._1.pc.setPc(pc + 2)
+        val clone = twoPathClone(ccr.extract(3, 3).equal(0), data)
+        clone._1.pc.setPc(pc + disp)
+        clone._2.pc.setPc(pc + 4)
         tapleToArray(clone)
 
       case 0xB0 =>
         //BMI N = 0
         val clone = twoPathClone(ccr.extract(3, 3).equal(1), data)
         clone._1.pc.setPc(pc + disp)
-        clone._2.pc.setPc(pc + 2)
+        clone._2.pc.setPc(pc + 4)
         tapleToArray(clone)
 
       case 0xC0 =>
-        //BLT N 排他的論理和 V = 0
-        val n = ccr.extract(3, 3).equal(1)
-        val v = ccr.extract(1, 1).equal(1)
-        val clone = twoPathClone(n ^^ v, data)
-        clone._2.pc.setPc(pc + disp)
-        clone._1.pc.setPc(pc + 2)
+        //BGE N 排他的論理和 V = 0
+        val n = ccr.extract(3, 3)
+        val v = ccr.extract(1, 1)
+        val clone = twoPathClone((n ^ v).equal(0), data)
+        clone._1.pc.setPc(pc + disp)
+        clone._2.pc.setPc(pc + 4)
         tapleToArray(clone)
 
       case 0xD0 =>
         //BLT N 排他的論理和 V = 1
-        val n = ccr.extract(3, 3).equal(1)
-        val v = ccr.extract(1, 1).equal(1)
-        val clone = twoPathClone(n ^^ v, data)
+        val n = ccr.extract(3, 3)
+        val v = ccr.extract(1, 1)
+        val clone = twoPathClone((n ^ v).equal(1), data)
         clone._1.pc.setPc(pc + disp)
-        clone._2.pc.setPc(pc + 2)
+        clone._2.pc.setPc(pc + 4)
         tapleToArray(clone)
 
       case 0xE0 =>
         //BGT Z | (N 排他的論理和 V) = 0
-        val n = ccr.extract(3, 3).equal(1)
-        val z = ccr.extract(2, 2).equal(1)
-        val v = ccr.extract(1, 1).equal(1)
-        val clone = twoPathClone(z || (n ^^ v), data)
-        clone._2.pc.setPc(pc + disp)
-        clone._1.pc.setPc(pc + 2)
+        val n = ccr.extract(3, 3)
+        val z = ccr.extract(2, 2)
+        val v = ccr.extract(1, 1)
+        val clone = twoPathClone((z | (n ^ v)).equal(0), data)
+        clone._1.pc.setPc(pc + disp)
+        clone._2.pc.setPc(pc + 4)
         tapleToArray(clone)
 
       case 0xF0 =>
         //BLE Z | (N 排他的論理和 V) = 1
-        val n = ccr.extract(3, 3).equal(1)
-        val z = ccr.extract(2, 2).equal(1)
-        val v = ccr.extract(1, 1).equal(1)
-        val clone = twoPathClone(z || (n ^^ v), data)
+        val n = ccr.extract(3, 3)
+        val z = ccr.extract(2, 2)
+        val v = ccr.extract(1, 1)
+        val clone = twoPathClone((z | (n ^ v)).equal(1), data)
         clone._1.pc.setPc(pc + disp)
-        clone._2.pc.setPc(pc + 2)
+        clone._2.pc.setPc(pc + 4)
         tapleToArray(clone)
     }
   }

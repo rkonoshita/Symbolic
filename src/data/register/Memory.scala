@@ -9,15 +9,22 @@ import symbol.CtxSymbol
 class Memory(m: CtxSymbol) {
 
   var mem = m
+  var in = false
   //  private val limit = 0xFFFF // ノーマルモード
 
   private def trans(num: Int): CtxSymbol = new CtxSymbol(num, 16)
 
-  def getByte(num: Int): CtxSymbol = getByte(trans(num))
+  def getByte(num: Int): CtxSymbol = {
+    if((num & 0x0000FFFF) == 0x0000FFD6)
+      Symbolic.inlabel = true
+    getByte(trans(num))
+  }
 
   def getByte(num: CtxSymbol): CtxSymbol = mem.select(num.extract(15, 0)).simpleify()
 
-  def getWord(num: Int): CtxSymbol = getWord(trans(num))
+  def getWord(num: Int): CtxSymbol = {
+    getWord(trans(num))
+  }
 
   def getWord(num: CtxSymbol) = {
     val number = num.extract(15, 0)

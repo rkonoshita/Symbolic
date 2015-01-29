@@ -28,8 +28,7 @@ object Symbolic {
     val file = new File("test_code") -> new File("asm")
     new ConvertToInputForm(file._1, file._2).convert()
     rom = new ASTVisitor().makeProgram(ctx, file._2)
-    val init = first
-    val initState = new State(state.size, init, null)
+    val initState = new State(state.size, first, null)
     state += initState
     stack.push(initState)
     //    queue += initState
@@ -40,15 +39,17 @@ object Symbolic {
         //val current = queue.dequeue
         val data = new DataSet(current)
         //ここらへんにセンサ関係書きたい
-        input(data)
+        if(inlabel) input(data)
 
+        inlabel = false
         val dataArray = new Decoder().analyze(data)
         dataArray.foreach { d =>
           val s = new State(state.size, d, current)
-          println("state:" + state.size + " rest:" + stack.size)
           println
           current.next += s
           state += s
+          if(s.stop)
+            println("stop")
           if (s.reach) {
             if (!s.stop) stack.push(s)
             //queue += s
@@ -58,9 +59,11 @@ object Symbolic {
               println(error._2.get)
             }
           }
+          println("state:" + state.size + " rest:" + stack.size + " sp:" + s.reg.getLong(7) + " reach:" + s.reach)
         }
         //        if (state.length >= 40000) stack.clear
         //if (state.length >= 500) queue.clear
+        println("----------next----------")
       }
     }
     new ResultWritter().write(new File("result.txt"), t)
@@ -68,15 +71,17 @@ object Symbolic {
 
   def first: DataSet = {
     val reg = new Register(new CtxSymbol(ctx.mkConst("reg", ctx.mkArraySort(ctx.mkBVSort(4), ctx.mkBVSort(32)))))
-    val mem = Parameter.ioInit
+    val mem = new Memory(new CtxSymbol(ctx.mkConst("mem", ctx.mkArraySort(ctx.mkBVSort(16), ctx.mkBVSort(8)))))//Parameter.ioInit
     val pc = new ProgramCounter(rom.getWord(0))
     val path = new PathCondition(null)
     val ccr = new ConditionRegister(new CtxSymbol(ctx.mkConst("ccr", ctx.mkBVSort(8))))
     ccr.setI
+    mem.in = true
     new DataSet(reg, mem, pc, ccr, path)
   }
 
   var input = 0
+  var inlabel = true
 
   def input(data: DataSet): Unit = {
     val pcr3 = data.mem.getByte(0xFFE6)
@@ -113,6 +118,8 @@ object Parameter {
     s
   }
 
+  //使いもしないメモリを初期化するのは，非効率的なので
+  //このメソッドの利用は推奨されません．
   def ioInit(): Memory = {
     val ctx = Symbolic.ctx
     val mem = new Memory(new CtxSymbol(ctx.mkConst("mem", ctx.mkArraySort(ctx.mkBVSort(16), ctx.mkBVSort(8)))))
