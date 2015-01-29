@@ -7,6 +7,7 @@ import symbol.CtxSymbol
  * Created by ryosuke on 14/11/18.
  */
 
+//プログラムカウンタ
 //記号的に扱うべきか悩ましいところ
 class ProgramCounter(p: Int) {
 

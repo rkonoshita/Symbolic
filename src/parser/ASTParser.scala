@@ -18,11 +18,11 @@ class ASTParser extends RegexParsers {
 
   def root: Parser[AST] = op | section | mlabel
 
-  def op: Parser[AST] = (add | adds | addx | and | andc | band | bcc | bclr | biand | bild | bior |
+  def op: Parser[AST] = add | adds | addx | and | andc | band | bcc | bclr | biand | bild | bior |
     bist | bixor | bld | bnot | bor | bset | bsr | bst | btst | bxor | cmp | daa | das | data | dataBlock | dec |
     divxs | divxu | eepmov | exts | extu | inc | jmp | jsr | ldc | mov | movfpe | movtpe | mulxs | mulxu |
     neg | nop | not | or | orc | pop | push | rotl | rotr | rotxl | rotxr | rte | rts | shal | shar | shll | shlr |
-    sleep | stc | sub | subs | subx | trapa | xor | xorc)
+    sleep | stc | sub | subs | subx | trapa | xor | xorc
 
   //ADD
   def add: Parser[AST] = "ADD" ~> opsize ~> (imm | reg) ~ "," ~ reg ^^ {
@@ -398,7 +398,7 @@ class ASTParser extends RegexParsers {
 
   //計算
   def calc(op: String) = op ^^ {
-    case op => (left: AST, right: AST) => Expr(op, left, right)
+    case op:String => (left: AST, right: AST) => Expr(op, left, right)
   }
 
   //数値として使えるものを一括

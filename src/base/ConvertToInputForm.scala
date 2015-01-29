@@ -82,6 +82,7 @@ class ConvertToInputForm(t: File, a: File) {
   }
 
   //OSの差をちょっと意識してる?
+  //z3scalaがwindowsで動かないので意味なかった
   private def setFileNameForOS: String =
     if (System.getProperty("os.name").startsWith("Windows")) "\\"
     else "/"

@@ -7,6 +7,7 @@ import z3.scala.{Z3Sort, Z3AST}
  * Created by rkonoshita on 14/11/26.
  */
 
+//毎回ctx.~って書くのがめんどくさいから用意した！
 class CtxSymbol(ast: Z3AST) {
   type T = Z3AST
   val symbol = ast

@@ -18,7 +18,7 @@ class State(num: Int, data: DataSet, pr: State) {
   val pc = data.pc
   val ccr = data.ccr
   val path = data.path
-  val reach =
+  val reach = //到達可能:true 到達不能:false
     if (path.path == null) true
     else {
       Symbolic.sol.assertCnstr(path.path)
@@ -26,9 +26,10 @@ class State(num: Int, data: DataSet, pr: State) {
       Symbolic.sol.reset
       ans
     }
-  val stop = data.stop
+  val stop = data.stop //プログラムの終端に達した:true 違う:false
   var error: (Boolean, Option[Z3Model]) = (false, None)
 
+  //スタックエラーを検出
   def stackError(): (Boolean, Option[Z3Model]) = {
     val sp = reg.getLong(7)
     val tsp = sp > 0xFFFFFF80
@@ -43,6 +44,7 @@ class State(num: Int, data: DataSet, pr: State) {
     error
   }
 
+  //テストケース出力
   def getModel():Z3Model = {
     Symbolic.sol.assertCnstr(path.path)
     Symbolic.sol.check()

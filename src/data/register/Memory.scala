@@ -6,6 +6,10 @@ import symbol.CtxSymbol
 /**
  * Created by rkonoshita on 14/11/17.
  */
+
+//メモリ
+//データサイズ8bit
+//記号地によるメモリアクセスは16bitで可能
 class Memory(m: CtxSymbol) {
 
   var mem = m
@@ -15,7 +19,7 @@ class Memory(m: CtxSymbol) {
   private def trans(num: Int): CtxSymbol = new CtxSymbol(num, 16)
 
   def getByte(num: Int): CtxSymbol = {
-    if((num & 0x0000FFFF) == 0x0000FFD6)
+    if((num & 0x0000FFFF) == 0x0000FFD6) //入力があればtrueにする。ダサイ
       Symbolic.inlabel = true
     getByte(trans(num))
   }

@@ -16,28 +16,34 @@ import scala.io.Source
 
 //意味解析用
 class ASTVisitor {
-
-  val label = new mutable.HashMap[String, Int]
   //ラベルの位置を保持
-  val count = new MyHashMap // 各セクションの終点アドレスを保持
-  count ++= Parameter.getStart
-  var section = ""
-  val parseResult = new ListBuffer[AST]
-  val tmppc = new MyHashMap
+  val label = new mutable.HashMap[String, Int]
+  // 各セクションの終点アドレスを保持
+  //ラベルの位置決めに使う
+  val count = new MyHashMap
+  count ++= Parameter.getStart //各セクションの開始アドレスを取得
+  var section = "" //現在指しているセクション
+  val parseResult = new ListBuffer[AST] //パースの結果
+
+  val tmppc = new MyHashMap //命令の配置に使う
   tmppc ++= Parameter.getStart
 
+  var ccrChecking = 0 //条件分岐に使われるCCRのビットを記録
+
   //ここでメモリにオペランドを配置する
-  def makeProgram(ctx: Z3Context, file: File): ROM = {
+  def makeProgram(ctx: Z3Context, file: File): (ROM, Int) = {
     //構文解析
-    file.listFiles.foreach { f => Source.fromFile(f).getLines.foreach { l =>
-//      println(l)
-      parseResult += new ASTParser().parse(l).get}}
+    file.listFiles.foreach { f => Source.fromFile(f).getLines().foreach { l =>
+      //      println(l)
+      parseResult += new ASTParser().parse(l).get
+    }
+    }
 
     //意味解析１回目：ラベルの位置を決める
     parseResult.foreach { p =>
       search(p) match {
-        case Some(i: Int) => count.put(section, i)
-        case _ =>
+        case Some(i: Int) => count.put(section, i) //命令やデータ配置はInt
+        case _ => //それ以外はむし
       }
     }
 
@@ -46,23 +52,24 @@ class ASTVisitor {
     parseResult.foreach { p =>
       println(p)
       visit(p) match {
-        case Some(array: Array[Int]) =>
+        case Some(array: Array[Int]) => //命令やデータ配置はArray
           (0 until array.length).foreach { op =>
-            print("%x".format(array(op).toByte) + ":")
-            rom += (tmppc(section) + op) -> array(op).toByte
+            print("%x".format(array(op).toByte) + ":") //デバッグ用
+            rom += (tmppc(section) + op) -> array(op).toByte //命令を配置
           }
           tmppc.put(section, array.length)
-        case _ =>
+        case _ => //それ以外はむし
       }
-      println
+      println()
     }
-    Parameter.sizeset(count)
+    Parameter.size ++= count
 
+    //デバッグ用
     label.foreach { l =>
       println(l._1 + " -> " + l._2)
     }
 
-    new ROM(rom)
+    (new ROM(rom), ccrChecking)
   }
 
   //ラベル位置の捜索
@@ -103,75 +110,103 @@ class ASTVisitor {
         case 16 => 4
       })
 
-      case Bhi(num, size) => Some(size match {
-        case 8 => 2
-        case 16 => 4
-      })
+      case Bhi(num, size) =>
+        ccrChecking |= 0x05
+        Some(size match {
+          case 8 => 2
+          case 16 => 4
+        })
 
-      case Bls(num, size) => Some(size match {
-        case 8 => 2
-        case 16 => 4
-      })
+      case Bls(num, size) =>
+        ccrChecking |= 0x05
+        Some(size match {
+          case 8 => 2
+          case 16 => 4
+        })
 
-      case Bcc(num, size) => Some(size match {
-        case 8 => 2
-        case 16 => 4
-      })
+      case Bcc(num, size) =>
+        ccrChecking |= 0x01
+        Some(size match {
+          case 8 => 2
+          case 16 => 4
+        })
 
-      case Bcs(num, size) => Some(size match {
-        case 8 => 2
-        case 16 => 4
-      })
+      case Bcs(num, size) =>
+        ccrChecking |= 0x01
+        Some(size match {
+          case 8 => 2
+          case 16 => 4
+        })
 
-      case Bne(num, size) => Some(size match {
-        case 8 => 2
-        case 16 => 4
-      })
+      case Bne(num, size) =>
+        ccrChecking |= 0x04
+        Some(size match {
+          case 8 => 2
+          case 16 => 4
+        })
 
-      case Beq(num, size) => Some(size match {
-        case 8 => 2
-        case 16 => 4
-      })
+      case Beq(num, size) =>
+        ccrChecking |= 0x04
+        Some(size match {
+          case 8 => 2
+          case 16 => 4
+        })
 
-      case Bvc(num, size) => Some(size match {
-        case 8 => 2
-        case 16 => 4
-      })
+      case Bvc(num, size) =>
+        ccrChecking |= 0x02
+        Some(size match {
+          case 8 => 2
+          case 16 => 4
+        })
 
-      case Bvs(num, size) => Some(size match {
-        case 8 => 2
-        case 16 => 4
-      })
+      case Bvs(num, size) =>
+        ccrChecking |= 0x02
+        Some(size match {
+          case 8 => 2
+          case 16 => 4
+        })
 
-      case Bpl(num, size) => Some(size match {
-        case 8 => 2
-        case 16 => 4
-      })
+      case Bpl(num, size) =>
+        ccrChecking |= 0x08
+        Some(size match {
+          case 8 => 2
+          case 16 => 4
+        })
 
-      case Bmi(num, size) => Some(size match {
-        case 8 => 2
-        case 16 => 4
-      })
+      case Bmi(num, size) =>
+        ccrChecking |= 0x08
+        Some(size match {
+          case 8 => 2
+          case 16 => 4
+        })
 
-      case Bge(num, size) => Some(size match {
-        case 8 => 2
-        case 16 => 4
-      })
+      case Bge(num, size) =>
+        ccrChecking |= 0x0A
+        Some(size match {
+          case 8 => 2
+          case 16 => 4
+        })
 
-      case Blt(num, size) => Some(size match {
-        case 8 => 2
-        case 16 => 4
-      })
+      case Blt(num, size) =>
+        ccrChecking |= 0x0A
+        Some(size match {
+          case 8 => 2
+          case 16 => 4
+        })
 
-      case Bgt(num, size) => Some(size match {
-        case 8 => 2
-        case 16 => 4
-      })
+      case Bgt(num, size) =>
+        ccrChecking |= 0x0E
+        Some(size match {
+          case 8 => 2
+          case 16 => 4
+        })
 
-      case Ble(num, size) => Some(size match {
-        case 8 => 2
-        case 16 => 4
-      })
+      case Ble(num, size) =>
+        ccrChecking |= 0x0E
+        Some(size match {
+          case 8 => 2
+          case 16 => 4
+        })
 
       case Bclr(left, right) => Some((left, right) match {
         case (_: Imm, _: RegByte) => 2

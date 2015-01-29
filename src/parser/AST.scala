@@ -5,6 +5,7 @@ package parser
  */
 
 //意味解析用のクラス群
+//ほしいトークンはここに追加する
 trait AST
 
 case class Add(left: AST, right: AST) extends AST

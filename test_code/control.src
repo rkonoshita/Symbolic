@@ -12,7 +12,7 @@ _loop:                                  ; function: loop
           .LINE       9
           .LINE       13
           CMP.W       #5,R5
-          BLT         L106:8
+          BNE         L106:8
           .LINE       13
           BRA         L107:8
 L106:                                    

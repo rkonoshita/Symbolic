@@ -6,9 +6,12 @@ import symbol.CtxSymbol
 /**
  * Created by ryosuke on 14/11/18.
  */
-class ConditionRegister(c: CtxSymbol) {
+
+//条件レジスタ
+class ConditionRegister(c: CtxSymbol, limit: Int) {
 
   private var ccr = c
+  val check = limit
 
   def getCcr: CtxSymbol = ccr.simpleify()
 

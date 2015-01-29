@@ -6,6 +6,11 @@ import symbol.CtxSymbol
 /**
  * Created by rkonoshita on 14/11/12.
  */
+
+//レジスタ
+//データサイズは32ビット
+//記号地によるアクセスの機会がまずない
+//記号値でアクセスするメソッドが欲しければ、4ビットでのアクセスを守ること
 class Register(r: CtxSymbol) {
 
   var reg = r

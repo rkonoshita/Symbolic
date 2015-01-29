@@ -6,6 +6,8 @@ import base.State
 /**
  * Created by rkonoshita on 14/11/12.
  */
+
+//寄せ集め
 class DataSet(r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, pt: PathCondition) {
 
   val reg = r
@@ -20,7 +22,7 @@ class DataSet(r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, p
       new Register(reg.reg),
       new Memory(mem.mem),
       new ProgramCounter(pc.pc),
-      new ConditionRegister(ccr.getCcr),
+      new ConditionRegister(ccr.getCcr, ccr.check),
       new PathCondition(path.path)
     )
   }
