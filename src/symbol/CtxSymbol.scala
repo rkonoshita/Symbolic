@@ -149,7 +149,9 @@ class CtxSymbol(ast: Z3AST) {
 
   def extract(high: Int, low: Int): CtxSymbol = new CtxSymbol(ctx.mkExtract(high, low, symbol))
 
-  def concat(s: CtxSymbol): CtxSymbol = new CtxSymbol(ctx.mkConcat(symbol, s.symbol))
+  def concat(s: CtxSymbol): CtxSymbol = concat(s.symbol)
+
+  def concat(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkConcat(symbol, s))
 
   def bitclr(s: CtxSymbol): CtxSymbol = bitclr(s.symbol)
 
@@ -162,6 +164,32 @@ class CtxSymbol(ast: Z3AST) {
   def bitset(s: Z3AST): CtxSymbol = |(new CtxSymbol(1, s.getSort) << s)
 
   def bitset(s: Int): CtxSymbol = |(1 << s)
+
+  def bitnot(s: CtxSymbol): CtxSymbol = bitnot(s.symbol)
+
+  def bitnot(s: Z3AST): CtxSymbol = {
+    val sym = concat(new CtxSymbol(0, 8))
+    val imm = new CtxSymbol(0, 8) concat s
+    val shift = sym >> imm
+    ((shift.extract(15, 9) concat (shift.extract(8, 8).~) concat shift.extract(7, 0)) << imm).extract(15, 8)
+  }
+
+  def bitnot(s: Int): CtxSymbol = {
+    if (s >= 7) {
+      val middle = this.extract(s, s).~
+      val low = this.extract(s - 1, 0)
+      middle concat low
+    } else if (s <= 0) {
+      val high = this.extract(7, s + 1)
+      val middle = this.extract(s, s).~
+      high concat middle
+    } else {
+      val high = this.extract(7, s + 1)
+      val middle = this.extract(s, s).~
+      val low = this.extract(s - 1, 0)
+      high concat middle concat low
+    }
+  }
 
   def store(index: CtxSymbol, store: CtxSymbol): CtxSymbol = this.store(index.symbol, store.symbol)
 
