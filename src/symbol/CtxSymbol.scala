@@ -153,41 +153,47 @@ class CtxSymbol(ast: Z3AST) {
 
   def concat(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkConcat(symbol, s))
 
-  def bitclr(s: CtxSymbol): CtxSymbol = bitclr(s.symbol)
+  def bitClr(index: CtxSymbol): CtxSymbol = bitClr(index.symbol)
 
-  def bitclr(s: Z3AST): CtxSymbol = &((new CtxSymbol(1, s.getSort) << s).~)
+  def bitClr(index: Z3AST): CtxSymbol = &((new CtxSymbol(1, index.getSort) << index).~)
 
-  def bitclr(s: Int): CtxSymbol = &(~(1 << s))
+  def bitClr(index: Int): CtxSymbol = &(~(1 << index))
 
-  def bitset(s: CtxSymbol): CtxSymbol = bitset(s.symbol)
+  def bitSet(index: CtxSymbol): CtxSymbol = bitSet(index.symbol)
 
-  def bitset(s: Z3AST): CtxSymbol = |(new CtxSymbol(1, s.getSort) << s)
+  def bitSet(index: Z3AST): CtxSymbol = |(new CtxSymbol(1, index.getSort) << index)
 
-  def bitset(s: Int): CtxSymbol = |(1 << s)
+  def bitSet(index: Int): CtxSymbol = |(1 << index)
 
-  def bitnot(s: CtxSymbol): CtxSymbol = bitnot(s.symbol)
+  def bitNot(index: CtxSymbol): CtxSymbol = bitNot(index.symbol)
 
-  def bitnot(s: Z3AST): CtxSymbol = {
-    val sym = concat(new CtxSymbol(0, 8))
-    val imm = new CtxSymbol(0, 8) concat s
-    val shift = sym >> imm
-    ((shift.extract(15, 9) concat (shift.extract(8, 8).~) concat shift.extract(7, 0)) << imm).extract(15, 8)
+  def bitNot(index: Z3AST): CtxSymbol = bitStore(bitGet(index).~, index)
+
+  def bitNot(index: Int): CtxSymbol = bitStore(bitGet(index).~, index)
+
+  def bitGet(index: CtxSymbol): CtxSymbol = bitGet(index.symbol)
+
+  def bitGet(index: Z3AST): CtxSymbol = (this >> index).extract(0, 0)
+
+  def bitGet(index: Int): CtxSymbol = extract(index, index)
+
+  def bitStore(s: CtxSymbol, index: CtxSymbol): CtxSymbol = bitStore(s.symbol, index.symbol)
+
+  def bitStore(s: CtxSymbol, index: Z3AST): CtxSymbol = bitStore(s.symbol, index)
+
+  def bitStore(s: CtxSymbol, index: Int): CtxSymbol = bitStore(s.symbol, index)
+
+  def bitStore(s: Z3AST, index: Z3AST): CtxSymbol = {
+    val ext = concat(new CtxSymbol(0, 8)) >> index
+    val ans = (ext.extract(15, 9) concat s concat extract(7, 0)) << index
+    ans.extract(15, 8)
   }
 
-  def bitnot(s: Int): CtxSymbol = {
-    if (s >= 7) {
-      val middle = this.extract(s, s).~
-      val low = this.extract(s - 1, 0)
-      middle concat low
-    } else if (s <= 0) {
-      val high = this.extract(7, s + 1)
-      val middle = this.extract(s, s).~
-      high concat middle
-    } else {
-      val high = this.extract(7, s + 1)
-      val middle = this.extract(s, s).~
-      val low = this.extract(s - 1, 0)
-      high concat middle concat low
+  def bitStore(s: Z3AST, index: Int): CtxSymbol = {
+    index match {
+      case 7 => new CtxSymbol(s) concat this.extract(6, 0)
+      case 0 => this.extract(7, 1) concat s
+      case _ => this.extract(7, index + 1) concat s concat this.extract(index - 1, 0)
     }
   }
 
