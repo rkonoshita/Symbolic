@@ -2453,7 +2453,6 @@ class Decoder {
   }
 
   private def checkC(num1: CtxSymbol, num2: CtxSymbol, res: CtxSymbol, data: DataSet, size: Int): ArrayBuffer[DataSet] = {
-    //    if ((data.ccr.check & 0x01) == 0x01) {
     //条件分岐にCフラグを使うものがなければ，分ける必要がない
     val s = size - 1
     val bool1 = num1.extract(s, s).equal(1) && num2.extract(s, s).equal(1)
@@ -2462,25 +2461,15 @@ class Decoder {
     clone._1.ccr.setC
     clone._2.ccr.clearC
     tapleToArray(clone)
-    //    } else ArrayBuffer(data)
   }
 
-  //  private def checkV(num1: CtxSymbol, num2: CtxSymbol, res: CtxSymbol, buf: ArrayBuffer[DataSet], size: Int): ArrayBuffer[DataSet] = {
-  //    val ans = new ArrayBuffer[DataSet]
-  //    buf.foreach { b => ans ++= checkV(num1, num2, res, b, size)}
-  //    ans
-  //  }
-
   private def checkV(num1: CtxSymbol, num2: CtxSymbol, res: CtxSymbol, data: DataSet, size: Int): ArrayBuffer[DataSet] = {
-    //    if ((data.ccr.check & 0x02) == 0x02) {
-    //条件分岐にVフラグを使うものがなければ，分ける必要がない
     val bool1 = (num1 >= 0) && (num2 >= 0) && (res < 0)
     val bool2 = (num1 < 0) && (num2 < 0) && (res >= 0)
     val clone = twoPathClone((bool1 || bool2).simpleify(), data)
     clone._1.ccr.setV
     clone._2.ccr.clearV
     tapleToArray(clone)
-    //    } else ArrayBuffer(data)
   }
 
   private def checkZ(num: CtxSymbol, buf: ArrayBuffer[DataSet]): ArrayBuffer[DataSet] = {
@@ -2490,13 +2479,10 @@ class Decoder {
   }
 
   private def checkZ(num: CtxSymbol, data: DataSet): ArrayBuffer[DataSet] = {
-    //    if ((data.ccr.check & 0x04) == 0x04) {
-    //条件分岐にZフラグを使うものがなければ，分ける必要がない
     val clone = twoPathClone((num.equal(0)).simpleify(), data)
     clone._1.ccr.setZ //data = 0
     clone._2.ccr.clearZ
     tapleToArray(clone)
-    //    } else ArrayBuffer(data)
   }
 
   private def checkN(num: CtxSymbol, buf: ArrayBuffer[DataSet]): ArrayBuffer[DataSet] = {
@@ -2506,13 +2492,10 @@ class Decoder {
   }
 
   private def checkN(num: CtxSymbol, data: DataSet): ArrayBuffer[DataSet] = {
-    //    if ((data.ccr.check & 0x08) == 0x08) {
-    //条件分岐にNフラグを使うものがなければ，分ける必要がない
     val clone = twoPathClone((num < 0).simpleify(), data)
     clone._1.ccr.setN //data < 0
     clone._2.ccr.clearN
     tapleToArray(clone)
-    //    } else ArrayBuffer(data)
   }
 
   private def checkH(data1: CtxSymbol, data2: CtxSymbol, res: CtxSymbol, buf: ArrayBuffer[DataSet], size: Int): ArrayBuffer[DataSet] = {
@@ -2522,8 +2505,6 @@ class Decoder {
   }
 
   private def checkH(num1: CtxSymbol, num2: CtxSymbol, res: CtxSymbol, data: DataSet, size: Int): ArrayBuffer[DataSet] = {
-    //    if ((data.ccr.check & 0x20) == 0x20) {
-    //条件分岐にHフラグを使うものがなければ，分ける必要がない
     val s = size - 5
     val bool1 = num1.extract(s, s).equal(1) && num2.extract(s, s).equal(1)
     val bool2 = (num1.extract(s, s).equal(1) || num2.extract(s, s).equal(1)) && res.extract(s, s).equal(0)
@@ -2531,7 +2512,6 @@ class Decoder {
     clone._1.ccr.setH
     clone._2.ccr.clearH
     tapleToArray(clone)
-    //    } else ArrayBuffer(data)
   }
 
   //twoPathCloneで作ったタプルを可変長Arrayに変換する

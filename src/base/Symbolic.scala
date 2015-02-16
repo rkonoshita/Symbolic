@@ -27,9 +27,8 @@ object Symbolic {
 
     val file = new File(args(0)) -> new File("asm")
     new ConvertToInputForm(file._1, file._2).convert()
-    val tmp = new ASTVisitor().makeProgram(ctx, file._2)
-    rom = tmp._1
-    val initState = new State(0, first(tmp._2), null)
+    rom = new ASTVisitor().makeProgram(ctx, file._2)
+    val initState = new State(0, first, null)
     state += initState
     stack.push(initState)
     //    queue += initState
@@ -53,11 +52,11 @@ object Symbolic {
               ans
             }
 
-          if(reach) {
-            val s = new State(state.size, d,current)
+          if (reach) {
+            val s = new State(state.size, d, current)
             current.next += s
             state += s
-            if(s.stop) println("stop") else stack.push(s)
+            if (s.stop) println("stop") else stack.push(s)
             s.divError()
             if (s.error._1) {
               stack.clear
@@ -72,7 +71,7 @@ object Symbolic {
     new ResultWritter().write(new File("result.txt"), t)
   }
 
-  def first(limit: Int): DataSet = {
+  def first(): DataSet = {
     val conset = Array(false, false)
     val reg = new Register(new CtxSymbol(ctx.mkConst("reg", ctx.mkArraySort(ctx.mkBVSort(4), ctx.mkBVSort(32)))))
     val inNum = Array.fill(1)(0)
@@ -80,7 +79,7 @@ object Symbolic {
     val mem = new Memory(new CtxSymbol(ctx.mkConst("mem", ctx.mkArraySort(ctx.mkBVSort(16), ctx.mkBVSort(8)))), inNum, inBool)
     val pc = new ProgramCounter(rom.getWord(0))
     val path = new PathCondition(null)
-    val ccr = new ConditionRegister(new CtxSymbol(ctx.mkConst("ccr", ctx.mkBVSort(8))), limit)
+    val ccr = new ConditionRegister(new CtxSymbol(ctx.mkConst("ccr", ctx.mkBVSort(8))))
     ccr.setI
     new DataSet(reg, mem, pc, ccr, path, conset)
   }

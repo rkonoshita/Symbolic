@@ -30,10 +30,8 @@ class ASTVisitor {
   val tmppc = new MyHashMap //命令の配置に使う
   tmppc ++= Parameter.getStart
 
-  var ccrChecking = 0 //条件分岐に使われるCCRのビットを記録
-
   //ここでメモリにオペランドを配置する
-  def makeProgram(ctx: Z3Context, file: File): (ROM, Int) = {
+  def makeProgram(ctx: Z3Context, file: File): ROM = {
     //構文解析
     file.listFiles.foreach { f => Source.fromFile(f).getLines().foreach { l =>
       //      println(l)
@@ -79,7 +77,7 @@ class ASTVisitor {
       println(l._1 + " -> " + l._2)
     }
 
-    (new ROM(rom), ccrChecking)
+    new ROM(rom)
   }
 
   //ラベル位置の捜索
@@ -121,98 +119,84 @@ class ASTVisitor {
       })
 
       case Bhi(num, size) =>
-        ccrChecking |= 0x05
         Some(size match {
           case 8 => 2
           case 16 => 4
         })
 
       case Bls(num, size) =>
-        ccrChecking |= 0x05
         Some(size match {
           case 8 => 2
           case 16 => 4
         })
 
       case Bcc(num, size) =>
-        ccrChecking |= 0x01
         Some(size match {
           case 8 => 2
           case 16 => 4
         })
 
       case Bcs(num, size) =>
-        ccrChecking |= 0x01
         Some(size match {
           case 8 => 2
           case 16 => 4
         })
 
       case Bne(num, size) =>
-        ccrChecking |= 0x04
         Some(size match {
           case 8 => 2
           case 16 => 4
         })
 
       case Beq(num, size) =>
-        ccrChecking |= 0x04
         Some(size match {
           case 8 => 2
           case 16 => 4
         })
 
       case Bvc(num, size) =>
-        ccrChecking |= 0x02
         Some(size match {
           case 8 => 2
           case 16 => 4
         })
 
       case Bvs(num, size) =>
-        ccrChecking |= 0x02
         Some(size match {
           case 8 => 2
           case 16 => 4
         })
 
       case Bpl(num, size) =>
-        ccrChecking |= 0x08
         Some(size match {
           case 8 => 2
           case 16 => 4
         })
 
       case Bmi(num, size) =>
-        ccrChecking |= 0x08
         Some(size match {
           case 8 => 2
           case 16 => 4
         })
 
       case Bge(num, size) =>
-        ccrChecking |= 0x0A
         Some(size match {
           case 8 => 2
           case 16 => 4
         })
 
       case Blt(num, size) =>
-        ccrChecking |= 0x0A
         Some(size match {
           case 8 => 2
           case 16 => 4
         })
 
       case Bgt(num, size) =>
-        ccrChecking |= 0x0E
         Some(size match {
           case 8 => 2
           case 16 => 4
         })
 
       case Ble(num, size) =>
-        ccrChecking |= 0x0E
         Some(size match {
           case 8 => 2
           case 16 => 4

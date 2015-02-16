@@ -3,6 +3,8 @@ package data.register
 import base.{Symbolic, Parameter}
 import symbol.CtxSymbol
 
+import scala.collection.mutable.ArrayBuffer
+
 /**
  * Created by ryosuke on 14/11/18.
  */
@@ -16,10 +18,11 @@ class ProgramCounter(p: Int) {
 
   def setPc(p: Int) = pc = p & limit
 
-  def setPc(p:CtxSymbol): Int = { //むちゃくちゃ
+  def setPc(p: CtxSymbol): Int = {
+    //むちゃくちゃ
     (0x0100 to 0x0E00).foreach { q =>
       Symbolic.sol.assertCnstr(p.equal(q).symbol)
-      if(Symbolic.sol.check.get) {
+      if (Symbolic.sol.check.get) {
         Symbolic.sol.reset
         pc = q
         return pc

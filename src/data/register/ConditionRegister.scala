@@ -8,10 +8,9 @@ import symbol.CtxSymbol
  */
 
 //条件レジスタ
-class ConditionRegister(c: CtxSymbol, limit: Int) {
+class ConditionRegister(c: CtxSymbol) {
 
   private var ccr = c
-  val check = limit
 
   def getCcr: CtxSymbol = ccr.simpleify()
 
