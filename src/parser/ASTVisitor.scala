@@ -1148,7 +1148,7 @@ class ASTVisitor {
       })
 
       case Divxs(left, right) => Some((visit(left), visit(right)) match {
-        case (Some(l: Int), Some(r: Int)) => Array(0x01, 0x00, (left, right) match {
+        case (Some(l: Int), Some(r: Int)) => Array(0x01, 0xD0, (left, right) match {
           case (lreg: RegByte, rreg: RegWord) => 0x51
           case (lreg: RegWord, rreg: RegLong) => 0x53
         }, (l << 4) | r)
@@ -1444,7 +1444,7 @@ class ASTVisitor {
       })
 
       case Mulxs(left, right) => Some((visit(left), visit(right)) match {
-        case (Some(l: Int), Some(r: Int)) => Array(0x01, 0x00, (left, right) match {
+        case (Some(l: Int), Some(r: Int)) => Array(0x01, 0xC0, (left, right) match {
           case (lreg: RegByte, rreg: RegWord) => 0x50
           case (lreg: RegWord, rreg: RegLong) => 0x52
         }, (l << 4) | r)

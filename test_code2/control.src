@@ -1,0 +1,49 @@
+          .CPU        300HN
+          .IMPORT     _tsensor_get
+          .EXPORT     _goodLoop
+          .EXPORT     _badLoop
+          .SECTION    P,CODE,ALIGN=2
+          .LINE       "C:\Users\ryousuke\Desktop\tests\test2\linetrace\control.c",9
+_badLoop:                               ; function: badLoop
+          .STACK      _badLoop=6
+          PUSH.L      ER6
+          .LINE       9
+          MOV.W       R0,E6
+          .LINE       13
+          JSR         @_tsensor_get:16
+          EXTU.W      R0
+          .LINE       14
+          MOV.W       E6,R6
+          EXTS.L      ER6
+          DIVXS.W     R0,ER6
+          MOV.W       R6,R0
+          .LINE       15
+          POP.L       ER6
+          RTS
+          .LINE       17
+_goodLoop:                              ; function: goodLoop
+          .STACK      _goodLoop=6
+          PUSH.L      ER6
+          .LINE       17
+          MOV.W       R0,E6
+          .LINE       22
+          JSR         @_tsensor_get:16
+          EXTU.W      R0
+          MOV.W       R0,R6
+          .LINE       23
+          BNE         L112:8
+          .LINE       23
+          .LINE       24
+          MOV.W       #0,R0
+          BRA         L113:8
+L112:                                    
+          .LINE       25
+          .LINE       26
+          MOV.W       E6,R0
+          EXTS.L      ER0
+          DIVXS.W     R6,ER0
+          .LINE       28
+L113:                                    
+          POP.L       ER6
+          RTS
+          .END

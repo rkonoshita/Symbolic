@@ -1,6 +1,5 @@
 package data.register
 
-import base.Symbolic
 import symbol.CtxSymbol
 
 /**
@@ -10,17 +9,19 @@ import symbol.CtxSymbol
 //メモリ
 //データサイズ8bit
 //記号地によるメモリアクセスは16bitで可能
-class Memory(m: CtxSymbol) {
+class Memory(m: CtxSymbol, inNum: Array[Int], inBool: Array[Boolean]) {
 
   var mem = m
-  var in = false
+  //0:PDR3
+  var in = inNum
+  var ib = inBool
   //  private val limit = 0xFFFF // ノーマルモード
 
   private def trans(num: Int): CtxSymbol = new CtxSymbol(num, 16)
 
   def getByte(num: Int): CtxSymbol = {
-    if((num & 0x0000FFFF) == 0x0000FFD6) //入力があればtrueにする。ダサイ
-      Symbolic.inlabel = true
+    if ((num & 0x0000FFFF) == 0x0000FFD6) //入力があればtrueにする。ダサイ
+      ib(0) = true
     getByte(trans(num))
   }
 
@@ -74,6 +75,6 @@ class Memory(m: CtxSymbol) {
 
   def setLong(data: Int, num: Int): Unit = setLong(new CtxSymbol(data, 32), trans(num))
 
-  override def toString():String = mem.toString()
+  override def toString(): String = mem.toString()
 
 }

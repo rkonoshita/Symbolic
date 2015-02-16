@@ -1,0 +1,40 @@
+    .CPU        300HN
+    .IMPORT     _startup
+    
+    .SECTION    V, DATA, ALIGN = 2
+
+    .DATA.W	_startup         	
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0            	
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0          		
+    .DATA.W     0           	
+    .DATA.W     0               
+    .DATA.W     0            	
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0         		
+    .DATA.W     0               
+    .DATA.W     0               
+    .DATA.W     0               
+    
+    .END

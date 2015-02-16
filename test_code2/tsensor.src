@@ -1,0 +1,14 @@
+          .CPU        300HN
+          .EXPORT     _tsensor_get
+          .SECTION    P,CODE,ALIGN=2
+          .LINE       "C:\Users\ryousuke\Desktop\tests\test2\linetrace\tsensor.c",16
+_tsensor_get:                           ; function: tsensor_get
+          .STACK      _tsensor_get=2
+          .LINE       17
+          .LINE       18
+          MOV.B       @65494:8,R0L
+          NOT.B       R0L
+          AND.B       #7,R0L
+          .LINE       19
+          RTS
+          .END
