@@ -75,6 +75,10 @@ class Memory(m: CtxSymbol, inNum: Array[Int], inBool: Array[Boolean]) {
 
   def setLong(data: Int, num: Int): Unit = setLong(new CtxSymbol(data, 32), trans(num))
 
+  def checkIOPortAddress(): Unit = {
+
+  }
+
   override def toString(): String = mem.toString()
 
 }

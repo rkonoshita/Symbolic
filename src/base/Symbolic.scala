@@ -74,8 +74,8 @@ object Symbolic {
   def first(): DataSet = {
     val conset = Array(false, false)
     val reg = new Register(new CtxSymbol(ctx.mkConst("reg", ctx.mkArraySort(ctx.mkBVSort(4), ctx.mkBVSort(32)))))
-    val inNum = Array.fill(4)(0)
-    val inBool = Array.fill(4)(false)
+    val inNum = Array.fill(8)(0)
+    val inBool = Array.fill(8)(false)
     val mem = new Memory(new CtxSymbol(ctx.mkConst("mem", ctx.mkArraySort(ctx.mkBVSort(16), ctx.mkBVSort(8)))), inNum, inBool)
     val pc = new ProgramCounter(rom.getWord(0))
     val path = new PathCondition(ctx.mkTrue())
