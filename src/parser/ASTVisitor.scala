@@ -7,7 +7,7 @@ import base.Parameter
 import z3.scala.Z3Context
 
 import scala.collection.mutable
-import scala.collection.mutable.ListBuffer
+import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 import scala.io.Source
 
 /**
@@ -21,10 +21,14 @@ class ASTVisitor {
   // 各セクションの終点アドレスを保持
   //ラベルの位置決めに使う
   val count = new MyHashMap
-  count ++= Parameter.getStart
   //各セクションの開始アドレスを取得
-  var section = ""
+  count ++= Parameter.getStart
   //現在指しているセクション
+  var section = ""
+
+  val func = new mutable.HashMap[String, Int]
+  var now = ""
+
   val parseResult = new ListBuffer[AST] //パースの結果
 
   val tmppc = new MyHashMap //命令の配置に使う
@@ -42,10 +46,17 @@ class ASTVisitor {
     //意味解析１回目：ラベルの位置を決める
     parseResult.foreach { p =>
       search(p) match {
-        case Some(i: Int) => count.put(section, i) //命令やデータ配置はInt
+        case Some(i: Int) =>
+          count.put(section, i) //命令やデータ配置はInt
+          func += (now -> (func(now) + i))
         case Some(s: String) => s match {
           case "V" | "P" | "C" | "D" | "B" | "R" => section = s
-          case _ => label += s -> count(section)
+          case _ =>
+            label += s -> count(section)
+            if (s.startsWith("_")) {
+              func += (s -> 0)
+              now = s
+            }
         }
         case _ => new ParserNotMatchError
       }
@@ -76,8 +87,19 @@ class ASTVisitor {
     label.foreach { l =>
       println(l._1 + " -> " + l._2)
     }
+    endPoint(rom)
 
     new ROM(rom)
+  }
+
+  def endPoint(rom: mutable.HashMap[Int, Byte]): Unit = {
+    val start = ((rom(0) & 0xFF) << 8) | (rom(1) & 0xFF)
+    label.keySet.foreach { k =>
+      if(label(k) == start) {
+        Parameter.endPoint = start + func(k)
+        return
+      }
+    }
   }
 
   //ラベル位置の捜索

@@ -1296,8 +1296,8 @@ class Decoder {
         val sp = data.reg.getLong(7)
         data.reg.setLong(sp + 2, 7)
         val mem = data.mem.getWord(sp)
-        val rts = data.pc.setPc(mem)
-        if (rts == rom.getWord(0) + 10) data.conset(0) = true
+        data.pc.setPc(mem)
+        if (data.pc.pc == Parameter.endPoint) data.conset(0) = true
         ArrayBuffer(data)
 
       case 0x55 =>

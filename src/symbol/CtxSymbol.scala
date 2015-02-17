@@ -17,79 +17,81 @@ class CtxSymbol(ast: Z3AST) {
 
   def this(ast: Int, size: Z3Sort) = this(Symbolic.ctx.mkInt(ast, size))
 
+  def this(name: String, size: Int) = this(Symbolic.ctx.mkConst(name, Symbolic.ctx.mkBVSort(size)))
+
   def +(s: CtxSymbol): CtxSymbol = this.+(s.symbol)
 
-  def +(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVAdd(symbol, s))
+  def +(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVAdd(symbol, s)).simpleify()
 
   def +(s: Int): CtxSymbol = this.+(ctx.mkInt(s, symbol.getSort))
 
   def -(s: CtxSymbol): CtxSymbol = this.-(s.symbol)
 
-  def -(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSub(symbol, s))
+  def -(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSub(symbol, s)).simpleify()
 
   def -(s: Int): CtxSymbol = this.-(ctx.mkInt(s, symbol.getSort))
 
   def *(s: CtxSymbol): CtxSymbol = *(s.symbol)
 
-  def *(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVMul(symbol, s))
+  def *(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVMul(symbol, s)).simpleify()
 
   def *(s: Int): CtxSymbol = *(ctx.mkInt(s, symbol.getSort))
 
   def sdiv(s: CtxSymbol): CtxSymbol = sdiv(s.symbol)
 
-  def sdiv(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSdiv(symbol, s))
+  def sdiv(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSdiv(symbol, s)).simpleify()
 
   def sdiv(s: Int): CtxSymbol = sdiv(ctx.mkInt(s, symbol.getSort))
 
   def udiv(s: CtxSymbol): CtxSymbol = udiv(s.symbol)
 
-  def udiv(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVUdiv(symbol, s))
+  def udiv(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVUdiv(symbol, s)).simpleify()
 
   def udiv(s: Int): CtxSymbol = udiv(ctx.mkInt(s, symbol.getSort))
 
   def srem(s: CtxSymbol): CtxSymbol = srem(s.symbol)
 
-  def srem(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSrem(symbol, s))
+  def srem(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSrem(symbol, s)).simpleify()
 
   def srem(s: Int): CtxSymbol = srem(ctx.mkInt(s, symbol.getSort))
 
   def urem(s: CtxSymbol): CtxSymbol = urem(s.symbol)
 
-  def urem(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVUrem(symbol, s))
+  def urem(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVUrem(symbol, s)).simpleify()
 
   def urem(s: Int): CtxSymbol = urem(ctx.mkInt(s, symbol.getSort))
 
   def &(s: CtxSymbol): CtxSymbol = &(s.symbol)
 
-  def &(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVAnd(symbol, s))
+  def &(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVAnd(symbol, s)).simpleify()
 
   def &(s: Int): CtxSymbol = &(ctx.mkInt(s, symbol.getSort))
 
   def |(s: CtxSymbol): CtxSymbol = |(s.symbol)
 
-  def |(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVOr(symbol, s))
+  def |(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVOr(symbol, s)).simpleify()
 
   def |(s: Int): CtxSymbol = |(ctx.mkInt(s, symbol.getSort))
 
   def ^(s: CtxSymbol): CtxSymbol = ^(s.symbol)
 
-  def ^(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVXor(symbol, s))
+  def ^(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVXor(symbol, s)).simpleify()
 
   def ^(s: Int): CtxSymbol = ^(ctx.mkInt(s, symbol.getSort))
 
-  def ~(): CtxSymbol = new CtxSymbol(ctx.mkBVNot(symbol))
+  def ~(): CtxSymbol = new CtxSymbol(ctx.mkBVNot(symbol)).simpleify()
 
-  def neg: CtxSymbol = new CtxSymbol(ctx.mkBVNeg(symbol))
+  def neg: CtxSymbol = new CtxSymbol(ctx.mkBVNeg(symbol)).simpleify()
 
   def >>(s: CtxSymbol): CtxSymbol = >>(s.symbol)
 
-  def >>(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVAshr(symbol, s))
+  def >>(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVAshr(symbol, s)).simpleify()
 
   def >>(s: Int): CtxSymbol = >>(ctx.mkInt(s, symbol.getSort))
 
   def <<(s: CtxSymbol): CtxSymbol = <<(s.symbol)
 
-  def <<(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVShl(symbol, s))
+  def <<(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVShl(symbol, s)).simpleify()
 
   def <<(s: Int): CtxSymbol = <<(ctx.mkInt(s, symbol.getSort))
 
@@ -97,61 +99,61 @@ class CtxSymbol(ast: Z3AST) {
 
   def equal(s: Int): CtxSymbol = equal(ctx.mkInt(s, symbol.getSort))
 
-  def equal(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkEq(symbol, s))
+  def equal(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkEq(symbol, s)).simpleify()
 
-  def not: CtxSymbol = new CtxSymbol(ctx.mkNot(symbol))
+  def not: CtxSymbol = new CtxSymbol(ctx.mkNot(symbol)).simpleify()
 
   def &&(s: CtxSymbol): CtxSymbol = &&(s.symbol)
 
   def &&(s: Int): CtxSymbol = &&(ctx.mkInt(s, symbol.getSort))
 
-  def &&(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkAnd(symbol, s))
+  def &&(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkAnd(symbol, s)).simpleify()
 
   def ||(s: CtxSymbol): CtxSymbol = ||(s.symbol)
 
-  def ||(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkAnd(symbol, s))
+  def ||(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkAnd(symbol, s)).simpleify()
 
   def ||(s: Int): CtxSymbol = ||(ctx.mkInt(s, symbol.getSort))
 
   def ^^(s: CtxSymbol): CtxSymbol = ^^(s.symbol)
 
-  def ^^(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkXor(symbol, s))
+  def ^^(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkXor(symbol, s)).simpleify()
 
   def ^^(s: Int): CtxSymbol = ^^(ctx.mkInt(s, symbol.getSort))
 
   def >=(s: CtxSymbol): CtxSymbol = >=(s.symbol)
 
-  def >=(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSge(symbol, s))
+  def >=(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSge(symbol, s)).simpleify()
 
   def >=(s: Int): CtxSymbol = >=(ctx.mkInt(s, symbol.getSort))
 
   def >(s: CtxSymbol): CtxSymbol = >(s.symbol)
 
-  def >(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSgt(symbol, s))
+  def >(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSgt(symbol, s)).simpleify()
 
   def >(s: Int): CtxSymbol = >(ctx.mkInt(s, symbol.getSort))
 
   def =<(s: CtxSymbol): CtxSymbol = =<(s.symbol)
 
-  def =<(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSle(symbol, s))
+  def =<(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSle(symbol, s)).simpleify()
 
   def =<(s: Int): CtxSymbol = =<(ctx.mkInt(s, symbol.getSort))
 
   def <(s: CtxSymbol): CtxSymbol = <(s.symbol)
 
-  def <(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSlt(symbol, s))
+  def <(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkBVSlt(symbol, s)).simpleify()
 
   def <(s: Int): CtxSymbol = <(ctx.mkInt(s, symbol.getSort))
 
-  def sextend(s: Int): CtxSymbol = new CtxSymbol(ctx.mkSignExt(s, symbol))
+  def sextend(s: Int): CtxSymbol = new CtxSymbol(ctx.mkSignExt(s, symbol)).simpleify()
 
-  def zextend(s: Int): CtxSymbol = new CtxSymbol(ctx.mkZeroExt(s, symbol))
+  def zextend(s: Int): CtxSymbol = new CtxSymbol(ctx.mkZeroExt(s, symbol)).simpleify()
 
-  def extract(high: Int, low: Int): CtxSymbol = new CtxSymbol(ctx.mkExtract(high, low, symbol))
+  def extract(high: Int, low: Int): CtxSymbol = new CtxSymbol(ctx.mkExtract(high, low, symbol)).simpleify()
 
   def concat(s: CtxSymbol): CtxSymbol = concat(s.symbol)
 
-  def concat(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkConcat(symbol, s))
+  def concat(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkConcat(symbol, s)).simpleify()
 
   def bitClr(index: CtxSymbol): CtxSymbol = bitClr(index.symbol)
 
@@ -199,11 +201,11 @@ class CtxSymbol(ast: Z3AST) {
 
   def store(index: CtxSymbol, store: CtxSymbol): CtxSymbol = this.store(index.symbol, store.symbol)
 
-  def store(index: Z3AST, store: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkStore(symbol, index, store))
+  def store(index: Z3AST, store: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkStore(symbol, index, store)).simpleify()
 
   def select(index: CtxSymbol): CtxSymbol = this.select(index.symbol)
 
-  def select(index: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkSelect(symbol, index))
+  def select(index: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkSelect(symbol, index)).simpleify()
 
   def simpleify(): CtxSymbol = {
     val c = new CtxSymbol(ctx.simplifyAst(symbol))

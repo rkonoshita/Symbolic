@@ -2,6 +2,7 @@ package data
 
 import data.register._
 import base.{Symbolic, State}
+import symbol.CtxSymbol
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -33,15 +34,68 @@ class DataSet(r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, p
   def this(s: State, c: Array[Boolean]) = this(s.reg, s.mem, s.pc, s.ccr, s.path, c)
 
   def inputCheck(): Unit = {
+    inputCheckIO1()
+    inputCheckIO2()
+    inputCheckIO3()
+    inputCheckIO5()
+  }
+
+  //IOport1のチェック
+  private def inputCheckIO1(): Unit = {
     if (mem.ib(0)) {
-      val input = mem.in(0)
-      val pcr3 = mem.getByte(0xFFE6)
-      val pdr3 = mem.getByte(0xFFD6)
-      val data3 = pdr3 & pcr3 | Symbolic.ctx.mkConst("m" + 0xFFDB + "_" + input, Symbolic.ctx.mkBVSort(8))
-      mem.setByte(data3, 0xFFD6)
-      mem.in(0) = input + 1
+      val pmr1 = mem.getByte(0xFFE0) //0なら入出力ポート
+      val pcr1 = mem.getByte(0xFFE4) //0なら入力ポート
+      val pdr1 = mem.getByte(0xFFD4)
+      val in = (pcr1 | pmr1).~ //1なら入力可能
+      val data1 = ((in.~) & pdr1) | (in & new CtxSymbol("m" + 0xFFD4 + "_" + mem.in(0), 8))
+      mem.setByte(data1, 0xFFD4)
+      mem.in(0) = mem.in(0) + 1
+      mem.ib(0) = false
     }
-    mem.ib(0) = false
+  }
+
+  //IOport2のチェック
+  private def inputCheckIO2(): Unit = {
+    if (mem.ib(1)) {
+      val pcr2 = mem.getByte(0xFFE5) | 0xE0 //0なら入力ポート
+      val pdr2 = mem.getByte(0xFFD5)
+      val data2 = (pdr2 & pcr2) | ((pcr2.~) & new CtxSymbol("m" + 0xFFD5 + "_" + mem.in(1), 8))
+      mem.setByte(data2, 0xFFD5)
+      mem.in(1) = mem.in(1) + 1
+      mem.ib(1) = false
+    }
+  }
+
+  //IOport3のチェック
+  private def inputCheckIO3(): Unit = {
+    if (mem.ib(2)) {
+      val input = mem.in(2)
+      val pcr3 = mem.getByte(0xFFE6) //0なら入力ポート
+      val pdr3 = mem.getByte(0xFFD6)
+      val data3 = (pdr3 & pcr3) | ((pcr3.~) & new CtxSymbol("m" + 0xFFD6 + "_" + mem.in(2), 8))
+      mem.setByte(data3, 0xFFD6)
+      mem.in(2) = input + 1
+      mem.ib(2) = false
+    }
+  }
+
+  //IOport5のチェック
+  private def inputCheckIO5(): Unit = {
+    if (mem.ib(3)) {
+      val pmr5 = mem.getByte(0xFFE2) //0なら入出力ポート
+      val pcr5 = mem.getByte(0xFFE7) //0なら入力ポート
+      val pdr5 = mem.getByte(0xFFD7)
+      val in = (pcr5 | pmr5).~ //1なら入力可能
+      val data1 = ((in.~) & pdr5) | (in & new CtxSymbol("m" + 0xFFD7 + "_" + mem.in(3), 8))
+      mem.setByte(data1, 0xFFD4)
+      mem.in(3) = mem.in(3) + 1
+      mem.ib(3) = false
+    }
+  }
+
+  //IOport6のチェック
+  private def inputCheckIO6(): Unit ={
+
   }
 
   def arrayClone(array: Array[Int]): Array[Int] = {

@@ -21,7 +21,7 @@ class Memory(m: CtxSymbol, inNum: Array[Int], inBool: Array[Boolean]) {
 
   def getByte(num: Int): CtxSymbol = {
     if ((num & 0x0000FFFF) == 0x0000FFD6) //入力があればtrueにする。ダサイ
-      ib(0) = true
+      ib(2) = true
     getByte(trans(num))
   }
 

@@ -74,11 +74,11 @@ object Symbolic {
   def first(): DataSet = {
     val conset = Array(false, false)
     val reg = new Register(new CtxSymbol(ctx.mkConst("reg", ctx.mkArraySort(ctx.mkBVSort(4), ctx.mkBVSort(32)))))
-    val inNum = Array.fill(1)(0)
-    val inBool = Array.fill(1)(false)
+    val inNum = Array.fill(4)(0)
+    val inBool = Array.fill(4)(false)
     val mem = new Memory(new CtxSymbol(ctx.mkConst("mem", ctx.mkArraySort(ctx.mkBVSort(16), ctx.mkBVSort(8)))), inNum, inBool)
     val pc = new ProgramCounter(rom.getWord(0))
-    val path = new PathCondition(null)
+    val path = new PathCondition(ctx.mkTrue())
     val ccr = new ConditionRegister(new CtxSymbol(ctx.mkConst("ccr", ctx.mkBVSort(8))))
     ccr.setI
     new DataSet(reg, mem, pc, ccr, path, conset)
@@ -110,6 +110,8 @@ object Parameter {
     start.foreach(v => s.put(v._1, v._2))
     s
   }
+
+  var endPoint: Int = 0
 
   //使いもしないメモリを初期化するのは，非効率的なので
   //このメソッドの利用は推奨されません．
