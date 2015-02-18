@@ -43,14 +43,10 @@ object Symbolic {
 
         val dataArray = new Decoder().analyze(data)
         dataArray.foreach { d =>
-          val reach = //到達可能:true 到達不能:false
-            if (d.path.path == null) true
-            else {
-              Symbolic.sol.assertCnstr(d.path.path)
-              val ans = Symbolic.sol.check.get
-              Symbolic.sol.reset
-              ans
-            }
+          //到達可能:true 到達不能:false
+          Symbolic.sol.assertCnstr(d.path.path)
+          val reach = Symbolic.sol.check.get
+          Symbolic.sol.reset
 
           if (reach) {
             val s = new State(state.size, d, current)
@@ -62,7 +58,7 @@ object Symbolic {
               stack.clear
               println(s.error._2.get)
             }
-            println("state:" + state.size + " rest:" + stack.size + " sp:" + s.reg.getLong(7))
+            println("state:" + state.size + " rest:" + stack.size)
           }
         }
         println("----------next----------")
@@ -73,13 +69,13 @@ object Symbolic {
 
   def first(): DataSet = {
     val conset = Array(false, false)
-    val reg = new Register(new CtxSymbol(ctx.mkConst("reg", ctx.mkArraySort(ctx.mkBVSort(4), ctx.mkBVSort(32)))))
+    val reg = new Register(new CtxSymbol(ctx.mkConst("reg", ctx.mkArraySort(Parameter.bv4, Parameter.bv32))))
     val inNum = Array.fill(8)(0)
     val inBool = Array.fill(8)(false)
-    val mem = new Memory(new CtxSymbol(ctx.mkConst("mem", ctx.mkArraySort(ctx.mkBVSort(16), ctx.mkBVSort(8)))), inNum, inBool)
+    val mem = new Memory(new CtxSymbol(ctx.mkConst("mem", ctx.mkArraySort(Parameter.bv16, Parameter.bv8))), inNum, inBool)
     val pc = new ProgramCounter(rom.getWord(0))
     val path = new PathCondition(ctx.mkTrue())
-    val ccr = new ConditionRegister(new CtxSymbol(ctx.mkConst("ccr", ctx.mkBVSort(8))))
+    val ccr = new ConditionRegister(new CtxSymbol(ctx.mkConst("ccr", Parameter.bv8)))
     ccr.setI
     new DataSet(reg, mem, pc, ccr, path, conset)
   }
@@ -92,6 +88,11 @@ object Symbolic {
 }
 
 object Parameter {
+
+  val bv32 = Symbolic.ctx.mkBVSort(32)
+  val bv16 = Symbolic.ctx.mkBVSort(16)
+  val bv8 = Symbolic.ctx.mkBVSort(8)
+  val bv4 = Symbolic.ctx.mkBVSort(4)
 
   //各セクションの開始アドレス
   val start = new mutable.HashMap[String, Int]

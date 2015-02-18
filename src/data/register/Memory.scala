@@ -12,7 +12,6 @@ import symbol.CtxSymbol
 class Memory(m: CtxSymbol, inNum: Array[Int], inBool: Array[Boolean]) {
 
   var mem = m
-  //0:PDR3
   var in = inNum
   var ib = inBool
   //  private val limit = 0xFFFF // ノーマルモード

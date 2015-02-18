@@ -17,7 +17,7 @@ L68:
           .LINE       23
           .LINE       24
           MOV.W       R6,R0
-          JSR         @_badLoop:16
+          JSR         @_goodLoop:16
           .LINE       23
           INC.W       #1,R6
           .LINE       23

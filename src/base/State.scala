@@ -19,10 +19,10 @@ class State(num: Int, data: DataSet, pr: State) {
   val ccr = data.ccr
   val path = data.path
   val con = data.conset
-  val inNum = mem.in
-  val inBool = mem.ib
+  private val inNum = mem.in
+  private val inBool = mem.ib
   val stop = con(0)
-  val divop = con(1)
+  private val divop = con(1)
   //プログラムの終端に達した:true 違う:false
   var error: (Boolean, Option[Z3Model]) = (false, None)
 

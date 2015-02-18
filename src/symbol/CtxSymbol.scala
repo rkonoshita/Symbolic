@@ -1,6 +1,6 @@
 package symbol
 
-import base.Symbolic
+import base.{Parameter, Symbolic}
 import z3.scala.{Z3Sort, Z3AST}
 
 /**
@@ -13,11 +13,21 @@ class CtxSymbol(ast: Z3AST) {
   val symbol = ast
   val ctx = ast.context
 
-  def this(ast: Int, size: Int) = this(Symbolic.ctx.mkInt(ast, Symbolic.ctx.mkBVSort(size)))
+  def this(ast: Int, size: Int) = this(Symbolic.ctx.mkInt(ast, size match {
+    case 4 => Parameter.bv4
+    case 8 => Parameter.bv8
+    case 16 => Parameter.bv16
+    case 32 => Parameter.bv32
+  }))
 
   def this(ast: Int, size: Z3Sort) = this(Symbolic.ctx.mkInt(ast, size))
 
-  def this(name: String, size: Int) = this(Symbolic.ctx.mkConst(name, Symbolic.ctx.mkBVSort(size)))
+  def this(name: String, size: Int) = this(Symbolic.ctx.mkConst(name, size match {
+    case 4 => Parameter.bv4
+    case 8 => Parameter.bv8
+    case 16 => Parameter.bv16
+    case 32 => Parameter.bv32
+  }))
 
   def +(s: CtxSymbol): CtxSymbol = this.+(s.symbol)
 

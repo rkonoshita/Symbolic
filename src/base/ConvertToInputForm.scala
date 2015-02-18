@@ -15,19 +15,19 @@ class ConvertToInputForm(t: File, a: File) {
 
   //ターゲットのプログラムが無いならばエラー
   if (!t.exists) t.mkdir
-  val tar = t.listFiles
+  private val tar = t.listFiles
 
   //一旦asmフォルダを削除し、作りなおす
-  val asm = a
+  private val asm = a
   delete(asm)
   asm.mkdir
 
   //出現済みローカルラベルを全て保持する
   //現在捜索中のファイルで出現している場合はtrue
   //そうでなければfalse
-  val local = new mutable.HashMap[String, Boolean]
+  private val local = new mutable.HashMap[String, Boolean]
   //出現済みラベルを新しいラベルへと写像する
-  val trans = new mutable.HashMap[String, String]
+  private val trans = new mutable.HashMap[String, String]
 
   //変換
   def convert() = {
