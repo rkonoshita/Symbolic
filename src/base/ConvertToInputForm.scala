@@ -3,7 +3,7 @@ package base
 import java.io.{File, PrintWriter}
 
 import scala.collection.mutable
-import scala.collection.mutable.ListBuffer
+import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 import scala.io.Source
 
 /**
@@ -48,8 +48,11 @@ class ConvertToInputForm(t: File, a: File) {
           var str = t
           if (str.matches(".*L[0-9]+.*")) //ラベルの存在判定
             divide(str, "\\s").foreach { l =>
-              if (check(l) && !local(l)) //ラベルが登場済み だが 現在捜索中のファイルではない
-                str = str.replaceAll(l, trans(l)) //新ラベルへ変換
+              if (local.contains(l)) {
+                //ラベルが登場済み だが 現在捜索中のファイルではない
+                if (available(l)) makeLocalLabel(l)
+                if (!local(l)) str = str.replaceAll(l, trans(l)) //新ラベルへ変換
+              } else local += l -> true
             }
 
           //ラベル宣言の直後に文が来ないようにする
@@ -107,8 +110,8 @@ class ConvertToInputForm(t: File, a: File) {
   }
 
   //.DATA.(size)以下のデータをバラバラに宣言し直す
-  private def combine(list: Array[String], size: String): ListBuffer[String] = {
-    val array = new ListBuffer[String]
+  private def combine(list: Array[String], size: String): ArrayBuffer[String] = {
+    val array = new ArrayBuffer[String]
     list.foreach(l => array += size + " " + l)
     array
   }
@@ -128,23 +131,10 @@ class ConvertToInputForm(t: File, a: File) {
     label
   }
 
-  //すでに存在するラベルならtrue
-  //まだなければfalseを返す
-  private def check(label: String): Boolean = {
-    if (local.contains(label)) {
-      //対象ローカルラベル(label)に対して
-      //過去のファイルで出現済みだが、変換テーブルには存在しない
-      //過去のファイルで出現済みで、変換テーブルにも存在するが、変換先のラベルは現在のファイルではまだ使用されていない
-      if (!local(label) && (!trans.contains(label) || !local(trans(label)))) makeLocalLabel(label)
-      true
-    } else {
-      local += label -> true
-      false
-    }
-  }
+  private def available(label: String): Boolean = !local(label) && (!trans.contains(label) || !local(trans(label)))
 
   //新しいローカルラベルを作っちゃう！
-  private def makeLocalLabel(key: String) {
+  private def makeLocalLabel(key: String): Unit = {
     for (i <- 0 to Byte.MaxValue) {
       val label = "L" + i
       //この番号のローカルラベルがなければ作る

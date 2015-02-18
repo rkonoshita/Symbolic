@@ -167,7 +167,7 @@ class CtxSymbol(ast: Z3AST) {
 
   def bitClr(index: CtxSymbol): CtxSymbol = bitClr(index.symbol)
 
-  def bitClr(index: Z3AST): CtxSymbol = &((new CtxSymbol(1, index.getSort) << index).~)
+  def bitClr(index: Z3AST): CtxSymbol = &((new CtxSymbol(1, index.getSort) << index).~())
 
   def bitClr(index: Int): CtxSymbol = &(~(1 << index))
 
@@ -179,9 +179,9 @@ class CtxSymbol(ast: Z3AST) {
 
   def bitNot(index: CtxSymbol): CtxSymbol = bitNot(index.symbol)
 
-  def bitNot(index: Z3AST): CtxSymbol = bitStore(bitGet(index).~, index)
+  def bitNot(index: Z3AST): CtxSymbol = bitStore(bitGet(index).~(), index)
 
-  def bitNot(index: Int): CtxSymbol = bitStore(bitGet(index).~, index)
+  def bitNot(index: Int): CtxSymbol = bitStore(bitGet(index).~(), index)
 
   def bitGet(index: CtxSymbol): CtxSymbol = bitGet(index.symbol)
 

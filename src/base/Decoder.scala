@@ -15,7 +15,7 @@ class Decoder {
   private val rom = Symbolic.rom
 
   //記号実行してる
-  def analyze(data: DataSet): ArrayBuffer[DataSet] = analyze(data.clone, data.pc.pc)
+  def analyze(data: DataSet): ArrayBuffer[DataSet] = analyze(data.clone(), data.pc.pc)
 
   private def analyze(data: DataSet, pc: Int): ArrayBuffer[DataSet] = {
     val op0 = rom.getByte(pc)
@@ -952,21 +952,21 @@ class Decoder {
     op1 & 0xF0 match {
       case 0x00 =>
         //NOT.B Reg [17][0reg]
-        val not = data.reg.getByte(op1).~
+        val not = data.reg.getByte(op1).~()
         data.reg.setByte(not, op1)
         data.ccr.clearV
         check2(not, data)
 
       case 0x10 =>
         //NOT.B Reg [17][1reg]
-        val not = data.reg.getWord(op1).~
+        val not = data.reg.getWord(op1).~()
         data.reg.setWord(not, op1)
         data.ccr.clearV
         check2(not, data)
 
       case 0x30 =>
         //NOT.B Reg [17][3reg]
-        val not = data.reg.getLong(op1).~
+        val not = data.reg.getLong(op1).~()
         data.reg.setLong(not, op1)
         data.ccr.clearV
         check2(not, data)
@@ -1536,7 +1536,7 @@ class Decoder {
       case 0x63 =>
         //BTST.B RegA,RegB [63][regAregB]
         val imm = data.reg.getByte(op1 >> 4) & 0x07
-        val reg = data.reg.getByte(op1).bitGet(imm).~
+        val reg = data.reg.getByte(op1).bitGet(imm).~()
         val ccr = data.ccr.getCcr
         data.ccr.setCcr(ccr.extract(7, 3) concat reg concat ccr.extract(1, 0))
         data.pc.setPc(pc + 2)
@@ -1597,7 +1597,7 @@ class Decoder {
 
       case 0x80 =>
         //BIST.B Imm,Reg [67][1imm reg]
-        data.reg.setByte(reg.bitStore(c.~, imm), op1)
+        data.reg.setByte(reg.bitStore(c.~(), imm), op1)
     }
     ArrayBuffer(data)
   }
@@ -1794,7 +1794,7 @@ class Decoder {
       case 0x73 =>
         //BTST.B Imm,Reg [73][immreg]
         val ccr = data.ccr.getCcr
-        data.ccr.setCcr(ccr.extract(7, 3) concat (reg.bitGet(imm).~) concat ccr.extract(1, 0))
+        data.ccr.setCcr(ccr.extract(7, 3) concat reg.bitGet(imm).~() concat ccr.extract(1, 0))
         data.pc.setPc(pc + 2)
         ArrayBuffer(data)
 
@@ -1826,7 +1826,7 @@ class Decoder {
 
       case 0x80 =>
         //BIOR.B Imm,Reg [74][1imm reg]
-        ccr.extract(0, 0) | (reg.~)
+        ccr.extract(0, 0) | reg.~()
     }
     data.ccr.setCcr(ccr.extract(7, 1) concat and)
     ArrayBuffer(data)
@@ -1845,7 +1845,7 @@ class Decoder {
 
       case 0x80 =>
         //BIXOR.B Imm,Reg [75][1imm reg]
-        ccr.extract(0, 0) ^ (reg.~)
+        ccr.extract(0, 0) ^ reg.~()
     }
     data.ccr.setCcr(ccr.extract(7, 1) concat and)
     ArrayBuffer(data)
@@ -1864,7 +1864,7 @@ class Decoder {
 
       case 0x80 =>
         //BIAND.B Imm,Reg [76][1imm reg]
-        ccr.extract(0, 0) & (reg.~)
+        ccr.extract(0, 0) & reg.~()
     }
     data.ccr.setCcr(ccr.extract(7, 1) concat and)
     ArrayBuffer(data)
@@ -2046,7 +2046,7 @@ class Decoder {
         //BTST.B Reg,IndReg [7C][indreg0][63][reg0]
         val imm = data.reg.getByte(rom.getByte(pc + 3) >> 4) & 0x07
         val ind = data.reg.getLong(rom.getByte(pc + 1) >> 4)
-        val mem = data.mem.getByte(ind).bitGet(imm).~
+        val mem = data.mem.getByte(ind).bitGet(imm).~()
         val ccr = data.ccr.getCcr
         data.ccr.setCcr(ccr.extract(7, 3) concat mem concat ccr.extract(1, 0))
         data.pc.setPc(pc + 4)
@@ -2062,7 +2062,7 @@ class Decoder {
         //BTST.B Imm,IndReg [7C][indreg0][73][imm0]
         val imm = rom.getByte(pc + 3) >> 4
         val ind = data.reg.getLong(rom.getByte(pc + 1) >> 4)
-        val mem = data.mem.getByte(ind).bitGet(imm).~
+        val mem = data.mem.getByte(ind).bitGet(imm).~()
         data.pc.setPc(pc + 4)
         val ccr = data.ccr.getCcr
         data.ccr.setCcr(ccr.extract(7, 3) concat mem concat ccr.extract(1, 0))
@@ -2089,7 +2089,7 @@ class Decoder {
 
       case 0x80 =>
         //BIOR.B Imm,IndReg [7C][indreg0][74][1imm0]
-        ccr.extract(0, 0) | (mem.~)
+        ccr.extract(0, 0) | mem.~()
     }
     data.ccr.setCcr(ccr.extract(7, 1) concat and)
     ArrayBuffer(data)
@@ -2109,7 +2109,7 @@ class Decoder {
 
       case 0x80 =>
         //BIXOR.B Imm,IndReg [7C][indreg0][75][1imm0]
-        ccr.extract(0, 0) ^ (mem.~)
+        ccr.extract(0, 0) ^ mem.~()
     }
     data.ccr.setCcr(ccr.extract(7, 1) concat and)
     ArrayBuffer(data)
@@ -2129,7 +2129,7 @@ class Decoder {
 
       case 0x80 =>
         //BIAND.B Imm,IndReg [7C][indreg0][76][1imm0]
-        ccr.extract(0, 0) & (mem.~)
+        ccr.extract(0, 0) & mem.~()
     }
     data.ccr.setCcr(ccr.extract(7, 1) concat and)
     ArrayBuffer(data)
@@ -2149,7 +2149,7 @@ class Decoder {
 
       case 0x80 =>
         //BILD.B Imm,IndReg [7C][indreg0][77][1imm0]
-        data.ccr.setCcr(ccr.extract(7, 1) concat (mem.~))
+        data.ccr.setCcr(ccr.extract(7, 1) concat mem.~())
     }
     ArrayBuffer(data)
   }
@@ -2204,7 +2204,7 @@ class Decoder {
 
       case 0x80 =>
         //BIST.B Imm,Indreg [7D][reg0][67][1imm0]]
-        data.mem.setByte(mem.bitStore(c.~, imm), ind)
+        data.mem.setByte(mem.bitStore(c.~(), imm), ind)
     }
     ArrayBuffer(data)
   }
@@ -2236,7 +2236,7 @@ class Decoder {
         //BTST.B Reg,Abs [7E][abs][63][reg0]
         val imm = data.reg.getByte(rom.getByte(pc + 3) >> 4) & 0x07
         val abs = rom.getByte(pc + 1) | 0xFFFFFF00
-        val mem = data.mem.getByte(abs).bitGet(imm).~
+        val mem = data.mem.getByte(abs).bitGet(imm).~()
         val ccr = data.ccr.getCcr
         data.ccr.setCcr(ccr.extract(7, 3) concat mem concat ccr.extract(1, 0))
         data.pc.setPc(pc + 4)
@@ -2252,7 +2252,7 @@ class Decoder {
         //BTST.B Imm,Abs [7E][abs][73][imm0]
         val imm = rom.getByte(pc + 3) >> 4
         val abs = rom.getByte(pc + 1) | 0xFFFFFF00
-        val mem = data.mem.getByte(abs).bitGet(imm).~
+        val mem = data.mem.getByte(abs).bitGet(imm).~()
         val ccr = data.ccr.getCcr
         data.ccr.setCcr(ccr.extract(7, 3) concat mem concat ccr.extract(1, 0))
         data.pc.setPc(pc + 4)
@@ -2278,7 +2278,7 @@ class Decoder {
 
       case 0x80 =>
         //BIOR.B Imm,Abs [7E][abs][74][1imm0]
-        ccr.extract(0, 0) | (mem.~)
+        ccr.extract(0, 0) | mem.~()
     }
     data.ccr.setCcr(ccr.extract(7, 1) concat and)
     ArrayBuffer(data)
@@ -2297,7 +2297,7 @@ class Decoder {
 
       case 0x80 =>
         //BIXOR.B Imm,Abs [7E][abs][75][1imm0]
-        ccr.extract(0, 0) ^ (mem.~)
+        ccr.extract(0, 0) ^ mem.~()
     }
     data.ccr.setCcr(ccr.extract(7, 1) concat and)
     ArrayBuffer(data)
@@ -2316,7 +2316,7 @@ class Decoder {
 
       case 0x80 =>
         //BIAND.B Imm,Abs [7E][abs][76][1imm0]
-        ccr.extract(0, 0) & (mem.~)
+        ccr.extract(0, 0) & mem.~()
     }
     data.ccr.setCcr(ccr.extract(7, 1) concat and)
     ArrayBuffer(data)
@@ -2335,7 +2335,7 @@ class Decoder {
 
       case 0x80 =>
         //BILD.B Imm,Abs [7E][abs][77][1imm0]
-        data.ccr.setCcr(ccr.extract(7, 1) concat (mem.~))
+        data.ccr.setCcr(ccr.extract(7, 1) concat mem.~())
     }
     ArrayBuffer(data)
   }
@@ -2388,7 +2388,7 @@ class Decoder {
 
       case 0x80 =>
         //BIST.B Imm,Abs [7F][abs][67][1imm0]
-        data.mem.setByte(mem.bitStore(c.~, imm), abs)
+        data.mem.setByte(mem.bitStore(c.~(), imm), abs)
     }
     ArrayBuffer(data)
   }
@@ -2479,7 +2479,7 @@ class Decoder {
   }
 
   private def checkZ(num: CtxSymbol, data: DataSet): ArrayBuffer[DataSet] = {
-    val clone = twoPathClone((num.equal(0)).simpleify(), data)
+    val clone = twoPathClone(num.equal(0).simpleify(), data)
     clone._1.ccr.setZ //data = 0
     clone._2.ccr.clearZ
     tapleToArray(clone)
@@ -2521,9 +2521,9 @@ class Decoder {
   //clone1が条件true
   //clone2が条件false
   private def twoPathClone(path: CtxSymbol, data: DataSet): (DataSet, DataSet) = {
-    val clone1 = data.clone
+    val clone1 = data.clone()
     clone1.path.set(path.symbol)
-    val clone2 = data.clone
+    val clone2 = data.clone()
     clone2.path.set(path.not.symbol)
     clone1 -> clone2
   }

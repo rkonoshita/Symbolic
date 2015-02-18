@@ -53,10 +53,10 @@ object Symbolic {
             current.next += s
             state += s
             if (s.stop) println("stop") else stack.push(s)
-            s.divError()
-            if (s.error._1) {
+
+            if (s.divError()) {
               stack.clear
-              println(s.error._2.get)
+              println(s.error.get)
             }
             println("state:" + state.size + " rest:" + stack.size)
           }

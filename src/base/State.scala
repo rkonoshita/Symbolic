@@ -24,35 +24,33 @@ class State(num: Int, data: DataSet, pr: State) {
   val stop = con(0)
   private val divop = con(1)
   //プログラムの終端に達した:true 違う:false
-  var error: (Boolean, Option[Z3Model]) = (false, None)
+  var error: Option[Z3Model] = None
 
   //スタックエラーを検出
-  def stackError(): Unit = {
+  def stackError(): Boolean = {
     val sp = reg.getLong(7)
     val tsp = sp > 0xFFFFFF80
     val bsp = sp < 0xFFFFFB80
     Symbolic.sol.assertCnstr(Symbolic.ctx.mkOr(tsp.symbol, bsp.symbol))
     val ans = Symbolic.sol.check.get
     Symbolic.sol.reset
-    val model =
+    error =
       if (ans) Some(getModel)
       else None
-    error = (ans, model)
+    ans
   }
 
-  def divError(): Unit = {
+  def divError(): Boolean = {
     if (divop) {
       val z = ccr.getCcr.extract(2, 2).equal(1).simpleify()
       Symbolic.sol.assertCnstr(z.symbol)
       val ans = Symbolic.sol.check.get
       Symbolic.sol.reset
-      val model =
+      error =
         if (ans) Some(getModel())
         else None
-      error = (ans, model)
-    } else {
-      error = (false, None)
-    }
+      ans
+    } else false
   }
 
   //テストケース出力

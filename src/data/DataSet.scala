@@ -14,7 +14,7 @@ import scala.collection.mutable.ArrayBuffer
 class DataSet(r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, pt: PathCondition, cs: Array[Boolean]) {
 
   val reg = new Register(r.reg)
-  val mem = new Memory(m.mem, arrayClone(m.in), arrayClone(m.ib.clone))
+  val mem = new Memory(m.mem, arrayClone(m.in), arrayClone(m.ib.clone()))
   val pc = new ProgramCounter(p.pc)
   val ccr = new ConditionRegister(c.getCcr)
   val path = new PathCondition(pt.path)
@@ -27,7 +27,7 @@ class DataSet(r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, p
       new ProgramCounter(pc.pc),
       new ConditionRegister(ccr.getCcr),
       new PathCondition(path.path),
-      conset.clone
+      conset.clone()
     )
   }
 
@@ -38,6 +38,10 @@ class DataSet(r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, p
     inputCheckIO2()
     inputCheckIO3()
     inputCheckIO5()
+    inputCheckIO6()
+    inputCheckIO7()
+    inputCheckIO8()
+    inputCheckIOB()
   }
 
   //IOport1のチェック
@@ -46,8 +50,8 @@ class DataSet(r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, p
       val pmr1 = mem.getByte(0xFFE0) //0なら入出力ポート
       val pcr1 = mem.getByte(0xFFE4) //0なら入力ポート
       val pdr1 = mem.getByte(0xFFD4)
-      val in = (pcr1 | pmr1).~ //1なら入力可能
-      val data = ((in.~) & pdr1) | (in & new CtxSymbol("m" + 0xFFD4 + "_" + mem.in(0), 8))
+      val in = (pcr1 | pmr1).~() //1なら入力可能
+      val data = (in.~() & pdr1) | (in & new CtxSymbol("m" + 0xFFD4 + "_" + mem.in(0), 8))
       mem.setByte(data, 0xFFD4)
       mem.in(0) = mem.in(0) + 1
       mem.ib(0) = false
@@ -59,7 +63,7 @@ class DataSet(r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, p
     if (mem.ib(1)) {
       val pcr2 = mem.getByte(0xFFE5) | 0xE0 //0なら入力ポート
       val pdr2 = mem.getByte(0xFFD5)
-      val data = (pdr2 & pcr2) | ((pcr2.~) & new CtxSymbol("m" + 0xFFD5 + "_" + mem.in(1), 8))
+      val data = (pdr2 & pcr2) | (pcr2.~() & new CtxSymbol("m" + 0xFFD5 + "_" + mem.in(1), 8))
       mem.setByte(data, 0xFFD5)
       mem.in(1) = mem.in(1) + 1
       mem.ib(1) = false
@@ -71,7 +75,7 @@ class DataSet(r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, p
     if (mem.ib(2)) {
       val pcr3 = mem.getByte(0xFFE6) //0なら入力ポート
       val pdr3 = mem.getByte(0xFFD6)
-      val data = (pdr3 & pcr3) | ((pcr3.~) & new CtxSymbol("m" + 0xFFD6 + "_" + mem.in(2), 8))
+      val data = (pdr3 & pcr3) | (pcr3.~() & new CtxSymbol("m" + 0xFFD6 + "_" + mem.in(2), 8))
       mem.setByte(data, 0xFFD6)
       mem.in(2) = mem.in(2) + 1
       mem.ib(2) = false
@@ -84,8 +88,8 @@ class DataSet(r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, p
       val pmr5 = mem.getByte(0xFFE2) //0なら入出力ポート
       val pcr5 = mem.getByte(0xFFE8) //0なら入力ポート
       val pdr5 = mem.getByte(0xFFD8)
-      val in = (pcr5 | pmr5).~ //1なら入力可能
-      val data = ((in.~) & pdr5) | (in & new CtxSymbol("m" + 0xFFD8 + "_" + mem.in(3), 8))
+      val in = (pcr5 | pmr5).~() //1なら入力可能
+      val data = (in.~() & pdr5) | (in & new CtxSymbol("m" + 0xFFD8 + "_" + mem.in(3), 8))
       mem.setByte(data, 0xFFD8)
       mem.in(3) = mem.in(3) + 1
       mem.ib(3) = false
@@ -97,7 +101,7 @@ class DataSet(r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, p
     if (mem.ib(4)) {
       val pcr6 = mem.getByte(0xFFE9) //0なら入力ポート
       val pdr6 = mem.getByte(0xFFD9)
-      val data = (pdr6 & pcr6) | ((pcr6.~) & new CtxSymbol("m" + 0xFFD9 + "_" + mem.in(4), 8))
+      val data = (pdr6 & pcr6) | (pcr6.~() & new CtxSymbol("m" + 0xFFD9 + "_" + mem.in(4), 8))
       mem.setByte(data, 0xFFD9)
       mem.in(4) = mem.in(4) + 1
       mem.ib(4) = false
@@ -107,9 +111,9 @@ class DataSet(r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, p
   //IOport7のチェック
   private def inputCheckIO7(): Unit = {
     if (mem.ib(5)) {
-      val pcr6 = mem.getByte(0xFFEA) | 0x88 //0なら入力ポート
-      val pdr6 = mem.getByte(0xFFDA)
-      val data = (pdr6 & pcr6) | ((pcr6.~) & new CtxSymbol("m" + 0xFFDA + "_" + mem.in(5), 8))
+      val pcr7 = mem.getByte(0xFFEA) | 0x88 //0なら入力ポート
+      val pdr7 = mem.getByte(0xFFDA)
+      val data = (pdr7 & pcr7) | (pcr7.~() & new CtxSymbol("m" + 0xFFDA + "_" + mem.in(5), 8))
       mem.setByte(data, 0xFFDA)
       mem.in(5) = mem.in(5) + 1
       mem.ib(5) = false
@@ -119,9 +123,9 @@ class DataSet(r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, p
   //IOport8のチェック
   private def inputCheckIO8(): Unit = {
     if (mem.ib(6)) {
-      val pcr6 = mem.getByte(0xFFEB) | 0x1F //0なら入力ポート
-      val pdr6 = mem.getByte(0xFFDB)
-      val data = (pdr6 & pcr6) | ((pcr6.~) & new CtxSymbol("m" + 0xFFDB + "_" + mem.in(6), 8))
+      val pcrb = mem.getByte(0xFFEB) | 0x1F //0なら入力ポート
+      val pdrb = mem.getByte(0xFFDB)
+      val data = (pdrb & pcrb) | (pcrb.~() & new CtxSymbol("m" + 0xFFDB + "_" + mem.in(6), 8))
       mem.setByte(data, 0xFFDB)
       mem.in(6) = mem.in(6) + 1
       mem.ib(6) = false
@@ -140,17 +144,13 @@ class DataSet(r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, p
 
   def arrayClone(array: Array[Int]): Array[Int] = {
     val cp = new Array[Int](array.length)
-    for (i <- 0 until array.length) {
-      cp(i) = array(i)
-    }
+    for (i <- 0 until array.length) cp(i) = array(i)
     cp
   }
 
   def arrayClone(array: Array[Boolean]): Array[Boolean] = {
     val cp = new Array[Boolean](array.length)
-    for (i <- 0 until array.length) {
-      cp(i) = array(i)
-    }
+    for (i <- 0 until array.length) cp(i) = array(i)
     cp
   }
 
