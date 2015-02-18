@@ -17,7 +17,7 @@ import scala.collection.mutable.ArrayBuffer
 object Symbolic {
 
   val ctx = new Z3Context
-  val sol = ctx.mkSolver
+  val sol = ctx.mkSolver()
   val state = new ArrayBuffer[State]
   val stack = new mutable.Stack[State]
   val queue = new mutable.Queue[State]
@@ -28,43 +28,50 @@ object Symbolic {
     val file = new File(args(0)) -> new File("asm")
     new ConvertToInputForm(file._1, file._2).convert()
     rom = new ASTVisitor().makeProgram(ctx, file._2)
-    val initState = new State(0, first, null)
+    val initState = new State(0, first(), null)
     state += initState
     stack.push(initState)
     //    queue += initState
 
     val t = time {
-      while (!stack.isEmpty) {
-        val current = stack.pop
+      while (stack.nonEmpty) {
+        val current = stack.pop()
         //val current = queue.dequeue
         val data = new DataSet(current, Array.fill(2)(false))
         //ここらへんにセンサ関係書きたい
         data.inputCheck()
 
-        val dataArray = new Decoder().analyze(data)
-        dataArray.foreach { d =>
-          //到達可能:true 到達不能:false
-          Symbolic.sol.assertCnstr(d.path.path)
-          val reach = Symbolic.sol.check.get
-          Symbolic.sol.reset
-
-          if (reach) {
-            val s = new State(state.size, d, current)
-            current.next += s
-            state += s
-            if (s.stop) println("stop") else stack.push(s)
-
-            if (s.divError()) {
-              stack.clear
-              println(s.error.get)
-            }
-            println("state:" + state.size + " rest:" + stack.size)
-          }
+        new Decoder().analyze(data) match {
+          case d: DataSet => make(d, current)
+          case (d1: DataSet, d2: DataSet) =>
+            make(d1, current)
+            make(d2, current)
+          case array: Array[DataSet] => array.foreach(make(_, current))
         }
+
         println("----------next----------")
       }
     }
     new ResultWritter().write(new File("result.txt"), t)
+  }
+
+  def make(data: DataSet, current: State): Unit = {
+    Symbolic.sol.assertCnstr(data.path.path)
+    val reach = Symbolic.sol.check().get
+    Symbolic.sol.reset()
+
+    if (reach) {
+      val s = new State(state.size, data, current)
+      current.next += s
+      state += s
+      if (s.stop) println("stop") else stack.push(s)
+
+      if (s.divError()) {
+        stack.clear()
+        println(s.error.get)
+      }
+      println("state:" + state.size + " rest:" + stack.size)
+    }
   }
 
   def first(): DataSet = {
@@ -76,7 +83,7 @@ object Symbolic {
     val pc = new ProgramCounter(rom.getWord(0))
     val path = new PathCondition(ctx.mkTrue())
     val ccr = new ConditionRegister(new CtxSymbol(ctx.mkConst("ccr", Parameter.bv8)))
-    ccr.setI
+    ccr.setI()
     new DataSet(reg, mem, pc, ccr, path, conset)
   }
 
