@@ -31,23 +31,20 @@ class State(num: Int, data: DataSet, pr: State) {
     val sp = reg.getLong(7)
     val tsp = sp > 0xFFFFFF80
     val bsp = sp < 0xFFFFFB80
-    Symbolic.sol.assertCnstr(Symbolic.ctx.mkOr(tsp.symbol, bsp.symbol))
-    val ans = Symbolic.sol.check.get
-    Symbolic.sol.reset
+    val bool = tsp || bsp
+    val ans = Symbolic.solverCheck(bool.symbol)
     error =
-      if (ans) (Some(getModel), Some("stack error"))
+      if (ans) (Some(getModel()), Some("stack error"))
       else (None, None)
     ans
   }
 
   def divError(): Boolean = {
     if (divop) {
-      val z = ccr.getCcr.extract(2, 2).equal(1).simpleify()
-      Symbolic.sol.assertCnstr(z.symbol)
-      val ans = Symbolic.sol.check.get
-      Symbolic.sol.reset
+      val z = ccr.getCcr.extract(2, 2).equal(1)
+      val ans = Symbolic.solverCheck(z.symbol)
       error =
-        if (ans) (Some(getModel), Some("div0 error"))
+        if (ans) (Some(getModel()), Some("div0 error"))
         else (None, None)
       ans
     } else false
@@ -55,10 +52,11 @@ class State(num: Int, data: DataSet, pr: State) {
 
   //テストケース出力
   def getModel(): Z3Model = {
+    Symbolic.sol.push()
     Symbolic.sol.assertCnstr(path.path)
     Symbolic.sol.check()
     val model = Symbolic.sol.getModel()
-    Symbolic.sol.reset()
+    Symbolic.sol.pop(1)
     model
   }
 

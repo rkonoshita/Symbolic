@@ -6,7 +6,7 @@ import data.DataSet
 import data.register._
 import parser.ASTVisitor
 import symbol.CtxSymbol
-import z3.scala.Z3Context
+import z3.scala.{Z3AST, Z3Context}
 
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
@@ -56,11 +56,7 @@ object Symbolic {
   }
 
   def make(data: DataSet, current: State): Unit = {
-    Symbolic.sol.assertCnstr(data.path.path)
-    val reach = Symbolic.sol.check().get
-    Symbolic.sol.reset()
-
-    if (reach) {
+    if (solverCheck(data.path.path)) {
       val s = new State(state.size, data, current)
       current.next += s
       state += s
@@ -98,6 +94,14 @@ object Symbolic {
     val longtime = System.currentTimeMillis
     proc
     System.currentTimeMillis - longtime
+  }
+
+  def solverCheck(ast: Z3AST): Boolean = {
+    sol.push()
+    sol.assertCnstr(ast)
+    val ans = sol.check().get
+    sol.pop(1)
+    ans
   }
 }
 
