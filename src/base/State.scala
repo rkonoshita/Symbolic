@@ -24,7 +24,7 @@ class State(num: Int, data: DataSet, pr: State) {
   val stop = con(0)
   private val divop = con(1)
   //プログラムの終端に達した:true 違う:false
-  var error: Option[Z3Model] = None
+  var error: (Option[Z3Model], Option[String]) = (None, None)
 
   //スタックエラーを検出
   def stackError(): Boolean = {
@@ -35,8 +35,8 @@ class State(num: Int, data: DataSet, pr: State) {
     val ans = Symbolic.sol.check.get
     Symbolic.sol.reset
     error =
-      if (ans) Some(getModel)
-      else None
+      if (ans) (Some(getModel), Some("stack error"))
+      else (None, None)
     ans
   }
 
@@ -47,8 +47,8 @@ class State(num: Int, data: DataSet, pr: State) {
       val ans = Symbolic.sol.check.get
       Symbolic.sol.reset
       error =
-        if (ans) Some(getModel())
-        else None
+        if (ans) (Some(getModel), Some("div0 error"))
+        else (None, None)
       ans
     } else false
   }

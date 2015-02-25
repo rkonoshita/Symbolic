@@ -16,29 +16,29 @@ class ConditionRegister(c: CtxSymbol) {
 
   def setCcr(c: CtxSymbol) = ccr = c.simpleify()
 
-  def clearC() = ccr = (ccr & 0xFE).simpleify()
+  def clearC() = ccr = ccr & 0xFE
 
-  def clearV() = ccr = (ccr & 0xFD).simpleify()
+  def clearV() = ccr = ccr & 0xFD
 
-  def clearZ() = ccr = (ccr & 0xFB).simpleify()
+  def clearZ() = ccr = ccr & 0xFB
 
-  def clearN() = ccr = (ccr & 0xF7).simpleify()
+  def clearN() = ccr = ccr & 0xF7
 
-  def clearH() = ccr = (ccr & 0xDF).simpleify()
+  def clearH() = ccr = ccr & 0xDF
 
-  def clearI() = ccr = (ccr & 0x7F).simpleify()
+  def clearI() = ccr = ccr & 0x7F
 
-  def setC() = ccr = (ccr | 0x01).simpleify()
+  def setC() = ccr = ccr | 0x01
 
-  def setV() = ccr = (ccr | 0x02).simpleify()
+  def setV() = ccr = ccr | 0x02
 
-  def setZ() = ccr = (ccr | 0x04).simpleify()
+  def setZ() = ccr = ccr | 0x04
 
-  def setN() = ccr = (ccr | 0x08).simpleify()
+  def setN() = ccr = ccr | 0x08
 
-  def setH() = ccr = (ccr | 0x20).simpleify()
+  def setH() = ccr = ccr | 0x20
 
-  def setI() = ccr = (ccr | 0x80).simpleify()
+  def setI() = ccr = ccr | 0x80
 
   override def toString(): String = ccr.toString()
 }

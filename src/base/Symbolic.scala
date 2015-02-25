@@ -19,7 +19,7 @@ object Symbolic {
   val ctx = new Z3Context
   val sol = ctx.mkSolver()
   val state = new ArrayBuffer[State]
-  val stack = new mutable.Stack[State]
+  //  val stack = new mutable.Stack[State]
   val queue = new mutable.Queue[State]
   var rom: ROM = null
 
@@ -30,13 +30,13 @@ object Symbolic {
     rom = new ASTVisitor().makeProgram(ctx, file._2)
     val initState = new State(0, first(), null)
     state += initState
-    stack.push(initState)
-    //    queue += initState
+    //    stack.push(initState)
+    queue += initState
 
     val t = time {
-      while (stack.nonEmpty) {
-        val current = stack.pop()
-        //val current = queue.dequeue
+      while (queue.nonEmpty) {
+        //val current = stack.pop()
+        val current = queue.dequeue()
         val data = new DataSet(current, Array.fill(2)(false))
         //ここらへんにセンサ関係書きたい
         data.inputCheck()
@@ -52,7 +52,7 @@ object Symbolic {
         println("----------next----------")
       }
     }
-    new ResultWritter().write(new File("result.txt"), t)
+    new ResultWritter().write(new File(args(1)), t)
   }
 
   def make(data: DataSet, current: State): Unit = {
@@ -64,13 +64,20 @@ object Symbolic {
       val s = new State(state.size, data, current)
       current.next += s
       state += s
-      if (s.stop) println("stop") else stack.push(s)
+      if (s.stop) println("stop") else queue += s
+
+      if (s.stackError()) {
+        queue.clear()
+        println(s.error._1.get + "," + s.error._2)
+        return
+      }
 
       if (s.divError()) {
-        stack.clear()
-        println(s.error.get)
+        queue.clear()
+        println(s.error._1.get + "," + s.error._2)
+        return
       }
-      println("state:" + state.size + " rest:" + stack.size)
+      println("state:" + state.size + " rest:" + queue.size)
     }
   }
 
