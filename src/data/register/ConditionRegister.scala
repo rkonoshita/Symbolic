@@ -10,11 +10,11 @@ import symbol.CtxSymbol
 //条件レジスタ
 class ConditionRegister(c: CtxSymbol) {
 
-  private var ccr = c
+  var ccr = c
 
-  def getCcr: CtxSymbol = ccr.simpleify()
+  def getCcr: CtxSymbol = ccr
 
-  def setCcr(c: CtxSymbol) = ccr = c.simpleify()
+  def setCcr(c: CtxSymbol) = ccr = c
 
   def clearC() = ccr = ccr & 0xFE
 

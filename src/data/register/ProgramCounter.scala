@@ -16,19 +16,6 @@ class ProgramCounter(p: Int) {
 
   def setPc(p: Int) = pc = p & limit
 
-  //  def setPc(p: CtxSymbol): Int = {
-  //    //むちゃくちゃ
-  //    (0x0100 to 0x0E00).foreach { q =>
-  //      Symbolic.sol.assertCnstr(p.equal(q).symbol)
-  //      if (Symbolic.sol.check.get) {
-  //        Symbolic.sol.reset
-  //        pc = q
-  //        return pc
-  //      } else Symbolic.sol.reset
-  //    }
-  //    return -1
-  //  }
-
   //すごい無理やりやってる
   def setPc(p: CtxSymbol): Unit =
     pc = Integer.parseInt(p.simpleify().toString().replace("#x", ""), 16) & limit

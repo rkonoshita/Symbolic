@@ -1,0 +1,12 @@
+;       startup.src
+    
+    .CPU        300HN
+    .EXPORT     _startup
+    .IMPORT     _main   
+    
+    .SECTION    P, CODE, ALIGN=2
+_startup:
+    MOV.L   #H'FF80, ER7  
+    JSR     @_main:16
+    
+    .END

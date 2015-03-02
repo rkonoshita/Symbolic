@@ -1,0 +1,16 @@
+          .CPU        300HN
+          .IMPORT     _init
+          .IMPORT     _loop
+          .EXPORT     _main
+          .SECTION    P,CODE,ALIGN=2
+          .LINE       "C:\Users\ryousuke\Desktop\tests\stack\linetrace\main.c",14
+_main:                                  ; function: main
+          .STACK      _main=2
+          .LINE       15
+          .LINE       17
+          JSR         @_init:16
+          .LINE       19
+          MOV.W       #0,R0
+          JMP         @_loop:16
+          .LINE       20
+          .END

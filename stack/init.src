@@ -1,0 +1,15 @@
+          .CPU        300HN
+          .EXPORT     _init
+          .SECTION    P,CODE,ALIGN=2
+          .LINE       "C:\Users\ryousuke\Desktop\tests\stack\linetrace\init.c",18
+_init:                                  ; function: init
+          .STACK      _init=2
+          .LINE       19
+          .LINE       21
+          MOV.B       #0,R0L
+          MOV.B       R0L,@65524:8
+          .LINE       22
+          MOV.B       R0L,@65525:8
+          .LINE       24
+          RTS
+          .END

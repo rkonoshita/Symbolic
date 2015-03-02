@@ -1,0 +1,25 @@
+          .CPU        300HN
+          .EXPORT     _loop
+          .SECTION    P,CODE,ALIGN=2
+          .LINE       "C:\Users\ryousuke\Desktop\tests\stack\linetrace\control.c",7
+_loop:                                  ; function: loop
+          .STACK      _loop=4
+          PUSH.W      R5
+          MOV.W       R0,R5
+          .LINE       7
+          .LINE       9
+          CMP.W       #300,R5
+          BLT         L100:8
+          .LINE       9
+          BRA         L101:8
+L100:                                    
+          .LINE       11
+          INC.W       #1,R5
+          .LINE       12
+          MOV.W       R5,R0
+          BSR         _loop:8
+          .LINE       14
+L101:                                    
+          POP.W       R5
+          RTS
+          .END

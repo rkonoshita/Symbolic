@@ -121,7 +121,7 @@ class CtxSymbol(ast: Z3AST) {
 
   def ||(s: CtxSymbol): CtxSymbol = ||(s.symbol)
 
-  def ||(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkAnd(symbol, s)).simpleify()
+  def ||(s: Z3AST): CtxSymbol = new CtxSymbol(ctx.mkOr(symbol, s)).simpleify()
 
   def ||(s: Int): CtxSymbol = ||(ctx.mkInt(s, symbol.getSort))
 
