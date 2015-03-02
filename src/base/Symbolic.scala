@@ -60,7 +60,7 @@ object Symbolic {
       val s = new State(state.size, data, current)
       current.next += s
       state += s
-      if (s.stop) println("stop") else queue += s
+      if (s.condition(0)) println("stop") else queue += s
 
       if (s.stackError()) {
         queue.clear()

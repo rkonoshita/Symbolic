@@ -17,7 +17,7 @@ class ResultWritter {
 //      writer.println("ccr:" + s.ccr)
     }
     writer.println(time + "ms")
-    writer.close
+    writer.close()
   }
 
 }

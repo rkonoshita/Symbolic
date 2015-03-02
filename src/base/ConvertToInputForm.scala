@@ -34,11 +34,11 @@ class ConvertToInputForm(t: File, a: File) {
     tar.foreach { file =>
       val source = Source.fromFile(file)
       val writter = new PrintWriter(asm.getAbsolutePath + setFileNameForOS + file.getName.replace(".src", ".asm"))
-      source.getLines.foreach { line =>
+      source.getLines().foreach { line =>
         //コメント文排除
         val split = line.split(";")
         val t =
-          if (!split.isEmpty) split(0).trim
+          if (split.nonEmpty) split(0).trim
           else ""
 
         //書き出し
@@ -79,14 +79,14 @@ class ConvertToInputForm(t: File, a: File) {
       }
       //ラベルを未使用状態にする
       local.foreach(l => local(l._1) = false)
-      writter.close
-      source.close
+      writter.close()
+      source.close()
     }
   }
 
   //OSの差をちょっと意識してる?
   //z3scalaがwindowsで動かないので意味なかった
-  private def setFileNameForOS: String =
+  private def setFileNameForOS(): String =
     if (System.getProperty("os.name").startsWith("Windows")) "\\"
     else "/"
 

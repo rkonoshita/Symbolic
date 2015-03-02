@@ -18,11 +18,7 @@ class State(num: Int, data: DataSet, pr: State) {
   val pc = data.pc
   val ccr = data.ccr
   val path = data.path
-  val con = data.conset
-  private val inNum = mem.in
-  private val inBool = mem.ib
-  val stop = con(0)
-  private val divop = con(1)
+  val condition = data.conset
   //プログラムの終端に達した:true 違う:false
   var error: (Option[Z3Model], Option[String]) = (None, None)
 
@@ -40,7 +36,7 @@ class State(num: Int, data: DataSet, pr: State) {
   }
 
   def divError(): Boolean = {
-    if (divop) {
+    if (condition(1)) {
       val z = ccr.getCcr.extract(2, 2).equal(1)
       val ans = Symbolic.solverCheck(z.symbol)
       error =
