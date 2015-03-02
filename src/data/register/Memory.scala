@@ -19,14 +19,39 @@ class Memory(m: CtxSymbol, inNum: Array[Int], inBool: Array[Boolean]) {
   private def trans(num: Int): CtxSymbol = new CtxSymbol(num, 16)
 
   def getByte(num: Int): CtxSymbol = {
-    if ((num & 0x0000FFFF) == 0x0000FFD6) //入力があればtrueにする。ダサイ
-      ib(2) = true
+    num & 0xFFFF match {
+      case 0xFFD4 => ib(0) = true
+      case 0xFFD5 => ib(1) = true
+      case 0xFFD6 => ib(2) = true
+      case 0xFFD8 => ib(3) = true
+      case 0xFFD9 => ib(4) = true
+      case 0xFFDA => ib(5) = true
+      case 0xFFDB => ib(6) = true
+      case 0xFFDD => ib(7) = true
+      case _ =>
+    }
     getByte(trans(num))
   }
 
   def getByte(num: CtxSymbol): CtxSymbol = mem.select(num.extract(15, 0))
 
+  //ワードサイズ以上は奇数アドレスでのアクセス禁止なので
+  //そこもやれたらいいと思います
   def getWord(num: Int): CtxSymbol = {
+    num & 0xFFFF match {
+      case 0xFFD4 =>
+        ib(0) = true
+        ib(1) = true
+      case 0xFFD6 => ib(2) = true
+      case 0xFFD8 =>
+        ib(3) = true
+        ib(4) = true
+      case 0xFFDA =>
+        ib(5) = true
+        ib(6) = true
+      case 0xFFDD => ib(7) = true
+      case _ =>
+    }
     getWord(trans(num))
   }
 
@@ -35,7 +60,30 @@ class Memory(m: CtxSymbol, inNum: Array[Int], inBool: Array[Boolean]) {
     mem.select(number) concat mem.select(number + 1)
   }
 
-  def getLong(num: Int): CtxSymbol = getLong(trans(num))
+  def getLong(num: Int): CtxSymbol = {
+    num & 0xFFFF match {
+      case 0xFFD4 =>
+        ib(0) = true
+        ib(1) = true
+        ib(2) = true
+      case 0xFFD6 =>
+        ib(2) = true
+        ib(3) = true
+        ib(4) = true
+      case 0xFFD8 =>
+        ib(3) = true
+        ib(4) = true
+        ib(5) = true
+        ib(6) = true
+      case 0xFFDA =>
+        ib(5) = true
+        ib(6) = true
+        ib(7) = true
+      case 0xFFDD => ib(7) = true
+      case _ =>
+    }
+    getLong(trans(num))
+  }
 
   def getLong(num: CtxSymbol): CtxSymbol = {
     val number = num.extract(15, 0)
