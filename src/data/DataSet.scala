@@ -16,7 +16,7 @@ class DataSet(r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, p
   val reg = new Register(r.reg)
   val mem = new Memory(m.mem, arrayClone(m.in), arrayClone(m.ib.clone()))
   val pc = new ProgramCounter(p.pc)
-  val ccr = new ConditionRegister(c.getCcr)
+  val ccr = new ConditionRegister(c.ccr)
   val path = new PathCondition(pt.path)
   val conset = cs
 
@@ -25,7 +25,7 @@ class DataSet(r: Register, m: Memory, p: ProgramCounter, c: ConditionRegister, p
       new Register(reg.reg),
       new Memory(mem.mem, mem.in, mem.ib),
       new ProgramCounter(pc.pc),
-      new ConditionRegister(ccr.getCcr),
+      new ConditionRegister(ccr.ccr),
       new PathCondition(path.path),
       conset.clone()
     )
