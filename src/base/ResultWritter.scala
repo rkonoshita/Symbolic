@@ -12,7 +12,8 @@ class ResultWritter {
     val writer = new PrintWriter(result)
     Symbolic.state.foreach { s =>
       //ここで各状態に対して出力する
-      writer.println(s.number + ", pc:" + s.pc + "," + s.pre + "," + s.next + ",end:" + s.stop + ",error:" + s.error)
+      writer.println(s.number + ", pc:" + s.pc + "," + s.pre + "," + s.next +
+        ",end:" + s.condition(0) + ",error:" + s.error)
 //      writer.println("path:" + s.path)
 //      writer.println("ccr:" + s.ccr)
     }
