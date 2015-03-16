@@ -25,9 +25,9 @@ object Symbolic {
 
   def main(args: Array[String]): Unit = {
 
-    val file = new File(args(0)) -> new File("asm")
-    new ConvertToInputForm(file._1, file._2).convert()
-    rom = new ASTVisitor().makeProgram(ctx, file._2)
+    val target = new File(args(0)) //検証対象
+    val asm = new ConvertToInputForm(target).convert("asm")
+    rom = new ASTVisitor().makeProgram(ctx, asm)
     val initState = new State(0, first(), null)
     state += initState
     //    stack.push(initState)

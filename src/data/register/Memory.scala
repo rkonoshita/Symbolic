@@ -19,6 +19,7 @@ class Memory(m: CtxSymbol, inNum: Array[Int], inBool: Array[Boolean]) {
   private def trans(num: Int): CtxSymbol = new CtxSymbol(num, 16)
 
   def getByte(num: Int): CtxSymbol = {
+    //入出力の利用判定
     num & 0xFFFF match {
       case 0xFFD4 => ib(0) = true
       case 0xFFD5 => ib(1) = true
@@ -33,6 +34,8 @@ class Memory(m: CtxSymbol, inNum: Array[Int], inBool: Array[Boolean]) {
     getByte(trans(num))
   }
 
+  //むしろこっちに入出力判定が必要
+  //SMT Solver使うしかない？
   def getByte(num: CtxSymbol): CtxSymbol = mem.select(num.extract(15, 0))
 
   //ワードサイズ以上は奇数アドレスでのアクセス禁止なので

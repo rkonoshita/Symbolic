@@ -11,29 +11,30 @@ import scala.io.Source
  */
 
 //変換用！
-class ConvertToInputForm(t: File, a: File) {
+class ConvertToInputForm(tar: File) {
 
-  //ターゲットのプログラムが無いならばエラー
-  if (!t.exists) t.mkdir
-  private val tar = t.listFiles
-
-  //一旦asmフォルダを削除し、作りなおす
-  private val asm = a
-  delete(asm)
-  asm.mkdir
+  //対象が存在しなければエラー終了
+  assert(tar.exists())
+  private val target = tar.listFiles
 
   //出現済みローカルラベルを全て保持する
   //現在捜索中のファイルで出現している場合はtrue
   //そうでなければfalse
   private val local = new mutable.HashMap[String, Boolean]
-  //出現済みラベルを新しいラベルへと写像する
+  //出現済みラベルを新しいラベルに変換する
   private val trans = new mutable.HashMap[String, String]
 
-  //変換
-  def convert() = {
-    tar.foreach { file =>
+  //対象を使いやすいように変換
+  def convert(conv: File): File = {
+
+    //asmフォルダを削除し、作りなおす
+    val asm = conv
+    delete(asm)
+    asm.mkdir
+
+    target.foreach { file =>
       val source = Source.fromFile(file)
-      val writter = new PrintWriter(asm.getAbsolutePath + setFileNameForOS + file.getName.replace(".src", ".asm"))
+      val writter = new PrintWriter(asm.getAbsolutePath + "/" + file.getName.replace(".src", ".asm"))
       source.getLines().foreach { line =>
         //コメント文排除
         val split = line.split(";")
@@ -82,13 +83,14 @@ class ConvertToInputForm(t: File, a: File) {
       writter.close()
       source.close()
     }
+    asm
   }
 
   //OSの差をちょっと意識してる?
   //z3scalaがwindowsで動かないので意味なかった
-  private def setFileNameForOS(): String =
-    if (System.getProperty("os.name").startsWith("Windows")) "\\"
-    else "/"
+  //  private def setFileNameForOS(): String =
+  //    if (System.getProperty("os.name").startsWith("Windows")) "\\"
+  //    else "/"
 
   //要らない文をここに定義
   private def removeCheck(str: String): Boolean = {
@@ -135,7 +137,7 @@ class ConvertToInputForm(t: File, a: File) {
 
   //新しいローカルラベルを作っちゃう！
   private def makeLocalLabel(key: String): Unit = {
-    for (i <- 0 to Byte.MaxValue) {
+    for (i <- 0 to Int.MaxValue) {
       val label = "L" + i
       //この番号のローカルラベルがなければ作る
       if (!local.contains(label)) {
