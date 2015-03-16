@@ -12,10 +12,6 @@ class ConditionRegister(c: CtxSymbol) {
 
   var ccr = c
 
-  def getCcr: CtxSymbol = ccr
-
-  def setCcr(c: CtxSymbol) = ccr = c
-
   def clearC() = ccr = ccr & 0xFE
 
   def clearV() = ccr = ccr & 0xFD

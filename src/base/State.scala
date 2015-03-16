@@ -37,7 +37,7 @@ class State(num: Int, data: DataSet, pr: State) {
 
   def divError(): Boolean = {
     if (condition(1)) {
-      val z = ccr.getCcr.extract(2, 2).equal(1)
+      val z = ccr.ccr.extract(2, 2).equal(1)
       val ans = Symbolic.solverCheck(z.symbol)
       error =
         if (ans) (Some(getModel()), Some("div0 error"))
