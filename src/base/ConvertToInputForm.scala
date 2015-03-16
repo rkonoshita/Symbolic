@@ -25,10 +25,10 @@ class ConvertToInputForm(tar: File) {
   private val trans = new mutable.HashMap[String, String]
 
   //対象を使いやすいように変換
-  def convert(conv: File): File = {
+  def convert(conv: String): File = {
 
     //asmフォルダを削除し、作りなおす
-    val asm = conv
+    val asm = new File(conv)
     delete(asm)
     asm.mkdir
 
